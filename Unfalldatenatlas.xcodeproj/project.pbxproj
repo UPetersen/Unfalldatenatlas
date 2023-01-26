@@ -8,14 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		C6CA9F64297DBCBC000D9E8B /* UnfalldatenatlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */; };
-		C6CA9F66297DBCBC000D9E8B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F65297DBCBC000D9E8B /* ContentView.swift */; };
 		C6CA9F68297DBCBC000D9E8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6CA9F67297DBCBC000D9E8B /* Assets.xcassets */; };
 		C6CA9F6B297DBCBC000D9E8B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6CA9F6A297DBCBC000D9E8B /* Preview Assets.xcassets */; };
 		C6CA9F6D297DBCBC000D9E8B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F6C297DBCBC000D9E8B /* Persistence.swift */; };
-		C6CA9F70297DBCBC000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F6E297DBCBC000D9E8B /* Unfalldatenatlas.xcdatamodeld */; };
 		C6CA9F7A297DBCBD000D9E8B /* UnfalldatenatlasTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F79297DBCBD000D9E8B /* UnfalldatenatlasTests.swift */; };
 		C6CA9F84297DBCBD000D9E8B /* UnfalldatenatlasUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F83297DBCBD000D9E8B /* UnfalldatenatlasUITests.swift */; };
 		C6CA9F86297DBCBD000D9E8B /* UnfalldatenatlasUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F85297DBCBD000D9E8B /* UnfalldatenatlasUITestsLaunchTests.swift */; };
+		C6CA9F93297DBD19000D9E8B /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F92297DBD19000D9E8B /* ViewModel.swift */; };
+		C6CA9F95297DBD4D000D9E8B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F94297DBD4D000D9E8B /* ContentView.swift */; };
+		C6CA9F98297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F96297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld */; };
+		C6CA9FA3297DC04E000D9E8B /* Accident+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */; };
+		C6CA9FA4297DC04E000D9E8B /* Accident+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,16 +41,19 @@
 /* Begin PBXFileReference section */
 		C6CA9F60297DBCBC000D9E8B /* Unfalldatenatlas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unfalldatenatlas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfalldatenatlasApp.swift; sourceTree = "<group>"; };
-		C6CA9F65297DBCBC000D9E8B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C6CA9F67297DBCBC000D9E8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C6CA9F6A297DBCBC000D9E8B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C6CA9F6C297DBCBC000D9E8B /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		C6CA9F6F297DBCBC000D9E8B /* Unfalldatenatlas.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Unfalldatenatlas.xcdatamodel; sourceTree = "<group>"; };
 		C6CA9F75297DBCBD000D9E8B /* UnfalldatenatlasTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnfalldatenatlasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6CA9F79297DBCBD000D9E8B /* UnfalldatenatlasTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfalldatenatlasTests.swift; sourceTree = "<group>"; };
 		C6CA9F7F297DBCBD000D9E8B /* UnfalldatenatlasUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnfalldatenatlasUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6CA9F83297DBCBD000D9E8B /* UnfalldatenatlasUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfalldatenatlasUITests.swift; sourceTree = "<group>"; };
 		C6CA9F85297DBCBD000D9E8B /* UnfalldatenatlasUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfalldatenatlasUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		C6CA9F92297DBD19000D9E8B /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		C6CA9F94297DBD4D000D9E8B /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C6CA9F97297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Unfalldatenatlas.xcdatamodel; sourceTree = "<group>"; };
+		C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Accident+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Accident+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +84,8 @@
 		C6CA9F57297DBCBC000D9E8B = {
 			isa = PBXGroup;
 			children = (
+				C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */,
+				C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */,
 				C6CA9F62297DBCBC000D9E8B /* Unfalldatenatlas */,
 				C6CA9F78297DBCBD000D9E8B /* UnfalldatenatlasTests */,
 				C6CA9F82297DBCBD000D9E8B /* UnfalldatenatlasUITests */,
@@ -98,11 +106,12 @@
 		C6CA9F62297DBCBC000D9E8B /* Unfalldatenatlas */ = {
 			isa = PBXGroup;
 			children = (
+				C6CA9F94297DBD4D000D9E8B /* ContentView.swift */,
+				C6CA9F92297DBD19000D9E8B /* ViewModel.swift */,
 				C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */,
-				C6CA9F65297DBCBC000D9E8B /* ContentView.swift */,
+				C6CA9F96297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld */,
 				C6CA9F67297DBCBC000D9E8B /* Assets.xcassets */,
 				C6CA9F6C297DBCBC000D9E8B /* Persistence.swift */,
-				C6CA9F6E297DBCBC000D9E8B /* Unfalldatenatlas.xcdatamodeld */,
 				C6CA9F69297DBCBC000D9E8B /* Preview Content */,
 			);
 			path = Unfalldatenatlas;
@@ -263,10 +272,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C6CA9F70297DBCBC000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */,
+				C6CA9FA3297DC04E000D9E8B /* Accident+CoreDataClass.swift in Sources */,
+				C6CA9FA4297DC04E000D9E8B /* Accident+CoreDataProperties.swift in Sources */,
+				C6CA9F93297DBD19000D9E8B /* ViewModel.swift in Sources */,
+				C6CA9F95297DBD4D000D9E8B /* ContentView.swift in Sources */,
 				C6CA9F6D297DBCBC000D9E8B /* Persistence.swift in Sources */,
-				C6CA9F66297DBCBC000D9E8B /* ContentView.swift in Sources */,
 				C6CA9F64297DBCBC000D9E8B /* UnfalldatenatlasApp.swift in Sources */,
+				C6CA9F98297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,13 +605,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		C6CA9F6E297DBCBC000D9E8B /* Unfalldatenatlas.xcdatamodeld */ = {
+		C6CA9F96297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				C6CA9F6F297DBCBC000D9E8B /* Unfalldatenatlas.xcdatamodel */,
+				C6CA9F97297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodel */,
 			);
-			currentVersion = C6CA9F6F297DBCBC000D9E8B /* Unfalldatenatlas.xcdatamodel */;
-			path = Unfalldatenatlas.xcdatamodeld;
+			currentVersion = C6CA9F97297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodel */;
+			name = Unfalldatenatlas.xcdatamodeld;
+			path = ../../UnfalldatenatlasRenamed/Unfalldatenatlas/Unfalldatenatlas.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
