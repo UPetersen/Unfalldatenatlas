@@ -97,83 +97,13 @@ class ViewModel: ObservableObject {
     
     @MainActor func importFromFiles() {
 
-        let urls = [URL.applicationSupportDirectory.appending(component: "Unfallorte_2016_LinRef.txt"),
-                    URL.applicationSupportDirectory.appending(component: "Unfallorte2017_LinRef.txt"),
-                    URL.applicationSupportDirectory.appending(component: "Unfallorte2018_LinRef.txt"),
-                    URL.applicationSupportDirectory.appending(component: "Unfallorte2019_LinRef.txt"),
-                    URL.applicationSupportDirectory.appending(component: "Unfallorte2020_LinRef.csv"),
-                    URL.applicationSupportDirectory.appending(component: "Unfallorte2021_LinRef.csv")]
-//        let url = URL.applicationSupportDirectory.appending(component: "Unfallorte2021_LinRef.csv")
 
         Task.init() {
             do {
 
                 let readAndStoreData = false
                 if readAndStoreData {
-                    for url in urls {
-                        print("Application Support Directory: \(url.description)")
-                        print(url.description)
-                        for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
-                            
-                            let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
-                            
-                            // Create core data object of type Accident and fill with the data
-                            let accident = Accident(context: PersistenceController.shared.container.viewContext)
-                            accident.accidentObjectID = Int32(components[0].replacingOccurrences(of: ",", with: "."))!
-                            accident.identStlae = components[1]
-                            accident.land = Int16(components[2].replacingOccurrences(of: ",", with: "."))!
-                            accident.regierungsBezirk = Int16(components[3].replacingOccurrences(of: ",", with: "."))!
-                            accident.kreis = Int16(components[4].replacingOccurrences(of: ",", with: "."))!
-                            accident.gemeinde = Int16(components[5].replacingOccurrences(of: ",", with: "."))!
-                            accident.jahr = Int16(components[6].replacingOccurrences(of: ",", with: "."))!
-                            accident.monat = Int16(components[7].replacingOccurrences(of: ",", with: "."))!
-                            accident.stunde = Int16(components[8].replacingOccurrences(of: ",", with: "."))!
-                            accident.wochentag = Int16(components[9].replacingOccurrences(of: ",", with: "."))!
-                            accident.unfallKategorie = Int16(components[10].replacingOccurrences(of: ",", with: "."))!
-                            accident.unfallArt = Int16(components[11].replacingOccurrences(of: ",", with: "."))!
-                            accident.unfallTyp1 = Int16(components[12].replacingOccurrences(of: ",", with: "."))!
-                            accident.lichtVerhaeltnisse = Int16(components[13].replacingOccurrences(of: ",", with: "."))!
-                            accident.strassenZustand = Int16(components[14].replacingOccurrences(of: ",", with: "."))!
-                            accident.istFahrrad = components[15] == "1" ? true : false
-                            accident.istPkw = components[16] == "1" ? true : false
-                            accident.istFussgaenger = components[17] == "1" ? true : false
-                            accident.istKrad = components[18] == "1" ? true : false
-                            accident.istGueterKfz = components[19] == "1" ? true : false
-                            accident.istSonstige = components[20] == "1" ? true : false
-                            accident.lineRefX = Double(components[21].replacingOccurrences(of: ",", with: "."))!
-                            accident.lineRefY = Double(components[22].replacingOccurrences(of: ",", with: "."))!
-                            accident.longitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
-                            accident.lattitude = Double(components[24].replacingOccurrences(of: ",", with: "."))!
-                        }
-                        
-//                        Col1=OBJECTID Long
-//                        Col2=UIDENTSTLA Text Width 254
-//                        Col3=ULAND Text Width 254
-//                        Col4=UREGBEZ Text Width 254
-//                        Col5=UKREIS Text Width 254
-//                        Col6=UGEMEINDE Text Width 254
-//                        Col7=UJAHR Text Width 254
-//                        Col8=UMONAT Text Width 254
-//                        Col9=USTUNDE Text Width 254
-//                        Col10=UWOCHENTAG Text Width 254
-//                        Col11=UKATEGORIE Text Width 254
-                        
-//                        Col12=UART Text Width 254
-//                        Col13=UTYP1 Text Width 254
-//                        Col14=IstRad Text Width 254
-//                        Col15=IstPKW Text Width 254
-//                        Col16=IstFuss Text Width 254
-//                        Col17=IstKrad Text Width 254
-//                        Col18=IstSonstig Text Width 254
-//                        Col19=LICHT Text Width 3
-//                        Col20=STRZUSTAND Text Width 3
-//                        Col21=LINREFX Double
-//                        Col22=LINREFY Double
-//                        Col23=XGCSWGS84 Double
-//                        Col24=YGCSWGS84 Double
-                        
-                        try PersistenceController.shared.container.viewContext.save()
-                    }
+                    try await ViewModel.readFromFileToCoreData()
                 }
                 
                 // fetch count of accidents from database and print to console
@@ -183,10 +113,10 @@ class ViewModel: ObservableObject {
                 print ("Anzahl Unfälle in Datenbank: \(totalCount)")
                 
                 let request = Accident.fetchRequest()
-                let longitudeMin = 9.11 - 0.08
-                let longitudeMax = 9.11 + 0.08
-                let lattitudeMin = 48.66 - 0.08
-                let lattitudeMax = 48.66 + 0.08
+                let longitudeMin = 9.11 - 0.07
+                let longitudeMax = 9.11 + 0.07
+                let lattitudeMin = 48.66 - 0.07
+                let lattitudeMax = 48.66 + 0.07
                 let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
 //                let predicate = NSPredicate(format: "(longitude < %lf) AND (%lf < longitude) AND (lattitude < %lf) AND (%lf < lattitude)", argumentArray: [longitudeMin, longitudeMax, lattitudeMin, lattitudeMax])
                 request.predicate = predicate
@@ -225,4 +155,267 @@ class ViewModel: ObservableObject {
         
         return request
     }
+    
+    static func readFromFileToCoreData() async throws {
+
+        // Each file has a different order of columns, that's why these are separate calls.
+//        try await read2016Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte_2016_LinRef.csv"))
+//        try await read2017Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2017_LinRef.csv"))
+//        try await read2018Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2018_LinRef.csv"))
+//        try await read2019Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2019_LinRef.csv"))
+//        try await read2020Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2020_LinRef.csv"))
+//        try await read2021Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2021_LinRef.csv"))
+
+    }
+    
+    static func read2016Data(url: URL) async throws {
+        print("Reading File: \(url.description)")
+        
+        for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
+            
+            let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
+            
+            // Create core data object of type Accident and fill with the data
+            let accident = Accident(context: PersistenceController.shared.container.viewContext)
+            accident.identStlae = components[0]
+            accident.accidentObjectID = Int32(components[1])!
+            accident.land = Int16(components[2])!
+            accident.regierungsBezirk = Int16(components[3])!
+            accident.kreis = Int16(components[4])!
+            accident.gemeinde = Int16(components[5])!
+            accident.jahr = Int16(components[6])!
+            accident.monat = Int16(components[7])!
+            accident.stunde = Int16(components[8])!
+            accident.wochentag = Int16(components[9])!
+            accident.unfallKategorie = Int16(components[10])!
+            accident.unfallArt = Int16(components[11])!
+            accident.unfallTyp1 = Int16(components[12])!
+            accident.lichtVerhaeltnisse = Int16(components[13])!
+            accident.strassenZustand = Int16(components[14])!
+            accident.istFahrrad = components[15] == "1" ? true : false
+            accident.istPkw = components[16] == "1" ? true : false
+            accident.istFussgaenger = components[17] == "1" ? true : false
+            accident.istKrad = components[18] == "1" ? true : false
+            accident.istGueterKfz = components[19] == "1" ? true : false
+            accident.istSonstige = components[20] == "1" ? true : false
+            accident.lineRefX = Double(components[21].replacingOccurrences(of: ",", with: "."))!
+            accident.lineRefY = Double(components[22].replacingOccurrences(of: ",", with: "."))!
+            accident.longitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
+            accident.lattitude = Double(components[24].replacingOccurrences(of: ",", with: "."))!
+        }
+        try PersistenceController.shared.container.viewContext.save()
+        print("... done with file \(url.description).")
+    }
+    
+    static func read2017Data(url: URL) async throws {
+        print("Reading File: \(url.description)")
+        
+        for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
+            
+            let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
+            
+            // Create core data object of type Accident and fill with the data
+            let accident = Accident(context: PersistenceController.shared.container.viewContext)
+
+            accident.accidentObjectID = Int32(components[0])!
+            accident.identStlae = components[1]
+            accident.land = Int16(components[2])!
+            accident.regierungsBezirk = Int16(components[3])!
+            accident.kreis = Int16(components[4])!
+            accident.gemeinde = Int16(components[5])!
+            accident.jahr = Int16(components[6])!
+            accident.monat = Int16(components[7])!
+            accident.stunde = Int16(components[8])!
+            accident.wochentag = Int16(components[9])!
+            accident.unfallKategorie = Int16(components[10])!
+            accident.unfallArt = Int16(components[11])!
+            accident.unfallTyp1 = Int16(components[12])!
+            
+
+            accident.istFahrrad = components[13] == "1" ? true : false
+            accident.istPkw = components[14] == "1" ? true : false
+            accident.istFussgaenger = components[15] == "1" ? true : false
+            accident.istKrad = components[16] == "1" ? true : false
+            
+            // TODO: how to handle this property, when information is not present? Make optional?
+            accident.istGueterKfz = false // Column not present in 2017 data -> denote as false
+            accident.istSonstige = components[17] == "1" ? true : false
+
+            accident.lichtVerhaeltnisse = Int16(components[18])!
+            accident.strassenZustand = Int16(components[19])!
+
+            accident.lineRefX = Double(components[20].replacingOccurrences(of: ",", with: "."))!
+            accident.lineRefY = Double(components[21].replacingOccurrences(of: ",", with: "."))!
+            accident.longitude = Double(components[22].replacingOccurrences(of: ",", with: "."))!
+            accident.lattitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
+        }
+        try PersistenceController.shared.container.viewContext.save()
+        print("... done with file \(url.description).")
+    }
+    
+    static func read2018Data(url: URL) async throws {
+        print("Reading File: \(url.description)")
+        
+        for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
+            
+            let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
+            
+            // Create core data object of type Accident and fill with the data
+            let accident = Accident(context: PersistenceController.shared.container.viewContext)
+
+            accident.accidentObjectID = Int32(components[0])!
+            accident.identStlae = ""
+            accident.land = Int16(components[1])!
+            accident.regierungsBezirk = Int16(components[2])!
+            accident.kreis = Int16(components[3])!
+            accident.gemeinde = Int16(components[4])!
+            accident.jahr = Int16(components[5])!
+            accident.monat = Int16(components[6])!
+            accident.stunde = Int16(components[7])!
+            accident.wochentag = Int16(components[8])!
+            accident.unfallKategorie = Int16(components[9])!
+            accident.unfallArt = Int16(components[10])!
+            accident.unfallTyp1 = Int16(components[11])!
+            accident.lichtVerhaeltnisse = Int16(components[12])!
+
+            accident.istFahrrad = components[13] == "1" ? true : false
+            accident.istPkw = components[14] == "1" ? true : false
+            accident.istFussgaenger = components[15] == "1" ? true : false
+            accident.istKrad = components[16] == "1" ? true : false
+            accident.istGueterKfz = components[17] == "1" ? true : false
+            
+            accident.istSonstige = components[18] == "1" ? true : false
+            accident.strassenZustand = Int16(components[19])!
+            accident.lineRefX = Double(components[20].replacingOccurrences(of: ",", with: "."))!
+            accident.lineRefY = Double(components[21].replacingOccurrences(of: ",", with: "."))!
+            accident.longitude = Double(components[22].replacingOccurrences(of: ",", with: "."))!
+            accident.lattitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
+        }
+        try PersistenceController.shared.container.viewContext.save()
+        print("... done with file \(url.description).")
+    }
+    
+    static func read2019Data(url: URL) async throws {
+        print("Reading File: \(url.description)")
+        
+        for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
+            
+            let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
+            
+            // Create core data object of type Accident and fill with the data
+            let accident = Accident(context: PersistenceController.shared.container.viewContext)
+
+            accident.accidentObjectID = Int32(components[0])!
+            accident.identStlae = ""
+            accident.land = Int16(components[1])!
+            accident.regierungsBezirk = Int16(components[2])!
+            accident.kreis = Int16(components[3])!
+            accident.gemeinde = Int16(components[4])!
+            accident.jahr = Int16(components[5])!
+            accident.monat = Int16(components[6])!
+            accident.stunde = Int16(components[7])!
+            accident.wochentag = Int16(components[8])!
+            accident.unfallKategorie = Int16(components[9])!
+            accident.unfallArt = Int16(components[10])!
+            accident.unfallTyp1 = Int16(components[11])!
+            accident.lichtVerhaeltnisse = Int16(components[12])!
+
+            accident.istFahrrad = components[13] == "1" ? true : false
+            accident.istPkw = components[14] == "1" ? true : false
+            accident.istFussgaenger = components[15] == "1" ? true : false
+            accident.istKrad = components[16] == "1" ? true : false
+            accident.istGueterKfz = components[17] == "1" ? true : false
+            
+            accident.istSonstige = components[18] == "1" ? true : false
+            accident.lineRefX = Double(components[19].replacingOccurrences(of: ",", with: "."))!
+            accident.lineRefY = Double(components[20].replacingOccurrences(of: ",", with: "."))!
+            accident.longitude = Double(components[21].replacingOccurrences(of: ",", with: "."))!
+            accident.lattitude = Double(components[22].replacingOccurrences(of: ",", with: "."))!
+            accident.strassenZustand = Int16(components[23])!
+        }
+        try PersistenceController.shared.container.viewContext.save()
+        print("... done with file \(url.description).")
+    }
+    
+    static func read2020Data(url: URL) async throws {
+        print("Reading File: \(url.description)")
+        
+        for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
+            
+            let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
+            
+            // Create core data object of type Accident and fill with the data
+            let accident = Accident(context: PersistenceController.shared.container.viewContext)
+
+            accident.accidentObjectID = Int32(components[0])!
+            accident.identStlae = components[1]
+            accident.land = Int16(components[2])!
+            accident.regierungsBezirk = Int16(components[3])!
+            accident.kreis = Int16(components[4])!
+            accident.gemeinde = Int16(components[5])!
+            accident.jahr = Int16(components[6])!
+            accident.monat = Int16(components[7])!
+            accident.stunde = Int16(components[8])!
+            accident.wochentag = Int16(components[9])!
+            accident.unfallKategorie = Int16(components[10])!
+            accident.unfallArt = Int16(components[11])!
+            accident.unfallTyp1 = Int16(components[12])!
+            accident.lichtVerhaeltnisse = Int16(components[13])!
+
+            accident.istFahrrad = components[14] == "1" ? true : false
+            accident.istPkw = components[15] == "1" ? true : false
+            accident.istFussgaenger = components[16] == "1" ? true : false
+            accident.istKrad = components[17] == "1" ? true : false
+            accident.istGueterKfz = components[18] == "1" ? true : false
+            accident.istSonstige = components[19] == "1" ? true : false
+            
+            accident.lineRefX = Double(components[20].replacingOccurrences(of: ",", with: "."))!
+            accident.lineRefY = Double(components[21].replacingOccurrences(of: ",", with: "."))!
+            accident.longitude = Double(components[22].replacingOccurrences(of: ",", with: "."))!
+            accident.lattitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
+            accident.strassenZustand = Int16(components[24])!
+        }
+        try PersistenceController.shared.container.viewContext.save()
+        print("... done with file \(url.description).")
+    }
+    
+    static func read2021Data(url: URL) async throws {
+        print("Reading File: \(url.description)")
+        
+        for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
+            
+            let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
+            
+            // Create core data object of type Accident and fill with the data
+            let accident = Accident(context: PersistenceController.shared.container.viewContext)
+            accident.accidentObjectID = Int32(components[0])!
+            accident.identStlae = components[1]
+            accident.land = Int16(components[2])!
+            accident.regierungsBezirk = Int16(components[3])!
+            accident.kreis = Int16(components[4])!
+            accident.gemeinde = Int16(components[5])!
+            accident.jahr = Int16(components[6])!
+            accident.monat = Int16(components[7])!
+            accident.stunde = Int16(components[8])!
+            accident.wochentag = Int16(components[9])!
+            accident.unfallKategorie = Int16(components[10])!
+            accident.unfallArt = Int16(components[11])!
+            accident.unfallTyp1 = Int16(components[12])!
+            accident.lichtVerhaeltnisse = Int16(components[13])!
+            accident.strassenZustand = Int16(components[14])!
+            accident.istFahrrad = components[15] == "1" ? true : false
+            accident.istPkw = components[16] == "1" ? true : false
+            accident.istFussgaenger = components[17] == "1" ? true : false
+            accident.istKrad = components[18] == "1" ? true : false
+            accident.istGueterKfz = components[19] == "1" ? true : false
+            accident.istSonstige = components[20] == "1" ? true : false
+            accident.lineRefX = Double(components[21].replacingOccurrences(of: ",", with: "."))!
+            accident.lineRefY = Double(components[22].replacingOccurrences(of: ",", with: "."))!
+            accident.longitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
+            accident.lattitude = Double(components[24].replacingOccurrences(of: ",", with: "."))!
+        }
+        try PersistenceController.shared.container.viewContext.save()
+        print("... done with file \(url.description).")
+    }
+    
 }

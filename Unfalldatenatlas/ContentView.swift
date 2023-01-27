@@ -51,13 +51,6 @@ struct ContentView: View {
         
         
         ZStack(alignment: .bottom) {
-//            Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: viewModel.annotations) { accident in
-//                MapAnnotation(coordinate: accident.coordinate) {
-//                    Circle().stroke(Color.red, lineWidth: 3)
-//                        .frame(width: 15, height: 15)
-//                }
-//            }
-//            .ignoresSafeArea()
 
             Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: theAccidents) { accident in
                 MapAnnotation(coordinate: accident.coordinate) {
