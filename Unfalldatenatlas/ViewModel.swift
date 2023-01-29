@@ -9,6 +9,7 @@ import Foundation
 import Combine
 import CoreLocation
 import CoreData
+import MapKit
 
 // Number in line, name, sample data
 //   0           1                    2                 3                4
@@ -48,7 +49,9 @@ struct Unfall: Identifiable {
 }
 
 class ViewModel: ObservableObject {
+
     @Published var annotations: [Unfall] = []
+    @Published var accidents: [Accident] = []
     
     init(initFromFile: Bool = false) {
 //        self.annotations = annotations
@@ -65,20 +68,13 @@ class ViewModel: ObservableObject {
 
         Task.init {
             do {
-                
                 var accidents: [Unfall] = []
                 // Read each line of the data as it becomes available
                 for try await line in url.lines.dropFirst().dropFirst(81000).prefix(3000) // Skip first line which contains heaader information
                 {
                     // Do something with line.
                     let components = line.components(separatedBy: ";")
-//                    print("Line: \(line.description)")
-//                    print("Components: \(components)")
                     let objectID = Int(components[0])!
-//                    if objectID % 10000 == 0 {
-//                        print("ObjectID: \(objectID)")
-//                    }
-//                    print("ObjectID: \(objectID)")
                     let UIDENTSTLAE = components[1]
                     let uLand = Int(components[2])!
                     let latitude = Double(components[24].replacingOccurrences(of: ",", with: "."))!
@@ -92,7 +88,6 @@ class ViewModel: ObservableObject {
                  print ("Error: \(error)")
             }
         }
-                
     }
     
     @MainActor func importFromFiles() {
@@ -112,6 +107,25 @@ class ViewModel: ObservableObject {
                 let totalCount =  try? context.count(for: countRequest)
                 print ("Anzahl Unfälle in Datenbank: \(totalCount)")
                 
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2016)
+                print ("Anzahl Unfälle in Datenbank für 2016: \(try? context.count(for: countRequest))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2017)
+                print ("Anzahl Unfälle in Datenbank für 2017: \(try? context.count(for: countRequest))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2018)
+                print ("Anzahl Unfälle in Datenbank für 2018: \(try? context.count(for: countRequest))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2019)
+                print ("Anzahl Unfälle in Datenbank für 2019: \(try? context.count(for: countRequest))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2020)
+                print ("Anzahl Unfälle in Datenbank für 2020: \(try? context.count(for: countRequest))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2021)
+                print ("Anzahl Unfälle in Datenbank für 2021: \(try? context.count(for: countRequest))")
+                
+                // Fetch some data to see if there is some correct data stored.
                 let request = Accident.fetchRequest()
                 let longitudeMin = 9.11 - 0.07
                 let longitudeMax = 9.11 + 0.07
@@ -137,6 +151,28 @@ class ViewModel: ObservableObject {
                  print ("Error: \(error)")
             }
         }
+        
+    }
+    
+    func fetchTheAccidents(region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.66, longitude: 9.11), latitudinalMeters: 1000, longitudinalMeters: 1000)) {
+        let request = Accident.fetchRequest()
+        let longitudeMin = region.center.longitude - 0.5 * region.span.longitudeDelta
+        let longitudeMax = region.center.longitude + 0.5 * region.span.longitudeDelta
+        let lattitudeMin = region.center.latitude - 0.5 * region.span.latitudeDelta
+        let lattitudeMax = region.center.latitude + 0.5 * region.span.latitudeDelta
+        let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
+        
+        request.fetchLimit = 500
+        request.fetchBatchSize = 50
+        
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
+
+        request.predicate = predicate
+        
+        let context = PersistenceController.shared.container.viewContext
+        
+        try? accidents = context.fetch(request)
+        print(accidents.last?.objectID)
         
     }
     

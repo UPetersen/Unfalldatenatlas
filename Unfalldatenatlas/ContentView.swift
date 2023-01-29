@@ -24,66 +24,57 @@ struct VeganFoodPlace: Identifiable {
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    
-    //    @FetchRequest(
-    //        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-    //        animation: .default)
-    //    private var items: FetchedResults<Item>
-    
+
     @StateObject var viewModel: ViewModel = ViewModel()
-    
-    @State private var currentLocation: CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648)
-    
+    @State private var showSymbols = false
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
     
-    @FetchRequest(fetchRequest: ViewModel.specialFetchRequest()) private var theAccidents: FetchedResults<Accident>
-    
+//    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)], animation: .default) private var items: FetchedResults<Item>
+//    @FetchRequest(fetchRequest: ViewModel.specialFetchRequest()) private var theAccidents: FetchedResults<Accident>
 
+//    @FetchRequest private var theAccidents: FetchedResults<Accident>
+//    init(viewModel: ViewModel) {
+//        print("In Init of ContentView.")
+//        self.viewModel = viewModel
+//        self._theAccidents = FetchRequest(fetchRequest: ViewModel.specialFetchRequest())
+//    }
     //    @FetchRequest(sortDescriptors: T##[NSSortDescriptor])
     //    @State private var newYourRegion = MKCoordinateRegion(
     //            center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1291648),
     //            span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
     //        )
     
-    
-    ///
     var body: some View {
         
-        
-        ZStack(alignment: .bottom) {
-
-            Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: theAccidents) { accident in
+        ZStack(alignment: .topLeading) {
+            Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
                 MapAnnotation(coordinate: accident.coordinate) {
-                    Circle().stroke(Color.red, lineWidth: 3)
-                        .frame(width: 15, height: 15)
+                    ZStack {
+                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+                            .frame(width: 18, height: 18)
+                        if showSymbols {
+                            Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
+                        }
+                    }
                 }
             }
+            .onChange(of: region.center.latitude) {
+                _ in viewModel.fetchTheAccidents(region: region)
+            }
             .ignoresSafeArea()
-
-            //            LocationButton(.currentLocation) {
-            //              // Fetch location with Core Location.
-            //                if let currentLocation = CLLocationManager().location?.coordinate {
-            //                    print("Current Location is lat = \(currentLocation.latitude.description) und long = \(currentLocation.longitude.description)")
-            //                    region = MKCoordinateRegion(center: currentLocation, latitudinalMeters: 1000, longitudinalMeters: 1000)
-            //                }
-            //            }
             
+            Text("\(viewModel.accidents.count) Unfälle")
+                .padding(.horizontal)
         }
-        //        .task {
-        //            viewModel.fetchAccidents()
-        //            print("-------------Ende .task -------------------------------------------------")
-        //        }
-        
-        //        .onReceive(viewModel.annotations.publisher, perform: {accident in print("something \(accident.objectID)")})
-        
+        .onTapGesture {
+            showSymbols.toggle()
+        }
         .onAppear() {
-//            viewModel.fetchAccidents()
             viewModel.importFromFiles()
+            viewModel.fetchTheAccidents(region: region)
             print("Ende .onAppear")
         }
-        //        .onChange(of: viewModel.$annotations, perform: {_ in print("another thing")})
-        //        .onChange(of: $region, perform: {_ in viewModel.fetchAccidents()})
-        //         .onChange(of: $region) { print("Region changed") }
+
         
         //        NavigationView {
         //            List {
@@ -109,9 +100,6 @@ struct ContentView: View {
         //            Text("Select an item")
         //        }
     }
-    
-    
-    
     
     //    private func addItem() {
     //        withAnimation {
@@ -144,16 +132,99 @@ struct ContentView: View {
     //        }
     //    }
     
+    func symbolsForAccident(accident: Accident) -> String {
+        var symbol = ""
+        
+        // Type of vehicles/persones involved. https://www.destatis.de/DE/ Themen/Gesellschaft- Umwelt/Verkehrsunfaelle/M ethoden/_inhalt.html#sprg37 1798
+        if accident.istPkw { symbol.append("🚗") }
+        if accident.istKrad { symbol.append("🏍️") }
+        if accident.istFahrrad { symbol.append("🚴") }
+        if accident.istFussgaenger { symbol.append("🚶‍♂️") }
+        // Güterkraffahrzeuge: Unfall mit Güterkraftfahrzeug (GKFZ): Unfall, an dem mindestens ein Lastkraftwagen mit
+        // Normalaufbau und einem Gesamtgewicht über 3,5 t, ein Lastkraftwagen mit Tankauflage bzw. Spezialaufbau,
+        // eine Sattelzugmaschine oder eine andere Zugmaschine beteiligt war (diese Kategorie ist in
+        // den Jahren 2016 und 2017 in "Unfall mit Sonstigen" enthalten)
+        if accident.istGueterKfz { symbol.append("🚚") }
+        // Unfall mit Sonstigen: Unfall, an dem mindestens ein oben nicht genanntes Verkehrsmittel beteiligt war, wie
+        // z. B. ein Bus oder eine Straßenbahn (2016 und 2017 einschließlich Unfall mit Güterkraftfahrzeug (GKFZ),
+        // ab 2018 ohne Unfall mit GKFZ)
+        if accident.istSonstige {
+            if accident.jahr >= 2018 {
+                symbol.append("🚌/🚃")
+            } else {
+                symbol.append("🚚/🚌/🚃")
+            }
+        }
+        
+        // Light Conditions, not icon for twilight (Dämmerung) available, so just made it night, too.
+        if accident.lichtVerhaeltnisse >= 1 {symbol.append("🌛") }
+        
+        // Road conditions
+        if accident.strassenZustand == 1 {
+            symbol.append("🌧️")
+        } else if accident.strassenZustand == 2 {
+            symbol.append("❄️")
+        }
+        
+        //Accident Category (Unfallkategorie): https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Methoden/_inhalt.html#sprg371798
+        switch accident.unfallKategorie {
+        case 1: symbol.append("✟")
+        case 2: symbol.append("🏥")
+        case 3: symbol.append("🩹")
+        default: fatalError("Wrong Unfallkategorie: \(accident.unfallKategorie). Must be 1, 2 or 3.")
+        }
+     
+        // Accident kind (Unfallart): https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Methoden/_inhalt.html#sprg371798
+        // 1 = Zusammenstoß mit anfahrendem/ anhaltendem/ruhendem Fahrzeug
+        // 2 = Zusammenstoß mit vorausfahrendem / wartendem Fahrzeug
+        // 3 = Zusammenstoß mit seitlich in gleicher Richtung fahrendem Fahrzeug
+        // 4 = Zusammenstoß mit entgegenkommendem Fahrzeug
+        // 5 = Zusammenstoß mit einbiegendem / kreuzendem Fahrzeug
+        // 6 = Zusammenstoß zwischen Fahrzeug und Fußgänger
+        // 7 = Aufprall auf Fahrbahnhindernis
+        // 8 = Abkommen von Fahrbahn nach rechts
+        // 9 = Abkommen von Fahrbahn nach links Unfall
+        // 0 = anderer Art
+        symbol.append("A\(accident.unfallArt)")
+        
+        // Accident type (Unfalltyp1): https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Methoden/_inhalt.html#sprg371798
+        // 1 = Fahrunfall
+        // 2 = Abbiegeunfall
+        // 3 = Einbiegen / Kreuzen-Unfall
+        // 4 = Überschreiten-Unfall
+        // 5 = Unfall durch ruhenden Verkehr
+        // 6 = Unfall im Längsverkehr
+        // 7 = sonstiger Unfall
+        symbol.append("T\(accident.unfallTyp1)")
+        
+        return symbol
+    }
+    
+    /// Returns the color to use for Unfall Type 1, as of https://de.wikipedia.org/wiki/Unfalltyp
+    func colorForAccidentType1(accident: Accident) -> Color {
+        switch accident.unfallTyp1 {
+        case 1: return Color.green   // 1 = Fahrunfall
+        case 2: return Color.yellow  // 2 = Abbiegeunfall
+        case 3: return Color.red     // 3 = Einbiegen / Kreuzen-Unfall
+        case 4: return Color.white   // 4 = Überschreiten-Unfall
+        case 5: return Color.blue    // 5 = Unfall durch ruhenden Verkehr
+        case 6: return Color.orange  // 6 = Unfall im Längsverkehr
+        case 7: return Color.black   // 7 = sonstiger Unfall
+        default:
+            fatalError("Wrong Unfalltyp 1: \(accident.unfallTyp1). Must be one out of 1 to 7.")
+        }
+    }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
+//private let itemFormatter: DateFormatter = {
+//    let formatter = DateFormatter()
+//    formatter.dateStyle = .short
+//    formatter.timeStyle = .medium
+//    return formatter
+//}()
 
 struct ContentView_Previews: PreviewProvider {
+    static var viewModel = ViewModel()
     static var previews: some View {
         ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
