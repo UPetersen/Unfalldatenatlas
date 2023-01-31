@@ -52,6 +52,8 @@ class ViewModel: ObservableObject {
 
     @Published var annotations: [Unfall] = []
     @Published var accidents: [Accident] = []
+    @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
+    private let asyncContext = PersistenceController.shared.container.newBackgroundContext()
     
     init(initFromFile: Bool = false) {
 //        self.annotations = annotations
@@ -160,8 +162,9 @@ class ViewModel: ObservableObject {
         let longitudeMax = region.center.longitude + 0.5 * region.span.longitudeDelta
         let lattitudeMin = region.center.latitude - 0.5 * region.span.latitudeDelta
         let lattitudeMax = region.center.latitude + 0.5 * region.span.latitudeDelta
-        let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
-        
+//        let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
+        let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf AND unfallKategorie <= 2 ", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
+
         request.fetchLimit = 500
         request.fetchBatchSize = 50
         
@@ -171,8 +174,36 @@ class ViewModel: ObservableObject {
         
         let context = PersistenceController.shared.container.viewContext
         
-        try? accidents = context.fetch(request)
-        print(accidents.last?.objectID)
+//        try? accidents = context.fetch(request)
+//        print(accidents.last?.objectID)
+        
+//        let contex2 = PersistenceController.shared.container.newBackgroundContext()
+//        contex2.automaticallyMergesChangesFromParent = true
+//        contex2.performAndWait {
+//            do {
+//                let  results =  try contex2.fetch(request)
+//                DispatchQueue.main.async {
+//                    self.accidents = results
+//                }
+//            }
+//            catch {
+//                fatalError()
+//            }
+//        }
+//
+        asyncContext.automaticallyMergesChangesFromParent
+        asyncContext.performAndWait {
+            do {
+//                accidents =  try asyncContext.fetch(request)
+                let  results =  try asyncContext.fetch(request)
+                DispatchQueue.main.async {
+                    self.accidents = results
+                }
+            }
+            catch {
+                fatalError()
+            }
+        }
         
     }
     

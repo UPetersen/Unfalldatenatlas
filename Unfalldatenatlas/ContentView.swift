@@ -27,28 +27,14 @@ struct ContentView: View {
 
     @StateObject var viewModel: ViewModel = ViewModel()
     @State private var showSymbols = false
-    @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
     
 //    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)], animation: .default) private var items: FetchedResults<Item>
-//    @FetchRequest(fetchRequest: ViewModel.specialFetchRequest()) private var theAccidents: FetchedResults<Accident>
-
-//    @FetchRequest private var theAccidents: FetchedResults<Accident>
-//    init(viewModel: ViewModel) {
-//        print("In Init of ContentView.")
-//        self.viewModel = viewModel
-//        self._theAccidents = FetchRequest(fetchRequest: ViewModel.specialFetchRequest())
-//    }
-    //    @FetchRequest(sortDescriptors: T##[NSSortDescriptor])
-    //    @State private var newYourRegion = MKCoordinateRegion(
-    //            center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1291648),
-    //            span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-    //        )
     
     var body: some View {
         
         ZStack(alignment: .topLeading) {
-            Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
-                MapAnnotation(coordinate: accident.coordinate) {
+            Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
+            MapAnnotation(coordinate: accident.coordinate) {
                     ZStack {
                         Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
                             .frame(width: 18, height: 18)
@@ -58,8 +44,8 @@ struct ContentView: View {
                     }
                 }
             }
-            .onChange(of: region.center.latitude) {
-                _ in viewModel.fetchTheAccidents(region: region)
+            .onReceive(viewModel.$region.debounce(for: 0.25, scheduler: RunLoop.main)) {
+                _ in viewModel.fetchTheAccidents(region: viewModel.region)
             }
             .ignoresSafeArea()
             
@@ -71,7 +57,7 @@ struct ContentView: View {
         }
         .onAppear() {
             viewModel.importFromFiles()
-            viewModel.fetchTheAccidents(region: region)
+//            viewModel.fetchTheAccidents(region: viewModel.region)
             print("Ende .onAppear")
         }
 
