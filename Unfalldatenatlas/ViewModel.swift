@@ -48,12 +48,47 @@ struct Unfall: Identifiable {
     }
 }
 
+struct PredicatesForAccidentCharacteristics {
+    var gemeinde: NSPredicate?
+    var istFahrrad: NSPredicate?
+    var istFussgaenger: NSPredicate?
+    var istGueterKfz: NSPredicate?
+    var istKrad: NSPredicate?
+    var istPkw: NSPredicate?
+    var istSonstige: NSPredicate?
+    var jahr: NSPredicate?
+    var kreis: NSPredicate?
+    var land: NSPredicate?
+//    var lattitude: NSPredicate?
+    var lichtVerhaeltnisse: NSPredicate?
+//    var lineRefX: NSPredicate?
+//    var lineRefY: NSPredicate?
+//    var longitude: NSPredicate?
+    var monat: NSPredicate?
+    var regierungsBezirk: NSPredicate?
+    var strassenZustand: NSPredicate?
+    var stunde: NSPredicate?
+    var unfallArt: NSPredicate?
+    var unfallKategorie: NSPredicate?
+    var unfallTyp1: NSPredicate?
+    var wochentag: NSPredicate?
+    
+    var predicates: [NSPredicate] {
+        return [gemeinde, istFahrrad, istFussgaenger, istGueterKfz, istKrad, istPkw, istSonstige, jahr, kreis, land, lichtVerhaeltnisse, monat, regierungsBezirk, strassenZustand, stunde, unfallArt, unfallKategorie, unfallTyp1, wochentag].compactMap{$0}
+    }
+}
+
+
+
 class ViewModel: ObservableObject {
 
     @Published var annotations: [Unfall] = []
     @Published var accidents: [Accident] = []
+    @Published var countOfAllAccidents: Int = 0
     @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
     private let asyncContext = PersistenceController.shared.container.newBackgroundContext()
+    
+    var predicates = PredicatesForAccidentCharacteristics()
     
     init(initFromFile: Bool = false) {
 //        self.annotations = annotations
@@ -139,15 +174,17 @@ class ViewModel: ObservableObject {
                 let countResults = try? context.count(for: request)
                 print ("Anzahl Unfälle im Geobereich ist \(countResults)")
 
+                // fetch some accidents to see if there is something in the database
                 let accidents = try? context.fetch(request)
                 print("\(accidents?.first?.debugDescription)")
                 print("\(accidents?.last?.debugDescription)")
                 
-                if let accidents {
-                    for accident in accidents {
-                        print("Accident no \(accident.accidentObjectID): long = \(accident.longitude), lat = \(accident.lattitude), Datum: \(accident.jahr)-\(accident.monat), Tag: \(accident.wochentag)")
-                    }
-                }
+                // Print some accidents
+//                if let accidents {
+//                    for accident in accidents {
+//                        print("Accident no \(accident.accidentObjectID): long = \(accident.longitude), lat = \(accident.lattitude), Datum: \(accident.jahr)-\(accident.monat), Tag: \(accident.wochentag)")
+//                    }
+//                }
                 
             } catch {
                  print ("Error: \(error)")
@@ -157,47 +194,39 @@ class ViewModel: ObservableObject {
     }
     
     func fetchTheAccidents(region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.66, longitude: 9.11), latitudinalMeters: 1000, longitudinalMeters: 1000)) {
-        let request = Accident.fetchRequest()
         let longitudeMin = region.center.longitude - 0.5 * region.span.longitudeDelta
         let longitudeMax = region.center.longitude + 0.5 * region.span.longitudeDelta
         let lattitudeMin = region.center.latitude - 0.5 * region.span.latitudeDelta
         let lattitudeMax = region.center.latitude + 0.5 * region.span.latitudeDelta
-//        let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
-        let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf AND unfallKategorie <= 2 ", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
 
-        request.fetchLimit = 500
-        request.fetchBatchSize = 50
+        let predicateLongLat = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
         
+//        predicates.istPkw = NSPredicate(format: "istPkw == 1")
+//        predicates.istKrad = NSPredicate(format: "istKrad == 1")
+        predicates.unfallKategorie = NSPredicate(format: "unfallKategorie <=2")
+//        predicates.unfallArt = NSPredicate(format: "unfallArt <= 1")
+//        predicates.unfallTyp1 = NSPredicate(format: "unfallTyp1 == 6")
+        
+        let request = Accident.fetchRequest()
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + predicates.predicates)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
 
-        request.predicate = predicate
+        request.fetchLimit = 400
+        request.fetchBatchSize = 50
         
-        let context = PersistenceController.shared.container.viewContext
+        // Analyse
+        let countAllAccidentsRequest = Accident.fetchRequest()
+        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates.predicates)
         
-//        try? accidents = context.fetch(request)
-//        print(accidents.last?.objectID)
-        
-//        let contex2 = PersistenceController.shared.container.newBackgroundContext()
-//        contex2.automaticallyMergesChangesFromParent = true
-//        contex2.performAndWait {
-//            do {
-//                let  results =  try contex2.fetch(request)
-//                DispatchQueue.main.async {
-//                    self.accidents = results
-//                }
-//            }
-//            catch {
-//                fatalError()
-//            }
-//        }
-//
-        asyncContext.automaticallyMergesChangesFromParent
-        asyncContext.performAndWait {
+        asyncContext.automaticallyMergesChangesFromParent = true
+        asyncContext.perform { [unowned self] in
             do {
-//                accidents =  try asyncContext.fetch(request)
-                let  results =  try asyncContext.fetch(request)
+                let countOfAllAccidents = try asyncContext.count(for: countAllAccidentsRequest)
+                let accidents =  try self.asyncContext.fetch(request)
+                // self.accidents =  try self.asyncContext.fetch(request)
                 DispatchQueue.main.async {
-                    self.accidents = results
+                    self.countOfAllAccidents = countOfAllAccidents
+                    self.accidents = accidents
                 }
             }
             catch {
@@ -207,21 +236,21 @@ class ViewModel: ObservableObject {
         
     }
     
-    static func specialFetchRequest() -> NSFetchRequest<Accident> {
-
-        // Special fetch request around Steinenbronn (48.655059814453125 und long = 9.112565011959946)
-        let request = Accident.fetchRequest()
-        let longitudeMin = 9.11 - 0.08
-        let longitudeMax = 9.11 + 0.08
-        let lattitudeMin = 48.66 - 0.08
-        let lattitudeMax = 48.66 + 0.08
-        let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
-
-        request.predicate = predicate
-        
-        return request
-    }
+//    static func specialFetchRequest() -> NSFetchRequest<Accident> {
+//
+//        // Special fetch request around Steinenbronn (48.655059814453125 und long = 9.112565011959946)
+//        let request = Accident.fetchRequest()
+//        let longitudeMin = 9.11 - 0.08
+//        let longitudeMax = 9.11 + 0.08
+//        let lattitudeMin = 48.66 - 0.08
+//        let lattitudeMax = 48.66 + 0.08
+//        let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf AND ", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
+//        request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
+//
+//        request.predicate = predicate
+//
+//        return request
+//    }
     
     static func readFromFileToCoreData() async throws {
 

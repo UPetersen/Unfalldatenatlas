@@ -36,21 +36,35 @@ struct ContentView: View {
             Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
             MapAnnotation(coordinate: accident.coordinate) {
                     ZStack {
-                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
-                            .frame(width: 18, height: 18)
                         if showSymbols {
-                            Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
+                            Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+                                .frame(width: 25, height: 25)
+                            Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))").font(.title3)
+                        } else {
+                            Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+                                .frame(width: 12, height: 12)
                         }
                     }
                 }
             }
+            // fetch accidents for current region only some time after user does not pan or pinch anymore.
             .onReceive(viewModel.$region.debounce(for: 0.25, scheduler: RunLoop.main)) {
                 _ in viewModel.fetchTheAccidents(region: viewModel.region)
             }
             .ignoresSafeArea()
-            
-            Text("\(viewModel.accidents.count) Unfälle")
-                .padding(.horizontal)
+            HStack {
+                Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
+                    .padding(.horizontal)
+                Spacer()
+                Text("Span: \(viewModel.region.span.latitudeDelta), \(viewModel.region.span.longitudeDelta)")
+                Spacer()
+                Button(action: {
+//                    isPresentingScanner = true
+                    print("Button pressed")
+                }) {
+                    Image(systemName: "line.3.horizontal.decrease.circle").padding(.horizontal)
+                }
+            }
         }
         .onTapGesture {
             showSymbols.toggle()
@@ -60,7 +74,6 @@ struct ContentView: View {
 //            viewModel.fetchTheAccidents(region: viewModel.region)
             print("Ende .onAppear")
         }
-
         
         //        NavigationView {
         //            List {
@@ -143,7 +156,7 @@ struct ContentView: View {
         }
         
         // Light Conditions, not icon for twilight (Dämmerung) available, so just made it night, too.
-        if accident.lichtVerhaeltnisse >= 1 {symbol.append("🌛") }
+        if accident.lichtVerhaeltnisse >= 1 {symbol.append("🌝") }
         
         // Road conditions
         if accident.strassenZustand == 1 {
