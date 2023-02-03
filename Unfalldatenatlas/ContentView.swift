@@ -31,105 +31,55 @@ struct ContentView: View {
 //    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)], animation: .default) private var items: FetchedResults<Item>
     
     var body: some View {
-        
-        ZStack(alignment: .topLeading) {
-            Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
-            MapAnnotation(coordinate: accident.coordinate) {
-                    ZStack {
-                        if showSymbols {
-                            Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
-                                .frame(width: 25, height: 25)
-                            Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))").font(.title3)
-                        } else {
-                            Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
-                                .frame(width: 12, height: 12)
+        NavigationStack {
+            ZStack(alignment: .topLeading) {
+                Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
+                MapAnnotation(coordinate: accident.coordinate) {
+                        ZStack {
+                            if showSymbols {
+                                Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+                                    .frame(width: 25, height: 25)
+                                Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))").font(.title3)
+                            } else {
+                                Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+                                    .frame(width: 12, height: 12)
+                            }
                         }
                     }
                 }
+                // fetch accidents for current region only some time after user does not pan or pinch anymore.
+                .onReceive(viewModel.$region.debounce(for: 0.25, scheduler: RunLoop.main)) {
+                    _ in viewModel.fetchTheAccidents(region: viewModel.region)
+                }
+//                .ignoresSafeArea()
+                HStack {
+                    Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
+                        .padding(.horizontal)
+                    Spacer()
+                    Text("Span: \(viewModel.region.span.latitudeDelta), \(viewModel.region.span.longitudeDelta)")
+                }
             }
-            // fetch accidents for current region only some time after user does not pan or pinch anymore.
-            .onReceive(viewModel.$region.debounce(for: 0.25, scheduler: RunLoop.main)) {
-                _ in viewModel.fetchTheAccidents(region: viewModel.region)
+            .onTapGesture {
+//                viewModel.showSymbols.toggle()
+                showSymbols.toggle()
             }
-            .ignoresSafeArea()
-            HStack {
-                Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
-                    .padding(.horizontal)
-                Spacer()
-                Text("Span: \(viewModel.region.span.latitudeDelta), \(viewModel.region.span.longitudeDelta)")
-                Spacer()
-                Button(action: {
-//                    isPresentingScanner = true
-                    print("Button pressed")
-                }) {
-                    Image(systemName: "line.3.horizontal.decrease.circle").padding(.horizontal)
+            .onAppear() {
+                viewModel.importFromFiles()
+    //            viewModel.fetchTheAccidents(region: viewModel.region)
+                print("Ende .onAppear")
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        FilterView(accidentDataFilters: self.$viewModel.accidentDataFilters)
+                    } label: {
+                        Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
+                    }
                 }
             }
         }
-        .onTapGesture {
-            showSymbols.toggle()
-        }
-        .onAppear() {
-            viewModel.importFromFiles()
-//            viewModel.fetchTheAccidents(region: viewModel.region)
-            print("Ende .onAppear")
-        }
-        
-        //        NavigationView {
-        //            List {
-        //                ForEach(items) { item in
-        //                    NavigationLink {
-        //                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-        //                    } label: {
-        //                        Text(item.timestamp!, formatter: itemFormatter)
-        //                    }
-        //                }
-        //                .onDelete(perform: deleteItems)
-        //            }
-        //            .toolbar {
-        //                ToolbarItem(placement: .navigationBarTrailing) {
-        //                    EditButton()
-        //                }
-        //                ToolbarItem {
-        //                    Button(action: addItem) {
-        //                        Label("Add Item", systemImage: "plus")
-        //                    }
-        //                }
-        //            }
-        //            Text("Select an item")
-        //        }
     }
     
-    //    private func addItem() {
-    //        withAnimation {
-    //            let newItem = Item(context: viewContext)
-    //            newItem.timestamp = Date()
-    //
-    //            do {
-    //                try viewContext.save()
-    //            } catch {
-    //                // Replace this implementation with code to handle the error appropriately.
-    //                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-    //                let nsError = error as NSError
-    //                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-    //            }
-    //        }
-    //    }
-    //
-    //    private func deleteItems(offsets: IndexSet) {
-    //        withAnimation {
-    //            offsets.map { items[$0] }.forEach(viewContext.delete)
-    //
-    //            do {
-    //                try viewContext.save()
-    //            } catch {
-    //                // Replace this implementation with code to handle the error appropriately.
-    //                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-    //                let nsError = error as NSError
-    //                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-    //            }
-    //        }
-    //    }
     
     func symbolsForAccident(accident: Accident) -> String {
         var symbol = ""
@@ -214,13 +164,6 @@ struct ContentView: View {
         }
     }
 }
-
-//private let itemFormatter: DateFormatter = {
-//    let formatter = DateFormatter()
-//    formatter.dateStyle = .short
-//    formatter.timeStyle = .medium
-//    return formatter
-//}()
 
 struct ContentView_Previews: PreviewProvider {
     static var viewModel = ViewModel()

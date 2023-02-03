@@ -19,6 +19,7 @@
 		C6CA9F98297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F96297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld */; };
 		C6CA9FA3297DC04E000D9E8B /* Accident+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */; };
 		C6CA9FA4297DC04E000D9E8B /* Accident+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */; };
+		C6D0D023298B0AF0000572C3 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D0D022298B0AF0000572C3 /* FilterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		C6CA9F97297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Unfalldatenatlas.xcdatamodel; sourceTree = "<group>"; };
 		C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Accident+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Accident+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C6D0D022298B0AF0000572C3 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FilterView.swift; path = Unfalldatenatlas/FilterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 		C6CA9F57297DBCBC000D9E8B = {
 			isa = PBXGroup;
 			children = (
+				C6D0D022298B0AF0000572C3 /* FilterView.swift */,
 				C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */,
 				C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */,
 				C6CA9F62297DBCBC000D9E8B /* Unfalldatenatlas */,
@@ -276,6 +279,7 @@
 				C6CA9FA4297DC04E000D9E8B /* Accident+CoreDataProperties.swift in Sources */,
 				C6CA9F93297DBD19000D9E8B /* ViewModel.swift in Sources */,
 				C6CA9F95297DBD4D000D9E8B /* ContentView.swift in Sources */,
+				C6D0D023298B0AF0000572C3 /* FilterView.swift in Sources */,
 				C6CA9F6D297DBCBC000D9E8B /* Persistence.swift in Sources */,
 				C6CA9F64297DBCBC000D9E8B /* UnfalldatenatlasApp.swift in Sources */,
 				C6CA9F98297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */,

@@ -1,0 +1,611 @@
+//
+//  FilterView.swift
+//  Unfalldatenatlas
+//
+//  Created by Uwe Petersen on 01.02.23.
+//
+
+import SwiftUI
+
+//var gemeinde: NSPredicate?
+//var istFahrrad: NSPredicate?
+//var istFussgaenger: NSPredicate?
+//var istGueterKfz: NSPredicate?
+//var istKrad: NSPredicate?
+//var istPkw: NSPredicate?
+//var istSonstige: NSPredicate?
+//var jahr: NSPredicate?
+//var kreis: NSPredicate?
+//var land: NSPredicate?
+//var lichtVerhaeltnisse: NSPredicate?
+//var monat: NSPredicate?
+//var regierungsBezirk: NSPredicate?
+//var strassenZustand: NSPredicate?
+//var stunde: NSPredicate?
+//var unfallArt: NSPredicate?
+//var unfallKategorie: NSPredicate?
+//var unfallTyp1: NSPredicate?
+//var wochentag: NSPredicate?
+
+struct FilterView: View {
+//    var predicates: PredicatesForAccidentCharacteristics = PredicatesForAccidentCharacteristics()
+    @State private var istFussgaenger = 0
+    @State private var unfallKategorie = 0
+    @State private var fussgaenger = IstFussgaenger.keineAuswahl
+
+    @Binding var accidentDataFilters: AccidentDataFilter
+//    @Binding var viewModel: ViewModel
+
+    
+    var body: some View {
+        List {
+            Section {
+                Text("Hier könnte die Gesamtzahl stehen.")
+            }
+            
+            Section {
+                // Unfall-Kategorie
+                Picker("Unfall-Kategorie", selection: $accidentDataFilters.unfallKategorie) {
+                    ForEach(UnfallKategorie.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+                
+                // Unfall-Art
+                Picker("Unfall-Art", selection: $accidentDataFilters.unfallArt) {
+                    ForEach(UnfallArt.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+                
+                // Unfall-Typ
+                Picker("Unfall-Typ", selection: $accidentDataFilters.unfallTyp1) {
+                    ForEach(UnfallTyp1.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+            }
+            
+            Section {
+                // Lichtverhaeltnisse
+                Picker("Lichtverhälntisse", selection: $accidentDataFilters.lichtVerhaeltnisse) {
+                    ForEach(LichtVerhaeltnisse.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+
+                // Strassenzustand
+                Picker("Straßenzustand", selection: $accidentDataFilters.strassenZustand) {
+                    ForEach(StrassenZustand.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+            }
+            
+            Section {
+                // Pkw-Beteiligung
+                Picker("Pkwbeteiligung", selection: $accidentDataFilters.istPkw) {
+                    ForEach(IstPkw.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+                
+                // Krad-Beteiligung
+                Picker("Kraftradbeteiligung", selection: $accidentDataFilters.istKrad) {
+                    ForEach(IstKrad.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+                
+                // Fahrrad-Beteiligung
+                Picker("Fahrradbeteiligung", selection: $accidentDataFilters.istFahrrad) {
+                    ForEach(IstFahrrad.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+                
+                // Fußgänger-Beteiligung
+                Picker("Fußgängerbeteiligung", selection: $accidentDataFilters.istFussgaenger) {
+                    ForEach(IstFussgaenger.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+                //            .onChange(of: accidentDataFilters.istFussgaenger) { predicates.istFussgaenger = $0.predicate }
+                
+                // Güter-Kfz-Beteiligung
+                Picker("Güter-Kfz-Beteiligung", selection: $accidentDataFilters.istGueterKfz) {
+                    ForEach(IstGueterKfz.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+                
+                // Sonstige-Kfz-Beteiligung
+                Picker("Sonstige Kfz-Beteiligung", selection: $accidentDataFilters.istSonstige) {
+                    ForEach(IstSonstige.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+            }
+            
+            Section {
+                // Unfall-Jahr
+                Picker("Unfall-Jahr", selection: $accidentDataFilters.jahr) {
+                    ForEach(UnfallJahr.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+
+                // Unfall-Monat
+                Picker("Unfall-Monat", selection: $accidentDataFilters.monat) {
+                    ForEach(UnfallMonat.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+
+                // Unfall-Wochentag
+                Picker("Unfall-Wochentag", selection: $accidentDataFilters.wochentag) {
+                    ForEach(UnfallWochentag.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+            }
+
+            Section {
+                // Bundesland
+                Picker("Bundesland", selection: $accidentDataFilters.land) {
+                    ForEach(Land.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+            }
+            
+            Section {
+                Text("Das Predicate: \(accidentDataFilters.predicates.debugDescription)")
+            }
+        }
+        .navigationTitle("Datenauswahl")
+        
+    }
+}
+
+enum Land: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 0
+    case schleswigHolstein = 1
+    case hamburg = 2
+    case niedersachsen = 3
+    case bremen = 4
+    case nordrheinWestphalen = 5
+    case hessen = 6
+    case rheinlandPfalz = 7
+    case badenWuerttemberg = 8
+    case bayern = 9
+    case saarland = 10
+    case berlin = 11
+    case brandenburg = 12
+    case mecklenburgVorpommern = 13
+    case sachsen = 14
+    case sachsenAnhalt = 15
+    case thueringen = 16
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "land == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .schleswigHolstein: return "Schleswig-Holstein (ab 2016)"
+        case .hamburg: return "Hamburg (ab 2016)"
+        case .niedersachsen: return "Niedersachsen (ab 2017)"
+        case .bremen: return "Bremen (ab 2016)"
+        case .nordrheinWestphalen: return "Nordrhein-Westphalen (ab 2016)"
+        case .hessen: return "Hessen (ab 2016)"
+        case .rheinlandPfalz: return "Rheinland-Pfalz (ab 2017)"
+        case .badenWuerttemberg: return "Baden-Württemberg (ab 2016)"
+        case .bayern: return "Bayern (ab 2016)"
+        case .saarland: return "Saarland (ab 2017)"
+        case .berlin: return "Berlin (ab 2018)"
+        case .brandenburg: return "Brandenburg (ab 2017)"
+        case .mecklenburgVorpommern: return "Mecklenburg-Vorpommern (ab 2020)"
+        case .sachsen: return "Sachsen (ab 2016)"
+        case .sachsenAnhalt: return "Sachsen-Anhalt (ab 2017)"
+        case .thueringen: return "Thürungen (ab 2019)"
+        }
+    }
+}
+
+
+enum StrassenZustand: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 4
+    case trocken = 0
+    case nassFeuchtSchluepfrig = 1
+    case winterglatt = 2
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "strassenZustand == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .trocken: return "Trocken"
+        case .nassFeuchtSchluepfrig: return "Nass/feucht/schlüpfrig"
+        case .winterglatt: return "Winterglatt"
+        }
+    }
+}
+
+enum LichtVerhaeltnisse: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 4
+    case tageslicht = 0
+    case daemmerung = 1
+    case dunkelheit = 2
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "lichtVerhaeltnisse == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .tageslicht: return "Tageslicht"
+        case .daemmerung: return "Dämmerung"
+        case .dunkelheit: return "Dunkelheit"
+        }
+    }
+}
+
+enum UnfallWochentag: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 0
+    case sunday = 1
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "wochentag == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .sunday: return "Sonntag"
+        case .monday: return "Montag"
+        case .tuesday: return "Dienstag"
+        case .wednesday: return "Mittwoch"
+        case .thursday: return "Donnerstag"
+        case .friday: return "Freitag"
+        case .saturday: return "Samstag"
+        }
+    }
+}
+
+enum UnfallMonat: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 0
+    case january = 1
+    case february = 2
+    case march = 3
+    case april = 4
+    case may = 5
+    case june = 6
+    case july = 7
+    case august = 8
+    case september = 9
+    case october = 10
+    case november = 11
+    case december = 12
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "monat == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .january: return "Januar"
+        case .february: return "Februar"
+        case .march: return "März"
+        case .april: return "April"
+        case .may: return "Mai"
+        case .june: return "Juni"
+        case .july: return " Juli"
+        case .august: return "August"
+        case .september: return "September"
+        case .october: return "Oktober"
+        case .november: return "November"
+        case .december: return "Dezember"
+        }
+    }
+}
+
+
+
+enum UnfallJahr: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 0
+    case jahr2016 = 2016
+    case jahr2017 = 2107
+    case jahr2018 = 2018
+    case jahr2019 = 2019
+    case jahr2020 = 2020
+    case jahr2021 = 2021
+
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "jahr == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .jahr2016: return "2016"
+        case .jahr2017: return "2017"
+        case .jahr2018: return "2018"
+        case .jahr2019: return "2019"
+        case .jahr2020: return "2020"
+        case .jahr2021: return "2021"
+        }
+    }
+}
+
+
+enum UnfallTyp1: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 0
+    case fahrUnfall = 1
+    case abbiegeUnfall = 2
+    case einbiegenKreuzenUnfall = 3
+    case ueberschreitenUnfall = 4
+    case unfallDurchRuhendenVerkehr = 5
+    case unfallImLaengsverkehr = 6
+    case sonstigerUnfall = 7
+ 
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "unfallTyp1 == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .fahrUnfall: return "Fahrunfall (grün)"
+        case .abbiegeUnfall: return "Abbiegeunfall (gelb)"
+        case .einbiegenKreuzenUnfall: return "Einbiegen-/Kreuzenunfall (rot)"
+        case .ueberschreitenUnfall: return "Überschreiten-Unfall (weiß)"
+        case .unfallDurchRuhendenVerkehr: return "Unfall durch ruhenden Verkehr (blau)"
+        case .unfallImLaengsverkehr: return "Unfall im Längsverkehr (orange)"
+        case .sonstigerUnfall: return "Sonstiger Unfall (schwarz)"
+        }
+    }
+}
+
+enum UnfallKategorie: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 0
+    case mitGetoeteten = 1
+    case mitSchwerverletzten = 2
+    case mitLeichtVerletzten = 3
+ 
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "unfallKategorie == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .mitGetoeteten: return "Mit Getöteten"
+        case .mitSchwerverletzten: return "Mit Schwerverletzten"
+        case .mitLeichtVerletzten: return "Mit Leichtverletzten"
+        }
+    }
+}
+
+enum UnfallArt: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 10
+    case mitAnfahrendemAnhaltendemRuhendemFzg = 1
+    case mitVorausFahrendemWartendemFzg = 2
+    case mitSeitlichFahrendemFzg = 3
+    case mitEntgegenkommendemFzg = 4
+    case mitEinbiegendemKreuzendemFzg = 5
+    case zwischenFahrezeugUndFussgaenger = 6
+    case aufprallAufFahrbahnhindernis = 7
+    case abkommenNachRechts = 8
+    case abkommenNachLinks = 9
+    case unfallAndererArt = 0
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "unfallArt == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .mitAnfahrendemAnhaltendemRuhendemFzg: return "Zusammenstoß mit anfahrendem/ anhaltendem/ruhendem Fahrzeug"
+        case .mitVorausFahrendemWartendemFzg: return "Zusammenstoß mit vorausfahrendem / wartendem Fahrzeug"
+        case .mitSeitlichFahrendemFzg: return "Zusammenstoß mit seitlich in gleicher Richtung fahrendem Fahrzeug"
+        case .mitEntgegenkommendemFzg: return "Zusammenstoß mit entgegenkommendem Fahrzeug"
+        case .mitEinbiegendemKreuzendemFzg: return "Zusammenstoß mit einbiegendem / kreuzendem Fahrzeug"
+        case .zwischenFahrezeugUndFussgaenger: return "Zusammenstoß zwischen Fahrzeug und Fußgänger"
+        case .aufprallAufFahrbahnhindernis: return "Aufprall auf Fahrbahnhindernis"
+        case .abkommenNachRechts: return "Abkommen von Fahrbahn nach rechts"
+        case .abkommenNachLinks: return "Abkommen von Fahrbahn nach links"
+        case .unfallAndererArt: return " Unfall anderer Art"
+        }
+    }
+}
+
+enum IstSonstige: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 2
+    case ohneSonstige = 0
+    case mitSonstige = 1
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "istSonstige == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .ohneSonstige: return "ohne Sonstige-Kfz-Beteiligung"
+        case .mitSonstige: return "mit Sonstige-Kfz-Beteiligung"
+        }
+    }
+}
+
+enum IstGueterKfz: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 2
+    case ohneGueterKfz = 0
+    case mitGueterKfz = 1
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "istGueterKfz == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .ohneGueterKfz: return "ohne Güter-Kfz-Beteiligung"
+        case .mitGueterKfz: return "mit Güter-Kfz-Beteiligung"
+        }
+    }
+}
+
+
+enum IstKrad: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 2
+    case ohneKrad = 0
+    case mitKrad = 1
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "istKrad == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .ohneKrad: return "ohne Kraftradbeteiligung"
+        case .mitKrad: return "mit Kraftradbeteiligung"
+        }
+    }
+}
+
+enum IstPkw: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 2
+    case ohnePkw = 0
+    case mitPkw = 1
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "istPkw == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .ohnePkw: return "ohne Pkwbeteiligung"
+        case .mitPkw: return "mit Pkwbeteiligung"
+        }
+    }
+}
+
+enum IstFahrrad: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 2
+    case ohneFahrrad = 0
+    case mitFahrrad = 1
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "istFahrrad == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .ohneFahrrad: return "ohne Fahrradbeteiligung"
+        case .mitFahrrad: return "mit Fahrradbeteiligung"
+        }
+    }
+}
+
+enum IstFussgaenger: Int, Identifiable, CaseIterable {
+    case keineAuswahl = 2
+    case ohneFussgaenger = 0
+    case mitFussgaenger = 1
+    
+    var id: Self { self }
+    var predicate: NSPredicate? {
+        switch self {
+        case .keineAuswahl:
+            return nil
+        default:
+            return NSPredicate(format: "istFussgaenger == %i", self.rawValue)
+        }
+    }
+    
+    var sectionText: String {
+        switch self {
+        case .keineAuswahl: return "keine Auswahl"
+        case .ohneFussgaenger: return "ohne Fußgängerbeteiligung"
+        case .mitFussgaenger: return "mit Fußgängerbeteiligung"
+        }
+    }
+}
+
+//struct FilterView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FilterView()
+//    }
+//}

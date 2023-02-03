@@ -59,11 +59,7 @@ struct PredicatesForAccidentCharacteristics {
     var jahr: NSPredicate?
     var kreis: NSPredicate?
     var land: NSPredicate?
-//    var lattitude: NSPredicate?
     var lichtVerhaeltnisse: NSPredicate?
-//    var lineRefX: NSPredicate?
-//    var lineRefY: NSPredicate?
-//    var longitude: NSPredicate?
     var monat: NSPredicate?
     var regierungsBezirk: NSPredicate?
     var strassenZustand: NSPredicate?
@@ -78,17 +74,62 @@ struct PredicatesForAccidentCharacteristics {
     }
 }
 
+struct AccidentDataFilter {
+//    var gemeinde: NSPredicate?
+    var istFahrrad = IstFahrrad.keineAuswahl
+    var istFussgaenger = IstFussgaenger.keineAuswahl
+    var istGueterKfz = IstGueterKfz.keineAuswahl
+    var istKrad = IstKrad.keineAuswahl
+    var istPkw = IstPkw.keineAuswahl
+    var istSonstige = IstSonstige.keineAuswahl
+    var jahr = UnfallJahr.keineAuswahl
+//    var kreis: NSPredicate?
+    var land = Land.keineAuswahl
+    var lichtVerhaeltnisse = LichtVerhaeltnisse.keineAuswahl
+    var monat = UnfallMonat.keineAuswahl
+//    var regierungsBezirk: NSPredicate?
+    var strassenZustand = StrassenZustand.keineAuswahl
+//    var stunde: NSPredicate?
+    var unfallArt = UnfallArt.keineAuswahl
+    var unfallKategorie = UnfallKategorie.keineAuswahl
+    var unfallTyp1 = UnfallTyp1.keineAuswahl
+    var wochentag = UnfallWochentag.keineAuswahl
+    
+    var predicates: [NSPredicate] {
+//        return [gemeinde, istFahrrad, istFussgaenger, istGueterKfz, istKrad, istPkw, istSonstige, jahr, kreis, land, lichtVerhaeltnisse, monat, regierungsBezirk, strassenZustand, stunde, unfallArt, unfallKategorie, unfallTyp1, wochentag].compactMap{$0}
+        return [istFahrrad.predicate,
+                istFussgaenger.predicate,
+                istGueterKfz.predicate,
+                istKrad.predicate,
+                istPkw.predicate,
+                istSonstige.predicate,
+                unfallArt.predicate,
+                unfallKategorie.predicate,
+                unfallTyp1.predicate,
+                lichtVerhaeltnisse.predicate,
+                strassenZustand.predicate,
+                jahr.predicate,
+                monat.predicate,
+                wochentag.predicate,
+                land.predicate
+        ].compactMap{$0}
+    }
+}
+
 
 
 class ViewModel: ObservableObject {
 
-    @Published var annotations: [Unfall] = []
+//    @Published var annotations: [Unfall] = []
     @Published var accidents: [Accident] = []
     @Published var countOfAllAccidents: Int = 0
     @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
-    private let asyncContext = PersistenceController.shared.container.newBackgroundContext()
+    @Published var predicates = PredicatesForAccidentCharacteristics()
+    @Published var accidentDataFilters = AccidentDataFilter()
     
-    var predicates = PredicatesForAccidentCharacteristics()
+//    @Published var showSymbols = false 
+    
+    private let asyncContext = PersistenceController.shared.container.newBackgroundContext()
     
     init(initFromFile: Bool = false) {
 //        self.annotations = annotations
@@ -97,35 +138,35 @@ class ViewModel: ObservableObject {
     
     //https://stackoverflow.com/questions/74318352/publishing-changes-from-background-threads-is-not-allowed-make-sure-to-publish
     
-    @MainActor func fetchAccidents()  {
-        
-        let url = URL.applicationSupportDirectory.appending(component: "Unfallorte2021_LinRef.csv")
-        print("Application Support Directory: \(url.description)")
-        print(url.description)
-
-        Task.init {
-            do {
-                var accidents: [Unfall] = []
-                // Read each line of the data as it becomes available
-                for try await line in url.lines.dropFirst().dropFirst(81000).prefix(3000) // Skip first line which contains heaader information
-                {
-                    // Do something with line.
-                    let components = line.components(separatedBy: ";")
-                    let objectID = Int(components[0])!
-                    let UIDENTSTLAE = components[1]
-                    let uLand = Int(components[2])!
-                    let latitude = Double(components[24].replacingOccurrences(of: ",", with: "."))!
-                    let longitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
-                    if uLand == 8 {
-                        accidents.append(Unfall(longitude: longitude, latitude: latitude, info: "hello", objectID: objectID, accidentID: UIDENTSTLAE, uLand: uLand))
-                    }
-                }
-                annotations = accidents
-            } catch {
-                 print ("Error: \(error)")
-            }
-        }
-    }
+//    @MainActor func fetchAccidents()  {
+//
+//        let url = URL.applicationSupportDirectory.appending(component: "Unfallorte2021_LinRef.csv")
+//        print("Application Support Directory: \(url.description)")
+//        print(url.description)
+//
+//        Task.init {
+//            do {
+//                var accidents: [Unfall] = []
+//                // Read each line of the data as it becomes available
+//                for try await line in url.lines.dropFirst().dropFirst(81000).prefix(3000) // Skip first line which contains heaader information
+//                {
+//                    // Do something with line.
+//                    let components = line.components(separatedBy: ";")
+//                    let objectID = Int(components[0])!
+//                    let UIDENTSTLAE = components[1]
+//                    let uLand = Int(components[2])!
+//                    let latitude = Double(components[24].replacingOccurrences(of: ",", with: "."))!
+//                    let longitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
+//                    if uLand == 8 {
+//                        accidents.append(Unfall(longitude: longitude, latitude: latitude, info: "hello", objectID: objectID, accidentID: UIDENTSTLAE, uLand: uLand))
+//                    }
+//                }
+//                annotations = accidents
+//            } catch {
+//                 print ("Error: \(error)")
+//            }
+//        }
+//    }
     
     @MainActor func importFromFiles() {
 
@@ -169,7 +210,6 @@ class ViewModel: ObservableObject {
                 let lattitudeMin = 48.66 - 0.07
                 let lattitudeMax = 48.66 + 0.07
                 let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
-//                let predicate = NSPredicate(format: "(longitude < %lf) AND (%lf < longitude) AND (lattitude < %lf) AND (%lf < lattitude)", argumentArray: [longitudeMin, longitudeMax, lattitudeMin, lattitudeMax])
                 request.predicate = predicate
                 let countResults = try? context.count(for: request)
                 print ("Anzahl Unfälle im Geobereich ist \(countResults)")
@@ -203,21 +243,25 @@ class ViewModel: ObservableObject {
         
 //        predicates.istPkw = NSPredicate(format: "istPkw == 1")
 //        predicates.istKrad = NSPredicate(format: "istKrad == 1")
-        predicates.unfallKategorie = NSPredicate(format: "unfallKategorie <=2")
+//        predicates.unfallKategorie = NSPredicate(format: "unfallKategorie <=2")
 //        predicates.unfallArt = NSPredicate(format: "unfallArt <= 1")
 //        predicates.unfallTyp1 = NSPredicate(format: "unfallTyp1 == 6")
         
         let request = Accident.fetchRequest()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + predicates.predicates)
+//        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + predicates.predicates)
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + accidentDataFilters.predicates)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
 
         request.fetchLimit = 400
         request.fetchBatchSize = 50
         
+        print("Das Predicate des Fetch Request: \(request.predicate!.debugDescription)")
+        
         // Analyse
         let countAllAccidentsRequest = Accident.fetchRequest()
-        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates.predicates)
-        
+//        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates.predicates)
+        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: accidentDataFilters.predicates)
+
         asyncContext.automaticallyMergesChangesFromParent = true
         asyncContext.perform { [unowned self] in
             do {
