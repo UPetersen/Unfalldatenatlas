@@ -34,20 +34,20 @@ import MapKit
 
 // Steinenbronn: lat = 48.655059814453125 und long = 9.112565011959946
 
-struct Unfall: Identifiable {
-    var longitude: Double
-    var latitude: Double
-    var info: String
-    var objectID: Int
-    var id = UUID()
-    var accidentID: String
-    var uLand: Int
-    
-    var coordinate: CLLocationCoordinate2D {
-      CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-    }
-}
-
+//struct Unfall: Identifiable {
+//    var longitude: Double
+//    var latitude: Double
+//    var info: String
+//    var objectID: Int
+//    var id = UUID()
+//    var accidentID: String
+//    var uLand: Int
+//
+//    var coordinate: CLLocationCoordinate2D {
+//      CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+//    }
+//}
+//
 struct PredicatesForAccidentCharacteristics {
     var gemeinde: NSPredicate?
     var istFahrrad: NSPredicate?
@@ -168,70 +168,6 @@ class ViewModel: ObservableObject {
 //        }
 //    }
     
-    @MainActor func importFromFiles() {
-
-
-        Task.init() {
-            do {
-
-                let readAndStoreData = false
-                if readAndStoreData {
-                    try await ViewModel.readFromFileToCoreData()
-                }
-                
-                // fetch count of accidents from database and print to console
-                let countRequest = Accident.fetchRequest()
-                let context = PersistenceController.shared.container.viewContext
-                let totalCount =  try? context.count(for: countRequest)
-                print ("Anzahl Unfälle in Datenbank: \(totalCount)")
-                
-                countRequest.predicate = NSPredicate(format: "%i == jahr", 2016)
-                print ("Anzahl Unfälle in Datenbank für 2016: \(try? context.count(for: countRequest))")
-                
-                countRequest.predicate = NSPredicate(format: "%i == jahr", 2017)
-                print ("Anzahl Unfälle in Datenbank für 2017: \(try? context.count(for: countRequest))")
-                
-                countRequest.predicate = NSPredicate(format: "%i == jahr", 2018)
-                print ("Anzahl Unfälle in Datenbank für 2018: \(try? context.count(for: countRequest))")
-                
-                countRequest.predicate = NSPredicate(format: "%i == jahr", 2019)
-                print ("Anzahl Unfälle in Datenbank für 2019: \(try? context.count(for: countRequest))")
-                
-                countRequest.predicate = NSPredicate(format: "%i == jahr", 2020)
-                print ("Anzahl Unfälle in Datenbank für 2020: \(try? context.count(for: countRequest))")
-                
-                countRequest.predicate = NSPredicate(format: "%i == jahr", 2021)
-                print ("Anzahl Unfälle in Datenbank für 2021: \(try? context.count(for: countRequest))")
-                
-                // Fetch some data to see if there is some correct data stored.
-                let request = Accident.fetchRequest()
-                let longitudeMin = 9.11 - 0.07
-                let longitudeMax = 9.11 + 0.07
-                let lattitudeMin = 48.66 - 0.07
-                let lattitudeMax = 48.66 + 0.07
-                let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
-                request.predicate = predicate
-                let countResults = try? context.count(for: request)
-                print ("Anzahl Unfälle im Geobereich ist \(countResults)")
-
-                // fetch some accidents to see if there is something in the database
-                let accidents = try? context.fetch(request)
-                print("\(accidents?.first?.debugDescription)")
-                print("\(accidents?.last?.debugDescription)")
-                
-                // Print some accidents
-//                if let accidents {
-//                    for accident in accidents {
-//                        print("Accident no \(accident.accidentObjectID): long = \(accident.longitude), lat = \(accident.lattitude), Datum: \(accident.jahr)-\(accident.monat), Tag: \(accident.wochentag)")
-//                    }
-//                }
-                
-            } catch {
-                 print ("Error: \(error)")
-            }
-        }
-        
-    }
     
     func fetchTheAccidents(region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.66, longitude: 9.11), latitudinalMeters: 1000, longitudinalMeters: 1000)) {
         let longitudeMin = region.center.longitude - 0.5 * region.span.longitudeDelta
@@ -240,12 +176,6 @@ class ViewModel: ObservableObject {
         let lattitudeMax = region.center.latitude + 0.5 * region.span.latitudeDelta
 
         let predicateLongLat = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
-        
-//        predicates.istPkw = NSPredicate(format: "istPkw == 1")
-//        predicates.istKrad = NSPredicate(format: "istKrad == 1")
-//        predicates.unfallKategorie = NSPredicate(format: "unfallKategorie <=2")
-//        predicates.unfallArt = NSPredicate(format: "unfallArt <= 1")
-//        predicates.unfallTyp1 = NSPredicate(format: "unfallTyp1 == 6")
         
         let request = Accident.fetchRequest()
 //        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + predicates.predicates)
@@ -280,43 +210,100 @@ class ViewModel: ObservableObject {
         
     }
     
-//    static func specialFetchRequest() -> NSFetchRequest<Accident> {
-//
-//        // Special fetch request around Steinenbronn (48.655059814453125 und long = 9.112565011959946)
-//        let request = Accident.fetchRequest()
-//        let longitudeMin = 9.11 - 0.08
-//        let longitudeMax = 9.11 + 0.08
-//        let lattitudeMin = 48.66 - 0.08
-//        let lattitudeMax = 48.66 + 0.08
-//        let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf AND ", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
-//        request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
-//
-//        request.predicate = predicate
-//
-//        return request
-//    }
+
+    // Imports the date from the *.csv files from Destatis.de into core date
+    // Do not forget to a) call this function from ContentVeiw.swift and
+    // b) set readAndStorData in the func to true.
+    @MainActor func importFromFiles() {
+
+        Task.init() {
+            do {
+                // Set this to true to read all files into core data
+                // Steps to be done before:
+                //   1. Delete app completely and install newly (-> core data new and empty)
+                //   2. Donwload the app container to the mac.
+                //   3. Copy the *.csv files into the application support directory of the container.
+                //   4. Replace the container of the app on the iphone with the container from the mac (containing the *.csv files)
+                //   5. Install the app with 'readAndStoreData = true'. This run will load all the files to core data
+                //   6. Install the app again with 'readAndStoreData = false'. From now on core data will not be changed any more.
+                let readAndStoreData = true
+                
+                // Read data from files into core data.
+                if readAndStoreData {
+                    try await ViewModel.readFromFileToCoreData()
+                }
+                
+                // Fetch count of accidents from database (overall and for the respective years) and print to console
+                let countRequest = Accident.fetchRequest()
+                let context = PersistenceController.shared.container.viewContext
+                let totalCount =  try? context.count(for: countRequest)
+                print ("Anzahl Unfälle in Datenbank: \(String(describing: totalCount))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2016)
+                print ("Anzahl Unfälle in Datenbank für 2016: \(String(describing: try? context.count(for: countRequest)))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2017)
+                print ("Anzahl Unfälle in Datenbank für 2017: \(String(describing: try? context.count(for: countRequest)))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2018)
+                print ("Anzahl Unfälle in Datenbank für 2018: \(String(describing: try? context.count(for: countRequest)))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2019)
+                print ("Anzahl Unfälle in Datenbank für 2019: \(String(describing: try? context.count(for: countRequest)))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2020)
+                print ("Anzahl Unfälle in Datenbank für 2020: \(String(describing: try? context.count(for: countRequest)))")
+                
+                countRequest.predicate = NSPredicate(format: "%i == jahr", 2021)
+                print ("Anzahl Unfälle in Datenbank für 2021: \(String(describing: try? context.count(for: countRequest)))")
+                
+                // Fetch some data to see if there is some correct data stored.
+                let request = Accident.fetchRequest()
+                let longitudeMin = 9.11 - 0.07
+                let longitudeMax = 9.11 + 0.07
+                let lattitudeMin = 48.66 - 0.07
+                let lattitudeMax = 48.66 + 0.07
+                let predicate = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
+                request.predicate = predicate
+                let countResults = try? context.count(for: request)
+                print ("Anzahl Unfälle im Geobereich ist \(String(describing: countResults))")
+
+                // fetch some accidents to see if there is something in the database
+                let accidents = try? context.fetch(request)
+                print("\(String(describing: accidents?.first?.debugDescription))")
+                print("\(String(describing: accidents?.last?.debugDescription))")
+                
+            } catch {
+                 print ("Error: \(error)")
+            }
+        }
+    }
+
     
+    
+    /// Reads al files and stores the content in cord data. Uncomment relevant lines for respective files.
     static func readFromFileToCoreData() async throws {
 
         // Each file has a different order of columns, that's why these are separate calls.
-//        try await read2016Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte_2016_LinRef.csv"))
-//        try await read2017Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2017_LinRef.csv"))
-//        try await read2018Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2018_LinRef.csv"))
-//        try await read2019Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2019_LinRef.csv"))
-//        try await read2020Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2020_LinRef.csv"))
-//        try await read2021Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2021_LinRef.csv"))
+        try await read2016Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte_2016_LinRef.csv"))
+        try await read2017Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2017_LinRef.csv"))
+        try await read2018Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2018_LinRef.csv"))
+        try await read2019Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2019_LinRef.csv"))
+        try await read2020Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2020_LinRef.csv"))
+        try await read2021Data(url: URL.applicationSupportDirectory.appending(component: "Unfallorte2021_LinRef.csv"))
 
     }
     
     static func read2016Data(url: URL) async throws {
         print("Reading File: \(url.description)")
+        let context = PersistenceController.shared.container.newBackgroundContext()
         
         for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
             
             let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
             
             // Create core data object of type Accident and fill with the data
-            let accident = Accident(context: PersistenceController.shared.container.viewContext)
+            let accident = Accident(context: context)
             accident.identStlae = components[0]
             accident.accidentObjectID = Int32(components[1])!
             accident.land = Int16(components[2])!
@@ -342,21 +329,24 @@ class ViewModel: ObservableObject {
             accident.lineRefY = Double(components[22].replacingOccurrences(of: ",", with: "."))!
             accident.longitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
             accident.lattitude = Double(components[24].replacingOccurrences(of: ",", with: "."))!
+            
+            print("Nr.: \(accident.accidentObjectID)")
         }
-        try PersistenceController.shared.container.viewContext.save()
+        try context.save()
         print("... done with file \(url.description).")
     }
     
     static func read2017Data(url: URL) async throws {
         print("Reading File: \(url.description)")
+        let context = PersistenceController.shared.container.newBackgroundContext()
         
         for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
             
             let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
             
             // Create core data object of type Accident and fill with the data
-            let accident = Accident(context: PersistenceController.shared.container.viewContext)
-
+            let accident = Accident(context: context)
+            
             accident.accidentObjectID = Int32(components[0])!
             accident.identStlae = components[1]
             accident.land = Int16(components[2])!
@@ -371,7 +361,7 @@ class ViewModel: ObservableObject {
             accident.unfallArt = Int16(components[11])!
             accident.unfallTyp1 = Int16(components[12])!
             
-
+            
             accident.istFahrrad = components[13] == "1" ? true : false
             accident.istPkw = components[14] == "1" ? true : false
             accident.istFussgaenger = components[15] == "1" ? true : false
@@ -380,29 +370,33 @@ class ViewModel: ObservableObject {
             // TODO: how to handle this property, when information is not present? Make optional?
             accident.istGueterKfz = false // Column not present in 2017 data -> denote as false
             accident.istSonstige = components[17] == "1" ? true : false
-
+            
             accident.lichtVerhaeltnisse = Int16(components[18])!
             accident.strassenZustand = Int16(components[19])!
-
+            
             accident.lineRefX = Double(components[20].replacingOccurrences(of: ",", with: "."))!
             accident.lineRefY = Double(components[21].replacingOccurrences(of: ",", with: "."))!
             accident.longitude = Double(components[22].replacingOccurrences(of: ",", with: "."))!
             accident.lattitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
+            
+            print("Nr.: \(accident.accidentObjectID)")
         }
-        try PersistenceController.shared.container.viewContext.save()
+        try context.save()
         print("... done with file \(url.description).")
     }
     
     static func read2018Data(url: URL) async throws {
         print("Reading File: \(url.description)")
         
+        let context = PersistenceController.shared.container.newBackgroundContext()
+        
         for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
             
             let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
             
             // Create core data object of type Accident and fill with the data
-            let accident = Accident(context: PersistenceController.shared.container.viewContext)
-
+            let accident = Accident(context: context)
+            
             accident.accidentObjectID = Int32(components[0])!
             accident.identStlae = ""
             accident.land = Int16(components[1])!
@@ -417,7 +411,7 @@ class ViewModel: ObservableObject {
             accident.unfallArt = Int16(components[10])!
             accident.unfallTyp1 = Int16(components[11])!
             accident.lichtVerhaeltnisse = Int16(components[12])!
-
+            
             accident.istFahrrad = components[13] == "1" ? true : false
             accident.istPkw = components[14] == "1" ? true : false
             accident.istFussgaenger = components[15] == "1" ? true : false
@@ -430,21 +424,26 @@ class ViewModel: ObservableObject {
             accident.lineRefY = Double(components[21].replacingOccurrences(of: ",", with: "."))!
             accident.longitude = Double(components[22].replacingOccurrences(of: ",", with: "."))!
             accident.lattitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
+            
+            print("Nr.: \(accident.accidentObjectID)")
         }
-        try PersistenceController.shared.container.viewContext.save()
+        
+        try context.save()
         print("... done with file \(url.description).")
     }
     
     static func read2019Data(url: URL) async throws {
         print("Reading File: \(url.description)")
         
+        let context = PersistenceController.shared.container.newBackgroundContext()
+        
         for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
             
             let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
             
             // Create core data object of type Accident and fill with the data
-            let accident = Accident(context: PersistenceController.shared.container.viewContext)
-
+            let accident = Accident(context: context)
+            
             accident.accidentObjectID = Int32(components[0])!
             accident.identStlae = ""
             accident.land = Int16(components[1])!
@@ -459,7 +458,7 @@ class ViewModel: ObservableObject {
             accident.unfallArt = Int16(components[10])!
             accident.unfallTyp1 = Int16(components[11])!
             accident.lichtVerhaeltnisse = Int16(components[12])!
-
+            
             accident.istFahrrad = components[13] == "1" ? true : false
             accident.istPkw = components[14] == "1" ? true : false
             accident.istFussgaenger = components[15] == "1" ? true : false
@@ -472,21 +471,25 @@ class ViewModel: ObservableObject {
             accident.longitude = Double(components[21].replacingOccurrences(of: ",", with: "."))!
             accident.lattitude = Double(components[22].replacingOccurrences(of: ",", with: "."))!
             accident.strassenZustand = Int16(components[23])!
+            
+            print("Nr.: \(accident.accidentObjectID)")
         }
-        try PersistenceController.shared.container.viewContext.save()
+        try context.save()
         print("... done with file \(url.description).")
     }
     
     static func read2020Data(url: URL) async throws {
         print("Reading File: \(url.description)")
         
+        let context = PersistenceController.shared.container.newBackgroundContext()
+        
         for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
             
             let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
             
             // Create core data object of type Accident and fill with the data
-            let accident = Accident(context: PersistenceController.shared.container.viewContext)
-
+            let accident = Accident(context: context)
+            
             accident.accidentObjectID = Int32(components[0])!
             accident.identStlae = components[1]
             accident.land = Int16(components[2])!
@@ -501,7 +504,7 @@ class ViewModel: ObservableObject {
             accident.unfallArt = Int16(components[11])!
             accident.unfallTyp1 = Int16(components[12])!
             accident.lichtVerhaeltnisse = Int16(components[13])!
-
+            
             accident.istFahrrad = components[14] == "1" ? true : false
             accident.istPkw = components[15] == "1" ? true : false
             accident.istFussgaenger = components[16] == "1" ? true : false
@@ -514,20 +517,25 @@ class ViewModel: ObservableObject {
             accident.longitude = Double(components[22].replacingOccurrences(of: ",", with: "."))!
             accident.lattitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
             accident.strassenZustand = Int16(components[24])!
+            
+            print("Nr.: \(accident.accidentObjectID)")
         }
-        try PersistenceController.shared.container.viewContext.save()
+        
+        try context.save()
         print("... done with file \(url.description).")
     }
     
     static func read2021Data(url: URL) async throws {
         print("Reading File: \(url.description)")
         
+        let context = PersistenceController.shared.container.newBackgroundContext()
+        
         for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
             
             let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
             
             // Create core data object of type Accident and fill with the data
-            let accident = Accident(context: PersistenceController.shared.container.viewContext)
+            let accident = Accident(context: context)
             accident.accidentObjectID = Int32(components[0])!
             accident.identStlae = components[1]
             accident.land = Int16(components[2])!
@@ -553,8 +561,11 @@ class ViewModel: ObservableObject {
             accident.lineRefY = Double(components[22].replacingOccurrences(of: ",", with: "."))!
             accident.longitude = Double(components[23].replacingOccurrences(of: ",", with: "."))!
             accident.lattitude = Double(components[24].replacingOccurrences(of: ",", with: "."))!
+            
+            print("Nr.: \(accident.accidentObjectID)")
         }
-        try PersistenceController.shared.container.viewContext.save()
+        
+        try context.save()
         print("... done with file \(url.description).")
     }
     

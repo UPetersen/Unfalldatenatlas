@@ -33,6 +33,8 @@ struct FilterView: View {
     @State private var unfallKategorie = 0
     @State private var fussgaenger = IstFussgaenger.keineAuswahl
 
+    @ObservedObject var viewModel: ViewModel
+    
     @Binding var accidentDataFilters: AccidentDataFilter
 //    @Binding var viewModel: ViewModel
 
@@ -41,10 +43,19 @@ struct FilterView: View {
         List {
             Section {
                 Text("Hier könnte die Gesamtzahl stehen.")
+                NavigationLink {
+                    UnfallKategorieSelectionView(viewModel: viewModel)
+                } label: {
+                    Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
+                }
             }
             
             Section {
                 // Unfall-Kategorie
+                Picker("Unfall-Kategorie", selection: $viewModel.accidentDataFilters.unfallKategorie) {
+                    ForEach(UnfallKategorie.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }//.onChange(of: self.$viewModel.accidentDataFilters, perform: {print("something")}) //.onChange(of: accidentDataFilters.istFussgaenger) { predicates.istFussgaenger = $0.predicate }
+                
                 Picker("Unfall-Kategorie", selection: $accidentDataFilters.unfallKategorie) {
                     ForEach(UnfallKategorie.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
@@ -158,6 +169,12 @@ enum Land: Int, Identifiable, CaseIterable {
     case thueringen = 16
     
     var id: Self { self }
+    
+    var setWithAllCases: Set<Land> {
+        return Set(Self.allCases)
+    }
+
+    
     var predicate: NSPredicate? {
         switch self {
         case .keineAuswahl:

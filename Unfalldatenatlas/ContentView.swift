@@ -35,23 +35,23 @@ struct ContentView: View {
             ZStack(alignment: .topLeading) {
                 Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
                 MapAnnotation(coordinate: accident.coordinate) {
-                        ZStack {
-                            if showSymbols {
-                                Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
-                                    .frame(width: 25, height: 25)
-                                Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))").font(.title3)
-                            } else {
-                                Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
-                                    .frame(width: 12, height: 12)
-                            }
+                    ZStack() {
+                        
+                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+                            .frame(width: 12, height: 12)
+                        
+                        Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
+                            .font(.title3)
+                            .background(Color.white.opacity(0.1))
+                            .padding(.top, 40)
+                            .opacity(showSymbols ? 1 : 0) // Otherwhise the view is only fully visible after panning or pitching
                         }
                     }
                 }
                 // fetch accidents for current region only some time after user does not pan or pinch anymore.
-                .onReceive(viewModel.$region.debounce(for: 0.25, scheduler: RunLoop.main)) {
+                .onReceive(viewModel.$region.debounce(for: 0.1, scheduler: RunLoop.main)) {
                     _ in viewModel.fetchTheAccidents(region: viewModel.region)
                 }
-//                .ignoresSafeArea()
                 HStack {
                     Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
                         .padding(.horizontal)
@@ -60,18 +60,17 @@ struct ContentView: View {
                 }
             }
             .onTapGesture {
-//                viewModel.showSymbols.toggle()
                 showSymbols.toggle()
+//                viewModel.objectWillChange.send()
             }
             .onAppear() {
-                viewModel.importFromFiles()
-    //            viewModel.fetchTheAccidents(region: viewModel.region)
-                print("Ende .onAppear")
+                // A C H T U N G: do nog delet this line, needed to read data (then uncomment it)
+                // viewModel.importFromFiles()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        FilterView(accidentDataFilters: self.$viewModel.accidentDataFilters)
+                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters)
                     } label: {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
                     }
@@ -106,7 +105,7 @@ struct ContentView: View {
         }
         
         // Light Conditions, not icon for twilight (Dämmerung) available, so just made it night, too.
-        if accident.lichtVerhaeltnisse >= 1 {symbol.append("🌝") }
+        if accident.lichtVerhaeltnisse >= 1 {symbol.append("🌛") }
         
         // Road conditions
         if accident.strassenZustand == 1 {
@@ -137,14 +136,14 @@ struct ContentView: View {
         symbol.append("A\(accident.unfallArt)")
         
         // Accident type (Unfalltyp1): https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Methoden/_inhalt.html#sprg371798
-        // 1 = Fahrunfall
-        // 2 = Abbiegeunfall
-        // 3 = Einbiegen / Kreuzen-Unfall
-        // 4 = Überschreiten-Unfall
-        // 5 = Unfall durch ruhenden Verkehr
-        // 6 = Unfall im Längsverkehr
-        // 7 = sonstiger Unfall
-        symbol.append("T\(accident.unfallTyp1)")
+        // 1 = Fahrunfall (grün)
+        // 2 = Abbiegeunfall (gelb)
+        // 3 = Einbiegen / Kreuzen-Unfall (rot)
+        // 4 = Überschreiten-Unfall (weiß)
+        // 5 = Unfall durch ruhenden Verkehr (blau)
+        // 6 = Unfall im Längsverkehr (orange)
+        // 7 = sonstiger Unfall (schwarz)
+//        symbol.append("T\(accident.unfallTyp1)")
         
         return symbol
     }
