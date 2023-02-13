@@ -25,15 +25,19 @@ struct VeganFoodPlace: Identifiable {
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
+    @StateObject var initializationViewModel = InitializationViewModel()
     @StateObject var viewModel: ViewModel = ViewModel()
     @State private var showSymbols = false
+    @State private var theRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 10000, longitudinalMeters: 10000)
     
 //    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)], animation: .default) private var items: FetchedResults<Item>
     
     var body: some View {
         NavigationStack {
+            
             ZStack(alignment: .topLeading) {
-                Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
+                Map(coordinateRegion: $theRegion, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
+//                    Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
                 MapAnnotation(coordinate: accident.coordinate) {
                     ZStack() {
                         
@@ -48,15 +52,30 @@ struct ContentView: View {
                         }
                     }
                 }
-                // fetch accidents for current region only some time after user does not pan or pinch anymore.
-                .onReceive(viewModel.$region.debounce(for: 0.1, scheduler: RunLoop.main)) {
-                    _ in viewModel.fetchTheAccidents(region: viewModel.region)
+                // Fetch accidents for current region only some time after user does not pan or pinch anymore.
+
+                .onChange(of: theRegion, debounceTime: 0.1) { newValue in
+                    Task {
+                        viewModel.fetchTheAccidents(region: theRegion) // viewModel.fetchTheAccidents(region: viewModel.region)
+                    }
                 }
-                HStack {
-                    Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
-                        .padding(.horizontal)
-                    Spacer()
-                    Text("Span: \(viewModel.region.span.latitudeDelta), \(viewModel.region.span.longitudeDelta)")
+
+//                .onReceive(viewModel.$region.debounce(for: 0.1, scheduler: RunLoop.main)) { region in
+//                    // viewContext.reset()
+//                    viewModel.fetchTheAccidents(region: region) // viewModel.fetchTheAccidents(region: viewModel.region)
+//                }
+                VStack {
+                    HStack {
+                        Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
+                            .padding(.horizontal)
+//                        Spacer()
+//                        Text("Span: \(theRegion.span.latitudeDelta), \(theRegion.span.longitudeDelta)")
+                    }
+
+                    // Initialization information if needed.
+                    if initializationViewModel.initializationState != .initalized {
+                        InitializationView(viewModel: initializationViewModel)
+                    }
                 }
             }
             .onTapGesture {
@@ -64,13 +83,13 @@ struct ContentView: View {
 //                viewModel.objectWillChange.send()
             }
             .onAppear() {
-                // A C H T U N G: do nog delet this line, needed to read data (then uncomment it)
-                // viewModel.importFromFiles()
+                // A C H T U N G: do not delete the following line, needed to read data (then uncomment it)
+//                viewModel.importFromFiles()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters)
+                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters, theRegion: theRegion)
                     } label: {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
                     }
@@ -170,3 +189,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
+
+

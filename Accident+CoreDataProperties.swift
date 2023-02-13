@@ -19,7 +19,7 @@ extension Accident {
 
     @NSManaged public var accidentObjectID: Int32
     @NSManaged public var gemeinde: Int16
-    @NSManaged public var identStlae: String
+//    @NSManaged public var identStlae: String
     @NSManaged public var istFahrrad: Bool
     @NSManaged public var istFussgaenger: Bool
     @NSManaged public var istGueterKfz: Bool

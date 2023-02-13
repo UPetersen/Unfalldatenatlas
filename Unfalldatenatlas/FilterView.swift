@@ -6,69 +6,47 @@
 //
 
 import SwiftUI
-
-//var gemeinde: NSPredicate?
-//var istFahrrad: NSPredicate?
-//var istFussgaenger: NSPredicate?
-//var istGueterKfz: NSPredicate?
-//var istKrad: NSPredicate?
-//var istPkw: NSPredicate?
-//var istSonstige: NSPredicate?
-//var jahr: NSPredicate?
-//var kreis: NSPredicate?
-//var land: NSPredicate?
-//var lichtVerhaeltnisse: NSPredicate?
-//var monat: NSPredicate?
-//var regierungsBezirk: NSPredicate?
-//var strassenZustand: NSPredicate?
-//var stunde: NSPredicate?
-//var unfallArt: NSPredicate?
-//var unfallKategorie: NSPredicate?
-//var unfallTyp1: NSPredicate?
-//var wochentag: NSPredicate?
+import MapKit
 
 struct FilterView: View {
-//    var predicates: PredicatesForAccidentCharacteristics = PredicatesForAccidentCharacteristics()
-    @State private var istFussgaenger = 0
-    @State private var unfallKategorie = 0
-    @State private var fussgaenger = IstFussgaenger.keineAuswahl
 
     @ObservedObject var viewModel: ViewModel
-    
     @Binding var accidentDataFilters: AccidentDataFilter
 //    @Binding var viewModel: ViewModel
+    var theRegion: MKCoordinateRegion
 
+    private let debounceTime = 0.1
     
     var body: some View {
         List {
+
             Section {
-                Text("Hier könnte die Gesamtzahl stehen.")
-                NavigationLink {
-                    UnfallKategorieSelectionView(viewModel: viewModel)
-                } label: {
-                    Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
+                HStack {
+                    Text("Anzahl Unfälle:")
+                    Spacer()
+                    Text("\(viewModel.countOfAllAccidents)")
                 }
             }
-            
+
             Section {
                 // Unfall-Kategorie
-                Picker("Unfall-Kategorie", selection: $viewModel.accidentDataFilters.unfallKategorie) {
-                    ForEach(UnfallKategorie.allCases, id: \.id) { Text($0.sectionText).tag($0) }
-                }//.onChange(of: self.$viewModel.accidentDataFilters, perform: {print("something")}) //.onChange(of: accidentDataFilters.istFussgaenger) { predicates.istFussgaenger = $0.predicate }
-                
                 Picker("Unfall-Kategorie", selection: $accidentDataFilters.unfallKategorie) {
                     ForEach(UnfallKategorie.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.unfallKategorie , debounceTime: debounceTime) { _ in updateMapView() }
+
                 
                 // Unfall-Art
                 Picker("Unfall-Art", selection: $accidentDataFilters.unfallArt) {
                     ForEach(UnfallArt.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
-                
+                .onChange(of: accidentDataFilters.unfallArt , debounceTime: debounceTime) { _ in updateMapView() }
+
                 // Unfall-Typ
                 Picker("Unfall-Typ", selection: $accidentDataFilters.unfallTyp1) {
                     ForEach(UnfallTyp1.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.unfallTyp1 , debounceTime: debounceTime) { _ in updateMapView() }
             }
             
             Section {
@@ -76,11 +54,14 @@ struct FilterView: View {
                 Picker("Lichtverhälntisse", selection: $accidentDataFilters.lichtVerhaeltnisse) {
                     ForEach(LichtVerhaeltnisse.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.lichtVerhaeltnisse , debounceTime: debounceTime) { _ in updateMapView() }
+
 
                 // Strassenzustand
                 Picker("Straßenzustand", selection: $accidentDataFilters.strassenZustand) {
                     ForEach(StrassenZustand.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.strassenZustand , debounceTime: debounceTime) { _ in updateMapView() }
             }
             
             Section {
@@ -88,32 +69,44 @@ struct FilterView: View {
                 Picker("Pkwbeteiligung", selection: $accidentDataFilters.istPkw) {
                     ForEach(IstPkw.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.istPkw , debounceTime: debounceTime) { _ in updateMapView() }
+
                 
                 // Krad-Beteiligung
                 Picker("Kraftradbeteiligung", selection: $accidentDataFilters.istKrad) {
                     ForEach(IstKrad.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.istKrad , debounceTime: debounceTime) { _ in updateMapView() }
+
                 
                 // Fahrrad-Beteiligung
                 Picker("Fahrradbeteiligung", selection: $accidentDataFilters.istFahrrad) {
                     ForEach(IstFahrrad.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.istFahrrad , debounceTime: debounceTime) { _ in updateMapView() }
+
                 
                 // Fußgänger-Beteiligung
                 Picker("Fußgängerbeteiligung", selection: $accidentDataFilters.istFussgaenger) {
                     ForEach(IstFussgaenger.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.istFussgaenger , debounceTime: debounceTime) { _ in updateMapView() }
+
                 //            .onChange(of: accidentDataFilters.istFussgaenger) { predicates.istFussgaenger = $0.predicate }
                 
                 // Güter-Kfz-Beteiligung
                 Picker("Güter-Kfz-Beteiligung", selection: $accidentDataFilters.istGueterKfz) {
                     ForEach(IstGueterKfz.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.istGueterKfz , debounceTime: debounceTime) { _ in updateMapView() }
+
                 
                 // Sonstige-Kfz-Beteiligung
                 Picker("Sonstige Kfz-Beteiligung", selection: $accidentDataFilters.istSonstige) {
                     ForEach(IstSonstige.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.istSonstige , debounceTime: debounceTime) { _ in updateMapView() }
+
             }
             
             Section {
@@ -121,16 +114,22 @@ struct FilterView: View {
                 Picker("Unfall-Jahr", selection: $accidentDataFilters.jahr) {
                     ForEach(UnfallJahr.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.jahr , debounceTime: debounceTime) { _ in updateMapView() }
+
 
                 // Unfall-Monat
                 Picker("Unfall-Monat", selection: $accidentDataFilters.monat) {
                     ForEach(UnfallMonat.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.monat , debounceTime: debounceTime) { _ in updateMapView() }
+
 
                 // Unfall-Wochentag
                 Picker("Unfall-Wochentag", selection: $accidentDataFilters.wochentag) {
                     ForEach(UnfallWochentag.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.wochentag , debounceTime: debounceTime) { _ in updateMapView() }
+
             }
 
             Section {
@@ -138,14 +137,19 @@ struct FilterView: View {
                 Picker("Bundesland", selection: $accidentDataFilters.land) {
                     ForEach(Land.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
+                .onChange(of: accidentDataFilters.land , debounceTime: debounceTime) { _ in updateMapView() }
             }
             
             Section {
-                Text("Das Predicate: \(accidentDataFilters.predicates.debugDescription)")
+                Text("Filter: \(accidentDataFilters.predicates.debugDescription)")
             }
+
         }
         .navigationTitle("Datenauswahl")
-        
+    }
+    
+    func updateMapView() {
+        viewModel.fetchTheAccidents(region: theRegion)
     }
 }
 
@@ -462,16 +466,16 @@ enum UnfallArt: Int, Identifiable, CaseIterable {
     var sectionText: String {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
-        case .mitAnfahrendemAnhaltendemRuhendemFzg: return "Zusammenstoß mit anfahrendem/ anhaltendem/ruhendem Fahrzeug"
-        case .mitVorausFahrendemWartendemFzg: return "Zusammenstoß mit vorausfahrendem / wartendem Fahrzeug"
-        case .mitSeitlichFahrendemFzg: return "Zusammenstoß mit seitlich in gleicher Richtung fahrendem Fahrzeug"
-        case .mitEntgegenkommendemFzg: return "Zusammenstoß mit entgegenkommendem Fahrzeug"
-        case .mitEinbiegendemKreuzendemFzg: return "Zusammenstoß mit einbiegendem / kreuzendem Fahrzeug"
-        case .zwischenFahrezeugUndFussgaenger: return "Zusammenstoß zwischen Fahrzeug und Fußgänger"
-        case .aufprallAufFahrbahnhindernis: return "Aufprall auf Fahrbahnhindernis"
-        case .abkommenNachRechts: return "Abkommen von Fahrbahn nach rechts"
-        case .abkommenNachLinks: return "Abkommen von Fahrbahn nach links"
-        case .unfallAndererArt: return " Unfall anderer Art"
+        case .mitAnfahrendemAnhaltendemRuhendemFzg: return "A1 Zusammenstoß mit anfahrendem/ anhaltendem/ruhendem Fahrzeug"
+        case .mitVorausFahrendemWartendemFzg: return "A2 Zusammenstoß mit vorausfahrendem / wartendem Fahrzeug"
+        case .mitSeitlichFahrendemFzg: return "A3 Zusammenstoß mit seitlich in gleicher Richtung fahrendem Fahrzeug"
+        case .mitEntgegenkommendemFzg: return "A4 Zusammenstoß mit entgegenkommendem Fahrzeug"
+        case .mitEinbiegendemKreuzendemFzg: return "A5 Zusammenstoß mit einbiegendem / kreuzendem Fahrzeug"
+        case .zwischenFahrezeugUndFussgaenger: return "A6 Zusammenstoß zwischen Fahrzeug und Fußgänger"
+        case .aufprallAufFahrbahnhindernis: return "A7 Aufprall auf Fahrbahnhindernis"
+        case .abkommenNachRechts: return "A8 Abkommen von Fahrbahn nach rechts"
+        case .abkommenNachLinks: return "A9 Abkommen von Fahrbahn nach links"
+        case .unfallAndererArt: return " A0 Unfall anderer Art"
         }
     }
 }
