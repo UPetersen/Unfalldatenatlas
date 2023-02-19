@@ -28,48 +28,85 @@ struct ContentView: View {
     @StateObject var initializationViewModel = InitializationViewModel()
     @StateObject var viewModel: ViewModel = ViewModel()
     @State private var showSymbols = false
-    @State private var theRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 10000, longitudinalMeters: 10000)
-    
-//    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)], animation: .default) private var items: FetchedResults<Item>
-    
+//    @State private var theRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 10000, longitudinalMeters: 10000)
+        
     var body: some View {
         NavigationStack {
             
             ZStack(alignment: .topLeading) {
-                Map(coordinateRegion: $theRegion, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
-//                    Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
-                MapAnnotation(coordinate: accident.coordinate) {
-                    ZStack() {
-                        
-                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
-                            .frame(width: 12, height: 12)
-                        
-                        Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
-                            .font(.title3)
-                            .background(Color.white.opacity(0.1))
-                            .padding(.top, 40)
-                            .opacity(showSymbols ? 1 : 0) // Otherwhise the view is only fully visible after panning or pitching
-                        }
-                    }
-                }
-                // Fetch accidents for current region only some time after user does not pan or pinch anymore.
+                
+                // Use MKMapView package from https://github.com/pauljohanneskraft/Map
+                Map(
+//                    coordinateRegion: $theRegion,
+                    coordinateRegion: $viewModel.region,
+                    type: .hybrid,
+                    annotationItems: viewModel.accidents,
+                    annotationContent: { accident in
+                        ViewMapAnnotation(coordinate: accident.coordinate) {
 
-                .onChange(of: theRegion, debounceTime: 0.1) { newValue in
-                    Task {
-                        viewModel.fetchTheAccidents(region: theRegion) // viewModel.fetchTheAccidents(region: viewModel.region)
+                            ZStack() {
+                                Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+                                    .frame(width: 12, height: 12)
+                                // Show symbols for accidents, if user taps once. Handled via opacity
+//                                if showSymbols {
+//                                    Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
+//                                        .font(.title3)
+//                                        .background(Color.white.opacity(0.1))
+//                                        .padding(.top, 40)
+//                                        .frame(width: 200, height: 12)
+//                                }
+                                Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
+                                    .font(.title3)
+                                    .background(Color.white.opacity(0.1))
+                                    .padding(.top, 40)
+                                    .opacity(showSymbols ? 1 : 0)   // Otherwhise the view is only fully visible after panning or pitching
+                                    .frame(width: 200, height: 12)
+                            }
+                         }
                     }
-                }
-
-//                .onReceive(viewModel.$region.debounce(for: 0.1, scheduler: RunLoop.main)) { region in
-//                    // viewContext.reset()
-//                    viewModel.fetchTheAccidents(region: region) // viewModel.fetchTheAccidents(region: viewModel.region)
+                )
+                
+                
+//                MapKit.Map(coordinateRegion: $theRegion, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
+////                    Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
+//                    MapKit.MapAnnotation(coordinate: accident.coordinate) {
+//                    ZStack() {
+//
+//                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+//                            .frame(width: 12, height: 12)
+//
+//                        Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
+//                            .font(.title3)
+//                            .background(Color.white.opacity(0.1))
+//                            .padding(.top, 40)
+//                            .opacity(showSymbols ? 1 : 0) // Otherwhise the view is only fully visible after panning or pitching
+//                        }
+//                    }
 //                }
+//                // Fetch accidents for current region only some time after user does not pan or pinch anymore.
+
+//                .onChange(of: theRegion, debounceTime: 0.1) { newValue in
+//                    Task {
+//                        viewModel.fetchTheAccidents(region: theRegion) // viewModel.fetchTheAccidents(region: viewModel.region)
+//                    }
+//                }
+                .onChange(of: showSymbols, debounceTime: 0.1) { newValue in
+                    Task {
+                        viewModel.refetchAccidents()
+                    }
+                }
+
+                
+
+                .onReceive(viewModel.$region.debounce(for: 0.1, scheduler: RunLoop.main)) { region in
+                    // viewContext.reset()
+                    viewModel.fetchTheAccidents() // viewModel.fetchTheAccidents(region: viewModel.region)
+                }
                 VStack {
                     HStack {
                         Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
                             .padding(.horizontal)
-//                        Spacer()
-//                        Text("Span: \(theRegion.span.latitudeDelta), \(theRegion.span.longitudeDelta)")
+                        Toggle("Show Symbols", isOn: $showSymbols)
                     }
 
                     // Initialization information if needed.
@@ -80,16 +117,15 @@ struct ContentView: View {
             }
             .onTapGesture {
                 showSymbols.toggle()
-//                viewModel.objectWillChange.send()
+                viewModel.fetchTheAccidents()
+                viewModel.objectWillChange.send()
             }
-            .onAppear() {
-                // A C H T U N G: do not delete the following line, needed to read data (then uncomment it)
-//                viewModel.importFromFiles()
-            }
+
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters, theRegion: theRegion)
+//                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters, theRegion: theRegion)
+                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters, theRegion: viewModel.region)
                     } label: {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
                     }

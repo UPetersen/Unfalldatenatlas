@@ -7,6 +7,59 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C604E928298FF4F600E3A078 /* Unfallorte2018_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E922298FF4CB00E3A078 /* Unfallorte2018_LinRef.csv */; };
+		C604E929298FF4F600E3A078 /* Unfallorte2018_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E922298FF4CB00E3A078 /* Unfallorte2018_LinRef.csv */; };
+		C604E92A298FF4F600E3A078 /* Unfallorte2021_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E923298FF4CE00E3A078 /* Unfallorte2021_LinRef.csv */; };
+		C604E92B298FF4F600E3A078 /* Unfallorte2021_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E923298FF4CE00E3A078 /* Unfallorte2021_LinRef.csv */; };
+		C604E92C298FF4F600E3A078 /* Unfallorte2020_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E924298FF4D000E3A078 /* Unfallorte2020_LinRef.csv */; };
+		C604E92D298FF4F600E3A078 /* Unfallorte2020_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E924298FF4D000E3A078 /* Unfallorte2020_LinRef.csv */; };
+		C604E92E298FF4F600E3A078 /* Unfallorte2017_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E925298FF4F600E3A078 /* Unfallorte2017_LinRef.csv */; };
+		C604E92F298FF4F600E3A078 /* Unfallorte2017_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E925298FF4F600E3A078 /* Unfallorte2017_LinRef.csv */; };
+		C604E930298FF4F600E3A078 /* Unfallorte2019_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E926298FF4F600E3A078 /* Unfallorte2019_LinRef.csv */; };
+		C604E931298FF4F600E3A078 /* Unfallorte2019_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E926298FF4F600E3A078 /* Unfallorte2019_LinRef.csv */; };
+		C604E932298FF4F600E3A078 /* Unfallorte2016_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E927298FF4F600E3A078 /* Unfallorte2016_LinRef.csv */; };
+		C604E933298FF4F600E3A078 /* Unfallorte2016_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C604E927298FF4F600E3A078 /* Unfallorte2016_LinRef.csv */; };
+		C604E935299009AF00E3A078 /* InitializationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C604E934299009AF00E3A078 /* InitializationView.swift */; };
+		C604E936299009AF00E3A078 /* InitializationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C604E934299009AF00E3A078 /* InitializationView.swift */; };
+		C604E938299009CB00E3A078 /* InitalizationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C604E937299009CB00E3A078 /* InitalizationViewModel.swift */; };
+		C604E939299009CB00E3A078 /* InitalizationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C604E937299009CB00E3A078 /* InitalizationViewModel.swift */; };
+		C642DA03299E16C200623663 /* SingleValueBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9DC299E16C200623663 /* SingleValueBuilder.swift */; };
+		C642DA04299E16C200623663 /* MapCameraZoomRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9DD299E16C200623663 /* MapCameraZoomRange.swift */; };
+		C642DA05299E16C200623663 /* MapInteractionModes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9DE299E16C200623663 /* MapInteractionModes.swift */; };
+		C642DA06299E16C200623663 /* MapInformationVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9DF299E16C200623663 /* MapInformationVisibility.swift */; };
+		C642DA07299E16C200623663 /* MapCameraBoundary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9E0299E16C200623663 /* MapCameraBoundary.swift */; };
+		C642DA08299E16C200623663 /* MapCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9E2299E16C200623663 /* MapCircle.swift */; };
+		C642DA09299E16C200623663 /* MapPolyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9E3299E16C200623663 /* MapPolyline.swift */; };
+		C642DA0A299E16C200623663 /* MapMultiPolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9E4299E16C200623663 /* MapMultiPolygon.swift */; };
+		C642DA0B299E16C200623663 /* RendererMapOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9E5299E16C200623663 /* RendererMapOverlay.swift */; };
+		C642DA0C299E16C200623663 /* MapOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9E6299E16C200623663 /* MapOverlay.swift */; };
+		C642DA0D299E16C200623663 /* MapPolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9E7299E16C200623663 /* MapPolygon.swift */; };
+		C642DA0E299E16C200623663 /* MapMultiPolyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9E8299E16C200623663 /* MapMultiPolyline.swift */; };
+		C642DA0F299E16C200623663 /* MapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9EA299E16C200623663 /* MapKit.swift */; };
+		C642DA10299E16C200623663 /* NativeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9EB299E16C200623663 /* NativeHostingController.swift */; };
+		C642DA11299E16C200623663 /* NativeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9EC299E16C200623663 /* NativeColor.swift */; };
+		C642DA12299E16C200623663 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9ED299E16C200623663 /* Identifiable.swift */; };
+		C642DA13299E16C200623663 /* MapRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9EE299E16C200623663 /* MapRegistry.swift */; };
+		C642DA14299E16C200623663 /* MKMapAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9F0299E16C200623663 /* MKMapAnnotationView.swift */; };
+		C642DA15299E16C200623663 /* MapMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9F1299E16C200623663 /* MapMarker.swift */; };
+		C642DA16299E16C200623663 /* ImageAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9F2299E16C200623663 /* ImageAnnotation.swift */; };
+		C642DA17299E16C200623663 /* ViewMapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9F3299E16C200623663 /* ViewMapAnnotation.swift */; };
+		C642DA18299E16C200623663 /* MapPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9F4299E16C200623663 /* MapPin.swift */; };
+		C642DA19299E16C200623663 /* MapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9F5299E16C200623663 /* MapAnnotation.swift */; };
+		C642DA1A299E16C200623663 /* MapScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9F7299E16C200623663 /* MapScale.swift */; };
+		C642DA1B299E16C200623663 /* MapZoomControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9F8299E16C200623663 /* MapZoomControl.swift */; };
+		C642DA1C299E16C200623663 /* MapPitchControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9F9299E16C200623663 /* MapPitchControl.swift */; };
+		C642DA1D299E16C200623663 /* MapUserTrackingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9FA299E16C200623663 /* MapUserTrackingButton.swift */; };
+		C642DA1E299E16C200623663 /* MapCompass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9FB299E16C200623663 /* MapCompass.swift */; };
+		C642DA1F299E16C200623663 /* Map+Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9FD299E16C200623663 /* Map+Coordinator.swift */; };
+		C642DA20299E16C200623663 /* Map+UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9FE299E16C200623663 /* Map+UIKit.swift */; };
+		C642DA21299E16C200623663 /* Map+Watch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642D9FF299E16C200623663 /* Map+Watch.swift */; };
+		C642DA22299E16C200623663 /* Map+Watch+Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA00299E16C200623663 /* Map+Watch+Coordinator.swift */; };
+		C642DA23299E16C200623663 /* Map+AppKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA01299E16C200623663 /* Map+AppKit.swift */; };
+		C642DA24299E16C200623663 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA02299E16C200623663 /* Map.swift */; };
+		C67874732997B5180015A20C /* Task+Delayed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874712997B5180015A20C /* Task+Delayed.swift */; };
+		C67874742997B5180015A20C /* DebouncedChangeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */; };
+		C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874752997B7260015A20C /* MKCoordinateRegion+Extension.swift */; };
 		C6C0BB04298ECD15001F702C /* UnfallKategorieSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C0BB03298ECD15001F702C /* UnfallKategorieSelectionView.swift */; };
 		C6CA9F64297DBCBC000D9E8B /* UnfalldatenatlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */; };
 		C6CA9F68297DBCBC000D9E8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6CA9F67297DBCBC000D9E8B /* Assets.xcassets */; };
@@ -41,6 +94,54 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C604E921298FE77A00E3A078 /* Unfalldatenatlas 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Unfalldatenatlas 2.xcdatamodel"; sourceTree = "<group>"; };
+		C604E922298FF4CB00E3A078 /* Unfallorte2018_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2018_LinRef.csv; sourceTree = "<group>"; };
+		C604E923298FF4CE00E3A078 /* Unfallorte2021_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2021_LinRef.csv; sourceTree = "<group>"; };
+		C604E924298FF4D000E3A078 /* Unfallorte2020_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2020_LinRef.csv; sourceTree = "<group>"; };
+		C604E925298FF4F600E3A078 /* Unfallorte2017_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2017_LinRef.csv; sourceTree = "<group>"; };
+		C604E926298FF4F600E3A078 /* Unfallorte2019_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2019_LinRef.csv; sourceTree = "<group>"; };
+		C604E927298FF4F600E3A078 /* Unfallorte2016_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2016_LinRef.csv; sourceTree = "<group>"; };
+		C604E934299009AF00E3A078 /* InitializationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationView.swift; sourceTree = "<group>"; };
+		C604E937299009CB00E3A078 /* InitalizationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitalizationViewModel.swift; sourceTree = "<group>"; };
+		C642D9D9299ACF8300623663 /* Unfalldatenatlas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Unfalldatenatlas.entitlements; sourceTree = "<group>"; };
+		C642D9DC299E16C200623663 /* SingleValueBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleValueBuilder.swift; sourceTree = "<group>"; };
+		C642D9DD299E16C200623663 /* MapCameraZoomRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapCameraZoomRange.swift; sourceTree = "<group>"; };
+		C642D9DE299E16C200623663 /* MapInteractionModes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapInteractionModes.swift; sourceTree = "<group>"; };
+		C642D9DF299E16C200623663 /* MapInformationVisibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapInformationVisibility.swift; sourceTree = "<group>"; };
+		C642D9E0299E16C200623663 /* MapCameraBoundary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapCameraBoundary.swift; sourceTree = "<group>"; };
+		C642D9E2299E16C200623663 /* MapCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapCircle.swift; sourceTree = "<group>"; };
+		C642D9E3299E16C200623663 /* MapPolyline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPolyline.swift; sourceTree = "<group>"; };
+		C642D9E4299E16C200623663 /* MapMultiPolygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapMultiPolygon.swift; sourceTree = "<group>"; };
+		C642D9E5299E16C200623663 /* RendererMapOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererMapOverlay.swift; sourceTree = "<group>"; };
+		C642D9E6299E16C200623663 /* MapOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapOverlay.swift; sourceTree = "<group>"; };
+		C642D9E7299E16C200623663 /* MapPolygon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPolygon.swift; sourceTree = "<group>"; };
+		C642D9E8299E16C200623663 /* MapMultiPolyline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapMultiPolyline.swift; sourceTree = "<group>"; };
+		C642D9EA299E16C200623663 /* MapKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapKit.swift; sourceTree = "<group>"; };
+		C642D9EB299E16C200623663 /* NativeHostingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeHostingController.swift; sourceTree = "<group>"; };
+		C642D9EC299E16C200623663 /* NativeColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeColor.swift; sourceTree = "<group>"; };
+		C642D9ED299E16C200623663 /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		C642D9EE299E16C200623663 /* MapRegistry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapRegistry.swift; sourceTree = "<group>"; };
+		C642D9F0299E16C200623663 /* MKMapAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKMapAnnotationView.swift; sourceTree = "<group>"; };
+		C642D9F1299E16C200623663 /* MapMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapMarker.swift; sourceTree = "<group>"; };
+		C642D9F2299E16C200623663 /* ImageAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAnnotation.swift; sourceTree = "<group>"; };
+		C642D9F3299E16C200623663 /* ViewMapAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewMapAnnotation.swift; sourceTree = "<group>"; };
+		C642D9F4299E16C200623663 /* MapPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPin.swift; sourceTree = "<group>"; };
+		C642D9F5299E16C200623663 /* MapAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapAnnotation.swift; sourceTree = "<group>"; };
+		C642D9F7299E16C200623663 /* MapScale.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapScale.swift; sourceTree = "<group>"; };
+		C642D9F8299E16C200623663 /* MapZoomControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapZoomControl.swift; sourceTree = "<group>"; };
+		C642D9F9299E16C200623663 /* MapPitchControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPitchControl.swift; sourceTree = "<group>"; };
+		C642D9FA299E16C200623663 /* MapUserTrackingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapUserTrackingButton.swift; sourceTree = "<group>"; };
+		C642D9FB299E16C200623663 /* MapCompass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapCompass.swift; sourceTree = "<group>"; };
+		C642D9FD299E16C200623663 /* Map+Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Map+Coordinator.swift"; sourceTree = "<group>"; };
+		C642D9FE299E16C200623663 /* Map+UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Map+UIKit.swift"; sourceTree = "<group>"; };
+		C642D9FF299E16C200623663 /* Map+Watch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Map+Watch.swift"; sourceTree = "<group>"; };
+		C642DA00299E16C200623663 /* Map+Watch+Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Map+Watch+Coordinator.swift"; sourceTree = "<group>"; };
+		C642DA01299E16C200623663 /* Map+AppKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Map+AppKit.swift"; sourceTree = "<group>"; };
+		C642DA02299E16C200623663 /* Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
+		C67874702992F0650015A20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C67874712997B5180015A20C /* Task+Delayed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Task+Delayed.swift"; sourceTree = "<group>"; };
+		C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebouncedChangeViewModifier.swift; sourceTree = "<group>"; };
+		C67874752997B7260015A20C /* MKCoordinateRegion+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKCoordinateRegion+Extension.swift"; sourceTree = "<group>"; };
 		C6C0BB03298ECD15001F702C /* UnfallKategorieSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfallKategorieSelectionView.swift; sourceTree = "<group>"; };
 		C6CA9F60297DBCBC000D9E8B /* Unfalldatenatlas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unfalldatenatlas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfalldatenatlasApp.swift; sourceTree = "<group>"; };
@@ -85,9 +186,104 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C642D9DA299E15EE00623663 /* MKMapViewStuff */ = {
+			isa = PBXGroup;
+			children = (
+				C642D9EF299E16C200623663 /* Annotations */,
+				C642D9DB299E16C200623663 /* Configuration */,
+				C642D9E9299E16C200623663 /* Extensions */,
+				C642D9FC299E16C200623663 /* Map */,
+				C642D9E1299E16C200623663 /* Overlays */,
+				C642D9F6299E16C200623663 /* Views */,
+			);
+			path = MKMapViewStuff;
+			sourceTree = "<group>";
+		};
+		C642D9DB299E16C200623663 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				C642D9DC299E16C200623663 /* SingleValueBuilder.swift */,
+				C642D9DD299E16C200623663 /* MapCameraZoomRange.swift */,
+				C642D9DE299E16C200623663 /* MapInteractionModes.swift */,
+				C642D9DF299E16C200623663 /* MapInformationVisibility.swift */,
+				C642D9E0299E16C200623663 /* MapCameraBoundary.swift */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		C642D9E1299E16C200623663 /* Overlays */ = {
+			isa = PBXGroup;
+			children = (
+				C642D9E2299E16C200623663 /* MapCircle.swift */,
+				C642D9E3299E16C200623663 /* MapPolyline.swift */,
+				C642D9E4299E16C200623663 /* MapMultiPolygon.swift */,
+				C642D9E5299E16C200623663 /* RendererMapOverlay.swift */,
+				C642D9E6299E16C200623663 /* MapOverlay.swift */,
+				C642D9E7299E16C200623663 /* MapPolygon.swift */,
+				C642D9E8299E16C200623663 /* MapMultiPolyline.swift */,
+			);
+			path = Overlays;
+			sourceTree = "<group>";
+		};
+		C642D9E9299E16C200623663 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C642D9EA299E16C200623663 /* MapKit.swift */,
+				C642D9EB299E16C200623663 /* NativeHostingController.swift */,
+				C642D9EC299E16C200623663 /* NativeColor.swift */,
+				C642D9ED299E16C200623663 /* Identifiable.swift */,
+				C642D9EE299E16C200623663 /* MapRegistry.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C642D9EF299E16C200623663 /* Annotations */ = {
+			isa = PBXGroup;
+			children = (
+				C642D9F0299E16C200623663 /* MKMapAnnotationView.swift */,
+				C642D9F1299E16C200623663 /* MapMarker.swift */,
+				C642D9F2299E16C200623663 /* ImageAnnotation.swift */,
+				C642D9F3299E16C200623663 /* ViewMapAnnotation.swift */,
+				C642D9F4299E16C200623663 /* MapPin.swift */,
+				C642D9F5299E16C200623663 /* MapAnnotation.swift */,
+			);
+			path = Annotations;
+			sourceTree = "<group>";
+		};
+		C642D9F6299E16C200623663 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C642D9F7299E16C200623663 /* MapScale.swift */,
+				C642D9F8299E16C200623663 /* MapZoomControl.swift */,
+				C642D9F9299E16C200623663 /* MapPitchControl.swift */,
+				C642D9FA299E16C200623663 /* MapUserTrackingButton.swift */,
+				C642D9FB299E16C200623663 /* MapCompass.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C642D9FC299E16C200623663 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				C642D9FD299E16C200623663 /* Map+Coordinator.swift */,
+				C642D9FE299E16C200623663 /* Map+UIKit.swift */,
+				C642D9FF299E16C200623663 /* Map+Watch.swift */,
+				C642DA00299E16C200623663 /* Map+Watch+Coordinator.swift */,
+				C642DA01299E16C200623663 /* Map+AppKit.swift */,
+				C642DA02299E16C200623663 /* Map.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		C6CA9F57297DBCBC000D9E8B = {
 			isa = PBXGroup;
 			children = (
+				C604E927298FF4F600E3A078 /* Unfallorte2016_LinRef.csv */,
+				C604E925298FF4F600E3A078 /* Unfallorte2017_LinRef.csv */,
+				C604E922298FF4CB00E3A078 /* Unfallorte2018_LinRef.csv */,
+				C604E926298FF4F600E3A078 /* Unfallorte2019_LinRef.csv */,
+				C604E924298FF4D000E3A078 /* Unfallorte2020_LinRef.csv */,
+				C604E923298FF4CE00E3A078 /* Unfallorte2021_LinRef.csv */,
 				C6C0BB03298ECD15001F702C /* UnfallKategorieSelectionView.swift */,
 				C6D0D022298B0AF0000572C3 /* FilterView.swift */,
 				C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */,
@@ -112,9 +308,17 @@
 		C6CA9F62297DBCBC000D9E8B /* Unfalldatenatlas */ = {
 			isa = PBXGroup;
 			children = (
+				C642D9DA299E15EE00623663 /* MKMapViewStuff */,
+				C642D9D9299ACF8300623663 /* Unfalldatenatlas.entitlements */,
+				C67874702992F0650015A20C /* Info.plist */,
+				C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */,
+				C67874712997B5180015A20C /* Task+Delayed.swift */,
 				C6CA9F94297DBD4D000D9E8B /* ContentView.swift */,
+				C67874752997B7260015A20C /* MKCoordinateRegion+Extension.swift */,
 				C6CA9F92297DBD19000D9E8B /* ViewModel.swift */,
 				C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */,
+				C604E934299009AF00E3A078 /* InitializationView.swift */,
+				C604E937299009CB00E3A078 /* InitalizationViewModel.swift */,
 				C6CA9F96297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld */,
 				C6CA9F67297DBCBC000D9E8B /* Assets.xcassets */,
 				C6CA9F6C297DBCBC000D9E8B /* Persistence.swift */,
@@ -252,8 +456,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C604E92E298FF4F600E3A078 /* Unfallorte2017_LinRef.csv in Resources */,
+				C604E930298FF4F600E3A078 /* Unfallorte2019_LinRef.csv in Resources */,
 				C6CA9F6B297DBCBC000D9E8B /* Preview Assets.xcassets in Resources */,
+				C604E92C298FF4F600E3A078 /* Unfallorte2020_LinRef.csv in Resources */,
 				C6CA9F68297DBCBC000D9E8B /* Assets.xcassets in Resources */,
+				C604E928298FF4F600E3A078 /* Unfallorte2018_LinRef.csv in Resources */,
+				C604E92A298FF4F600E3A078 /* Unfallorte2021_LinRef.csv in Resources */,
+				C604E932298FF4F600E3A078 /* Unfallorte2016_LinRef.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +471,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C604E92F298FF4F600E3A078 /* Unfallorte2017_LinRef.csv in Resources */,
+				C604E929298FF4F600E3A078 /* Unfallorte2018_LinRef.csv in Resources */,
+				C604E92B298FF4F600E3A078 /* Unfallorte2021_LinRef.csv in Resources */,
+				C604E933298FF4F600E3A078 /* Unfallorte2016_LinRef.csv in Resources */,
+				C604E931298FF4F600E3A078 /* Unfallorte2019_LinRef.csv in Resources */,
+				C604E92D298FF4F600E3A078 /* Unfallorte2020_LinRef.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,15 +494,54 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C642DA14299E16C200623663 /* MKMapAnnotationView.swift in Sources */,
 				C6CA9FA3297DC04E000D9E8B /* Accident+CoreDataClass.swift in Sources */,
+				C604E938299009CB00E3A078 /* InitalizationViewModel.swift in Sources */,
 				C6CA9FA4297DC04E000D9E8B /* Accident+CoreDataProperties.swift in Sources */,
+				C642DA23299E16C200623663 /* Map+AppKit.swift in Sources */,
 				C6C0BB04298ECD15001F702C /* UnfallKategorieSelectionView.swift in Sources */,
+				C642DA15299E16C200623663 /* MapMarker.swift in Sources */,
+				C642DA09299E16C200623663 /* MapPolyline.swift in Sources */,
+				C642DA05299E16C200623663 /* MapInteractionModes.swift in Sources */,
+				C642DA16299E16C200623663 /* ImageAnnotation.swift in Sources */,
 				C6CA9F93297DBD19000D9E8B /* ViewModel.swift in Sources */,
+				C642DA21299E16C200623663 /* Map+Watch.swift in Sources */,
+				C642DA10299E16C200623663 /* NativeHostingController.swift in Sources */,
 				C6CA9F95297DBD4D000D9E8B /* ContentView.swift in Sources */,
+				C642DA18299E16C200623663 /* MapPin.swift in Sources */,
+				C642DA03299E16C200623663 /* SingleValueBuilder.swift in Sources */,
+				C642DA22299E16C200623663 /* Map+Watch+Coordinator.swift in Sources */,
+				C642DA13299E16C200623663 /* MapRegistry.swift in Sources */,
+				C642DA1E299E16C200623663 /* MapCompass.swift in Sources */,
+				C67874742997B5180015A20C /* DebouncedChangeViewModifier.swift in Sources */,
+				C642DA1D299E16C200623663 /* MapUserTrackingButton.swift in Sources */,
+				C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */,
+				C642DA0C299E16C200623663 /* MapOverlay.swift in Sources */,
+				C642DA12299E16C200623663 /* Identifiable.swift in Sources */,
+				C642DA0A299E16C200623663 /* MapMultiPolygon.swift in Sources */,
 				C6D0D023298B0AF0000572C3 /* FilterView.swift in Sources */,
+				C642DA0E299E16C200623663 /* MapMultiPolyline.swift in Sources */,
+				C642DA1F299E16C200623663 /* Map+Coordinator.swift in Sources */,
+				C67874732997B5180015A20C /* Task+Delayed.swift in Sources */,
 				C6CA9F6D297DBCBC000D9E8B /* Persistence.swift in Sources */,
+				C642DA07299E16C200623663 /* MapCameraBoundary.swift in Sources */,
+				C642DA08299E16C200623663 /* MapCircle.swift in Sources */,
+				C642DA0B299E16C200623663 /* RendererMapOverlay.swift in Sources */,
+				C642DA0F299E16C200623663 /* MapKit.swift in Sources */,
+				C642DA24299E16C200623663 /* Map.swift in Sources */,
+				C642DA0D299E16C200623663 /* MapPolygon.swift in Sources */,
+				C642DA04299E16C200623663 /* MapCameraZoomRange.swift in Sources */,
+				C642DA20299E16C200623663 /* Map+UIKit.swift in Sources */,
 				C6CA9F64297DBCBC000D9E8B /* UnfalldatenatlasApp.swift in Sources */,
+				C642DA1C299E16C200623663 /* MapPitchControl.swift in Sources */,
+				C642DA17299E16C200623663 /* ViewMapAnnotation.swift in Sources */,
+				C642DA06299E16C200623663 /* MapInformationVisibility.swift in Sources */,
+				C642DA1A299E16C200623663 /* MapScale.swift in Sources */,
+				C604E935299009AF00E3A078 /* InitializationView.swift in Sources */,
+				C642DA19299E16C200623663 /* MapAnnotation.swift in Sources */,
+				C642DA11299E16C200623663 /* NativeColor.swift in Sources */,
 				C6CA9F98297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */,
+				C642DA1B299E16C200623663 /* MapZoomControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,6 +549,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C604E939299009CB00E3A078 /* InitalizationViewModel.swift in Sources */,
+				C604E936299009AF00E3A078 /* InitializationView.swift in Sources */,
 				C6CA9F7A297DBCBD000D9E8B /* UnfalldatenatlasTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,12 +699,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Unfalldatenatlas/Unfalldatenatlas.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Unfalldatenatlas/Preview Content\"";
 				DEVELOPMENT_TEAM = 26F6YWJYL8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Unfalldatenatlas/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -462,7 +722,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = UPP.Unfalldatenatlas;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -475,12 +735,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Unfalldatenatlas/Unfalldatenatlas.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Unfalldatenatlas/Preview Content\"";
 				DEVELOPMENT_TEAM = 26F6YWJYL8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Unfalldatenatlas/Info.plist;
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -495,7 +758,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = UPP.Unfalldatenatlas;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -624,9 +887,10 @@
 		C6CA9F96297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C604E921298FE77A00E3A078 /* Unfalldatenatlas 2.xcdatamodel */,
 				C6CA9F97297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodel */,
 			);
-			currentVersion = C6CA9F97297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodel */;
+			currentVersion = C604E921298FE77A00E3A078 /* Unfalldatenatlas 2.xcdatamodel */;
 			name = Unfalldatenatlas.xcdatamodeld;
 			path = ../../UnfalldatenatlasRenamed/Unfalldatenatlas/Unfalldatenatlas.xcdatamodeld;
 			sourceTree = "<group>";

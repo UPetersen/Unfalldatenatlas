@@ -123,7 +123,7 @@ class ViewModel: ObservableObject {
 //    @Published var annotations: [Unfall] = []
     @Published var accidents: [Accident] = []
     @Published var countOfAllAccidents: Int = 0
-//    @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
+    @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
     @Published var predicates = PredicatesForAccidentCharacteristics()
     @Published var accidentDataFilters = AccidentDataFilter()
     
@@ -180,7 +180,59 @@ class ViewModel: ObservableObject {
                 fatalError()
             }
         }
+    }
+    
+    
+    func refetchAccidents() {
+        self.accidents = []
+        self.fetchTheAccidents()
+    }
+    
+    
+    func fetchTheAccidents() {
+        let region = self.region
+        
+        let longitudeMin = region.center.longitude - 0.5 * region.span.longitudeDelta
+        let longitudeMax = region.center.longitude + 0.5 * region.span.longitudeDelta
+        let lattitudeMin = region.center.latitude - 0.5 * region.span.latitudeDelta
+        let lattitudeMax = region.center.latitude + 0.5 * region.span.latitudeDelta
+
+        let predicateLongLat = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
+        
+        let request = Accident.fetchRequest()
+//        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + predicates.predicates)
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + accidentDataFilters.predicates)
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
+
+        request.fetchLimit = 500
+        request.fetchBatchSize = 50
+        
+        print("Das Predicate des Fetch Request: \(request.predicate!.debugDescription)")
+        
+        // Analyse
+        let countAllAccidentsRequest = Accident.fetchRequest()
+//        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates.predicates)
+        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: accidentDataFilters.predicates)
+
+        asyncContext.automaticallyMergesChangesFromParent = true
+//        asyncContext.reset()
+        asyncContext.perform { [unowned self] in
+            do {
+                let countOfAllAccidents = try asyncContext.count(for: countAllAccidentsRequest)
+                let accidents =  try self.asyncContext.fetch(request)
+                // self.accidents =  try self.asyncContext.fetch(request)
+                DispatchQueue.main.async {
+                    self.countOfAllAccidents = countOfAllAccidents
+                    self.accidents = accidents
+                }
+            }
+            catch {
+                fatalError()
+            }
+        }
         
     }
+
+    
     
 }

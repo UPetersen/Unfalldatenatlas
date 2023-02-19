@@ -9,10 +9,11 @@ import SwiftUI
 import MapKit
 
 struct FilterView: View {
+    
+    @Environment(\.colorScheme) var colorScheme // .dark for dark mode
 
     @ObservedObject var viewModel: ViewModel
     @Binding var accidentDataFilters: AccidentDataFilter
-//    @Binding var viewModel: ViewModel
     var theRegion: MKCoordinateRegion
 
     private let debounceTime = 0.1
@@ -43,8 +44,11 @@ struct FilterView: View {
                 .onChange(of: accidentDataFilters.unfallArt , debounceTime: debounceTime) { _ in updateMapView() }
 
                 // Unfall-Typ
+//                Picker("Unfall-Typ", selection: $accidentDataFilters.unfallTyp1) {
+//                    ForEach(UnfallTyp1.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+//                }
                 Picker("Unfall-Typ", selection: $accidentDataFilters.unfallTyp1) {
-                    ForEach(UnfallTyp1.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                    ForEach(UnfallTyp1.allCases, id: \.id) { $0.sectionTextView(colorScheme: colorScheme).tag($0) }
                 }
                 .onChange(of: accidentDataFilters.unfallTyp1 , debounceTime: debounceTime) { _ in updateMapView() }
             }
@@ -149,7 +153,8 @@ struct FilterView: View {
     }
     
     func updateMapView() {
-        viewModel.fetchTheAccidents(region: theRegion)
+//        viewModel.fetchTheAccidents(region: theRegion)
+        viewModel.fetchTheAccidents()
     }
 }
 
@@ -409,6 +414,53 @@ enum UnfallTyp1: Int, Identifiable, CaseIterable {
         case .unfallDurchRuhendenVerkehr: return "Unfall durch ruhenden Verkehr (blau)"
         case .unfallImLaengsverkehr: return "Unfall im Längsverkehr (orange)"
         case .sonstigerUnfall: return "Sonstiger Unfall (schwarz)"
+        }
+    }
+
+    @ViewBuilder func sectionTextView(colorScheme: ColorScheme) -> some View {
+        switch self {
+        case .keineAuswahl:
+            HStack() {
+                Text("keine Auswahl")
+                Image(systemName: "smallcircle.filled.circle.fill")
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(Color(red: 1, green: 0, blue: 0, opacity: 0), Color(red: 1, green: 0, blue: 0, opacity: 0)) // invisible symbol as placeholder
+            }
+        case .fahrUnfall:
+            HStack() {
+                Text("Fahrunfall")
+                Image(systemName: "smallcircle.filled.circle.fill").symbolRenderingMode(.palette).foregroundStyle(colorScheme == .dark ? .secondary : .quaternary, .green)
+            }
+        case .abbiegeUnfall:
+            HStack() {
+                Text("Abbiegeunfall")
+                Image(systemName: "smallcircle.filled.circle.fill").symbolRenderingMode(.palette).foregroundStyle(colorScheme == .dark ? .secondary : .quaternary, .yellow)
+            }
+        case .einbiegenKreuzenUnfall:
+            HStack() {
+                Text("Einbiegen-/Kreuzenunfall")
+                Image(systemName: "smallcircle.filled.circle.fill").symbolRenderingMode(.palette).foregroundStyle(colorScheme == .dark ? .secondary : .quaternary, .red)
+            }
+        case .ueberschreitenUnfall:
+            HStack() {
+                Text("Überschreiten-Unfall")
+                Image(systemName: "smallcircle.filled.circle.fill").symbolRenderingMode(.palette).foregroundStyle(colorScheme == .dark ? .secondary : .quaternary, .white)
+            }
+        case .unfallDurchRuhendenVerkehr:
+            HStack() {
+                Text("Unfall durch ruhenden Verkehr")
+                Image(systemName: "smallcircle.filled.circle.fill").symbolRenderingMode(.palette).foregroundStyle(colorScheme == .dark ? .secondary : .quaternary, .blue).padding(.horizontal)
+            }
+        case .unfallImLaengsverkehr:
+            HStack() {
+                Text("Unfall im Längsverkehr")
+                Image(systemName: "smallcircle.filled.circle.fill").symbolRenderingMode(.palette).foregroundStyle(colorScheme == .dark ? .secondary : .quaternary, .orange)
+            }
+        case .sonstigerUnfall:
+            HStack() {
+                Text("Sonstiger Unfall")
+                Image(systemName: "smallcircle.filled.circle.fill").symbolRenderingMode(.palette).foregroundStyle(colorScheme == .dark ? .secondary : .quaternary, .black)
+            }
         }
     }
 }
