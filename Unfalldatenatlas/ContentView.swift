@@ -85,7 +85,7 @@ struct ContentView: View {
                     HStack {
                         Spacer()
                     }
-                    .padding([.top, .bottom], 40)
+                    .padding([.top, .bottom], 30)
                     HStack() {
                         Spacer()
                         MapConfigurationView(mapType: $mapType)

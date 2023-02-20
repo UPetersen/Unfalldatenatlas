@@ -34,9 +34,11 @@ struct MapConfigurationView: View {
 
         }
         .foregroundColor(.secondary)
-        .buttonStyle(.bordered)
-        .padding([.trailing], 10)
-//        .background(Color(.red))
+//        .buttonStyle(.bordered)
+        .padding(10)
+        .background(Color(.tertiarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .padding([.trailing], 5)
 //        .tint(Color(.secondaryLabel))
 //        .tint(Color(.red))
 
