@@ -57,6 +57,7 @@
 		C642DA22299E16C200623663 /* Map+Watch+Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA00299E16C200623663 /* Map+Watch+Coordinator.swift */; };
 		C642DA23299E16C200623663 /* Map+AppKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA01299E16C200623663 /* Map+AppKit.swift */; };
 		C642DA24299E16C200623663 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA02299E16C200623663 /* Map.swift */; };
+		C642DA2629A20CEC00623663 /* MapConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2529A20CEC00623663 /* MapConfigurationView.swift */; };
 		C67874732997B5180015A20C /* Task+Delayed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874712997B5180015A20C /* Task+Delayed.swift */; };
 		C67874742997B5180015A20C /* DebouncedChangeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */; };
 		C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874752997B7260015A20C /* MKCoordinateRegion+Extension.swift */; };
@@ -138,6 +139,7 @@
 		C642DA00299E16C200623663 /* Map+Watch+Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Map+Watch+Coordinator.swift"; sourceTree = "<group>"; };
 		C642DA01299E16C200623663 /* Map+AppKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Map+AppKit.swift"; sourceTree = "<group>"; };
 		C642DA02299E16C200623663 /* Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
+		C642DA2529A20CEC00623663 /* MapConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapConfigurationView.swift; path = Unfalldatenatlas/MapConfigurationView.swift; sourceTree = "<group>"; };
 		C67874702992F0650015A20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C67874712997B5180015A20C /* Task+Delayed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Task+Delayed.swift"; sourceTree = "<group>"; };
 		C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebouncedChangeViewModifier.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 		C6CA9F57297DBCBC000D9E8B = {
 			isa = PBXGroup;
 			children = (
+				C642DA2529A20CEC00623663 /* MapConfigurationView.swift */,
 				C604E927298FF4F600E3A078 /* Unfallorte2016_LinRef.csv */,
 				C604E925298FF4F600E3A078 /* Unfallorte2017_LinRef.csv */,
 				C604E922298FF4CB00E3A078 /* Unfallorte2018_LinRef.csv */,
@@ -542,6 +545,7 @@
 				C642DA11299E16C200623663 /* NativeColor.swift in Sources */,
 				C6CA9F98297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */,
 				C642DA1B299E16C200623663 /* MapZoomControl.swift in Sources */,
+				C642DA2629A20CEC00623663 /* MapConfigurationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,12 +22,17 @@ struct VeganFoodPlace: Identifiable {
   }
 }
 
+
+
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @StateObject var initializationViewModel = InitializationViewModel()
     @StateObject var viewModel: ViewModel = ViewModel()
     @State private var showSymbols = false
+    @State private var mapType: MKMapType = .standard
+    
+    
 //    @State private var theRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 10000, longitudinalMeters: 10000)
         
     var body: some View {
@@ -35,26 +40,21 @@ struct ContentView: View {
             
             ZStack(alignment: .topLeading) {
                 
+                // MapInformationVisibility(arrayLiteral: .buildings, .compass, .scale, .traffic, .userLocation)
+                // .userHeading, .userLocation)
                 // Use MKMapView package from https://github.com/pauljohanneskraft/Map
                 Map(
 //                    coordinateRegion: $theRegion,
                     coordinateRegion: $viewModel.region,
-                    type: .hybrid,
+                    type: mapType,   //.standard,
+                    informationVisibility: MapInformationVisibility(arrayLiteral: .buildings, .compass, .scale, .userLocation),
                     annotationItems: viewModel.accidents,
                     annotationContent: { accident in
                         ViewMapAnnotation(coordinate: accident.coordinate) {
-
                             ZStack() {
                                 Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
                                     .frame(width: 12, height: 12)
                                 // Show symbols for accidents, if user taps once. Handled via opacity
-//                                if showSymbols {
-//                                    Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
-//                                        .font(.title3)
-//                                        .background(Color.white.opacity(0.1))
-//                                        .padding(.top, 40)
-//                                        .frame(width: 200, height: 12)
-//                                }
                                 Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
                                     .font(.title3)
                                     .background(Color.white.opacity(0.1))
@@ -66,47 +66,29 @@ struct ContentView: View {
                     }
                 )
                 
-                
-//                MapKit.Map(coordinateRegion: $theRegion, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
-////                    Map(coordinateRegion: $viewModel.region, showsUserLocation: true, annotationItems: viewModel.accidents) { accident in
-//                    MapKit.MapAnnotation(coordinate: accident.coordinate) {
-//                    ZStack() {
-//
-//                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
-//                            .frame(width: 12, height: 12)
-//
-//                        Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
-//                            .font(.title3)
-//                            .background(Color.white.opacity(0.1))
-//                            .padding(.top, 40)
-//                            .opacity(showSymbols ? 1 : 0) // Otherwhise the view is only fully visible after panning or pitching
-//                        }
-//                    }
-//                }
-//                // Fetch accidents for current region only some time after user does not pan or pinch anymore.
-
 //                .onChange(of: theRegion, debounceTime: 0.1) { newValue in
 //                    Task {
 //                        viewModel.fetchTheAccidents(region: theRegion) // viewModel.fetchTheAccidents(region: viewModel.region)
 //                    }
 //                }
-                .onChange(of: showSymbols, debounceTime: 0.1) { newValue in
+                .onChange(of: showSymbols, debounceTime: 0.1) { showSymbols in
                     Task {
                         viewModel.refetchAccidents()
                     }
                 }
 
-                
-
                 .onReceive(viewModel.$region.debounce(for: 0.1, scheduler: RunLoop.main)) { region in
-                    // viewContext.reset()
-                    viewModel.fetchTheAccidents() // viewModel.fetchTheAccidents(region: viewModel.region)
+                    viewModel.fetchTheAccidents(region: region) // viewModel.fetchTheAccidents(region: viewModel.region)
                 }
+                
                 VStack {
                     HStack {
-                        Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
-                            .padding(.horizontal)
-                        Toggle("Show Symbols", isOn: $showSymbols)
+                        Spacer()
+                    }
+                    .padding([.top, .bottom], 40)
+                    HStack() {
+                        Spacer()
+                        MapConfigurationView(mapType: $mapType)
                     }
 
                     // Initialization information if needed.
@@ -122,6 +104,9 @@ struct ContentView: View {
             }
 
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
 //                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters, theRegion: theRegion)

@@ -120,26 +120,75 @@ struct AccidentDataFilter {
 
 class ViewModel: ObservableObject {
 
-//    @Published var annotations: [Unfall] = []
     @Published var accidents: [Accident] = []
     @Published var countOfAllAccidents: Int = 0
     @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
     @Published var predicates = PredicatesForAccidentCharacteristics()
     @Published var accidentDataFilters = AccidentDataFilter()
     
-//    @Published var showSymbols = false 
-    
     private let asyncContext = PersistenceController.shared.container.newBackgroundContext()
+    private let maxCountOfAccidents = 300 // Maximum number of accidents to fetched -> fetchLimit for fetch request.
+    private let batchSize = 50            // Batch size for fetch request
     
     init(initFromFile: Bool = false) {
 //        self.annotations = annotations
     }
     
     
-    //https://stackoverflow.com/questions/74318352/publishing-changes-from-background-threads-is-not-allowed-make-sure-to-publish
-    
 
+    /// Deletes all accidents and refetches them to display the icons with each accident instantly. Otherwhise reused annotations will not update, but only new ones. I.e. icons for each accident were only toggled, whenn a new accident was panned into the visible area.
+    func refetchAccidents() {
+        self.accidents = []
+        let region = self.region
+        self.fetchTheAccidents(region: region)
+    }
     
+    /// Loads accidents for the current region from the database.
+    func fetchTheAccidents() {
+        let region = self.region
+        self.fetchTheAccidents(region: region)
+//
+//        let longitudeMin = region.center.longitude - 0.5 * region.span.longitudeDelta
+//        let longitudeMax = region.center.longitude + 0.5 * region.span.longitudeDelta
+//        let lattitudeMin = region.center.latitude - 0.5 * region.span.latitudeDelta
+//        let lattitudeMax = region.center.latitude + 0.5 * region.span.latitudeDelta
+//
+//        let predicateLongLat = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
+//
+//        let request = Accident.fetchRequest()
+////        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + predicates.predicates)
+//        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + accidentDataFilters.predicates)
+//        request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
+//
+//        request.fetchLimit = 500
+//        request.fetchBatchSize = 50
+//
+//        print("Das Predicate des Fetch Request: \(request.predicate!.debugDescription)")
+//
+//        // Analyse
+//        let countAllAccidentsRequest = Accident.fetchRequest()
+////        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates.predicates)
+//        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: accidentDataFilters.predicates)
+//
+//        asyncContext.automaticallyMergesChangesFromParent = true
+////        asyncContext.reset()
+//        asyncContext.perform { [unowned self] in
+//            do {
+//                let countOfAllAccidents = try asyncContext.count(for: countAllAccidentsRequest)
+//                let accidents =  try self.asyncContext.fetch(request)
+//                // self.accidents =  try self.asyncContext.fetch(request)
+//                DispatchQueue.main.async {
+//                    self.countOfAllAccidents = countOfAllAccidents
+//                    self.accidents = accidents
+//                }
+//            }
+//            catch {
+//                fatalError()
+//            }
+//        }
+    }
+
+    /// Loads accidents for the region from the database.
     func fetchTheAccidents(region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.66, longitude: 9.11), latitudinalMeters: 1000, longitudinalMeters: 1000)) {
         
         let longitudeMin = region.center.longitude - 0.5 * region.span.longitudeDelta
@@ -154,8 +203,8 @@ class ViewModel: ObservableObject {
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + accidentDataFilters.predicates)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
 
-        request.fetchLimit = 300
-        request.fetchBatchSize = 50
+        request.fetchLimit = maxCountOfAccidents
+        request.fetchBatchSize = batchSize
         
         print("Das Predicate des Fetch Request: \(request.predicate!.debugDescription)")
         
@@ -182,57 +231,6 @@ class ViewModel: ObservableObject {
         }
     }
     
-    
-    func refetchAccidents() {
-        self.accidents = []
-        self.fetchTheAccidents()
-    }
-    
-    
-    func fetchTheAccidents() {
-        let region = self.region
-        
-        let longitudeMin = region.center.longitude - 0.5 * region.span.longitudeDelta
-        let longitudeMax = region.center.longitude + 0.5 * region.span.longitudeDelta
-        let lattitudeMin = region.center.latitude - 0.5 * region.span.latitudeDelta
-        let lattitudeMax = region.center.latitude + 0.5 * region.span.latitudeDelta
-
-        let predicateLongLat = NSPredicate(format: "%lf < longitude AND longitude < %lf AND %lf < lattitude AND lattitude < %lf", longitudeMin, longitudeMax, lattitudeMin, lattitudeMax)
-        
-        let request = Accident.fetchRequest()
-//        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + predicates.predicates)
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongLat] + accidentDataFilters.predicates)
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
-
-        request.fetchLimit = 500
-        request.fetchBatchSize = 50
-        
-        print("Das Predicate des Fetch Request: \(request.predicate!.debugDescription)")
-        
-        // Analyse
-        let countAllAccidentsRequest = Accident.fetchRequest()
-//        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates.predicates)
-        countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: accidentDataFilters.predicates)
-
-        asyncContext.automaticallyMergesChangesFromParent = true
-//        asyncContext.reset()
-        asyncContext.perform { [unowned self] in
-            do {
-                let countOfAllAccidents = try asyncContext.count(for: countAllAccidentsRequest)
-                let accidents =  try self.asyncContext.fetch(request)
-                // self.accidents =  try self.asyncContext.fetch(request)
-                DispatchQueue.main.async {
-                    self.countOfAllAccidents = countOfAllAccidents
-                    self.accidents = accidents
-                }
-            }
-            catch {
-                fatalError()
-            }
-        }
-        
-    }
-
     
     
 }
