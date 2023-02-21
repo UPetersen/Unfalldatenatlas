@@ -40,8 +40,6 @@ struct ContentView: View {
             
             ZStack(alignment: .topLeading) {
                 
-                // MapInformationVisibility(arrayLiteral: .buildings, .compass, .scale, .traffic, .userLocation)
-                // .userHeading, .userLocation)
                 // Use MKMapView package from https://github.com/pauljohanneskraft/Map
                 Map(
 //                    coordinateRegion: $theRegion,
@@ -53,14 +51,16 @@ struct ContentView: View {
                         ViewMapAnnotation(coordinate: accident.coordinate) {
                             ZStack() {
                                 Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
-                                    .frame(width: 12, height: 12)
+                                    .frame(width: 15, height: 15)
                                 // Show symbols for accidents, if user taps once. Handled via opacity
                                 Text("\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
-                                    .font(.title3)
-                                    .background(Color.white.opacity(0.1))
+                                    .font(.title2)
+                                    .padding(.horizontal, 5)
+                                    .background(Color(.systemBackground))
+                                    .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
                                     .padding(.top, 40)
                                     .opacity(showSymbols ? 1 : 0)   // Otherwhise the view is only fully visible after panning or pitching
-                                    .frame(width: 200, height: 12)
+                                    .frame(width: 400)
                             }
                          }
                     }
@@ -80,7 +80,7 @@ struct ContentView: View {
                 .onReceive(viewModel.$region.debounce(for: 0.1, scheduler: RunLoop.main)) { region in
                     viewModel.fetchTheAccidents(region: region) // viewModel.fetchTheAccidents(region: viewModel.region)
                 }
-                
+                // Button for changing between standard and satellite map
                 VStack {
                     HStack {
                         Spacer()
@@ -88,7 +88,7 @@ struct ContentView: View {
                     .padding([.top, .bottom], 30)
                     HStack() {
                         Spacer()
-                        MapConfigurationView(mapType: $mapType)
+                        MapConfigurationView(mapType: $mapType, showSymbols: $showSymbols)
                     }
 
                     // Initialization information if needed.
@@ -97,12 +97,6 @@ struct ContentView: View {
                     }
                 }
             }
-            .onTapGesture {
-                showSymbols.toggle()
-                viewModel.fetchTheAccidents()
-                viewModel.objectWillChange.send()
-            }
-
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")

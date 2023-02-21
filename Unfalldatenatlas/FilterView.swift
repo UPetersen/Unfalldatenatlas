@@ -237,8 +237,8 @@ enum StrassenZustand: Int, Identifiable, CaseIterable {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
         case .trocken: return "Trocken"
-        case .nassFeuchtSchluepfrig: return "Nass/feucht/schlüpfrig"
-        case .winterglatt: return "Winterglatt"
+        case .nassFeuchtSchluepfrig: return "Nass/feucht/schlüpfrig 🌧️"
+        case .winterglatt: return "Winterglatt ❄️"
         }
     }
 }
@@ -263,8 +263,8 @@ enum LichtVerhaeltnisse: Int, Identifiable, CaseIterable {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
         case .tageslicht: return "Tageslicht"
-        case .daemmerung: return "Dämmerung"
-        case .dunkelheit: return "Dunkelheit"
+        case .daemmerung: return "Dämmerung🌛"
+        case .dunkelheit: return "Dunkelheit🌛"
         }
     }
 }
@@ -485,9 +485,9 @@ enum UnfallKategorie: Int, Identifiable, CaseIterable {
     var sectionText: String {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
-        case .mitGetoeteten: return "Mit Getöteten"
-        case .mitSchwerverletzten: return "Mit Schwerverletzten"
-        case .mitLeichtVerletzten: return "Mit Leichtverletzten"
+        case .mitGetoeteten: return "Mit Getöteten ✟"
+        case .mitSchwerverletzten: return "Mit Schwerverletzten 🏥"
+        case .mitLeichtVerletzten: return "Mit Leichtverletzten 🩹"
         }
     }
 }
@@ -551,7 +551,7 @@ enum IstSonstige: Int, Identifiable, CaseIterable {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
         case .ohneSonstige: return "ohne Sonstige-Kfz-Beteiligung"
-        case .mitSonstige: return "mit Sonstige-Kfz-Beteiligung"
+        case .mitSonstige: return "mit Sonstige-Kfz-Beteiligung 🚚/🚌/🚃"
         }
     }
 }
@@ -575,7 +575,7 @@ enum IstGueterKfz: Int, Identifiable, CaseIterable {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
         case .ohneGueterKfz: return "ohne Güter-Kfz-Beteiligung"
-        case .mitGueterKfz: return "mit Güter-Kfz-Beteiligung"
+        case .mitGueterKfz: return "mit Güter-Kfz-Beteiligung 🚚"
         }
     }
 }
@@ -600,7 +600,7 @@ enum IstKrad: Int, Identifiable, CaseIterable {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
         case .ohneKrad: return "ohne Kraftradbeteiligung"
-        case .mitKrad: return "mit Kraftradbeteiligung"
+        case .mitKrad: return "mit Kraftradbeteiligung 🏍️"
         }
     }
 }
@@ -624,7 +624,7 @@ enum IstPkw: Int, Identifiable, CaseIterable {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
         case .ohnePkw: return "ohne Pkwbeteiligung"
-        case .mitPkw: return "mit Pkwbeteiligung"
+        case .mitPkw: return "mit Pkwbeteiligung 🚗"
         }
     }
 }
@@ -648,7 +648,7 @@ enum IstFahrrad: Int, Identifiable, CaseIterable {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
         case .ohneFahrrad: return "ohne Fahrradbeteiligung"
-        case .mitFahrrad: return "mit Fahrradbeteiligung"
+        case .mitFahrrad: return "mit Fahrradbeteiligung 🚴"
         }
     }
 }
@@ -672,7 +672,7 @@ enum IstFussgaenger: Int, Identifiable, CaseIterable {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
         case .ohneFussgaenger: return "ohne Fußgängerbeteiligung"
-        case .mitFussgaenger: return "mit Fußgängerbeteiligung"
+        case .mitFussgaenger: return "mit Fußgängerbeteiligung 🚶‍♂️"
         }
     }
 }

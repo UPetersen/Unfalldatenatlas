@@ -11,39 +11,33 @@ import MapKit
 struct MapConfigurationView: View {
     
     @Binding var mapType: MKMapType
+    @Binding var showSymbols: Bool
     
     var body: some View {
 
         VStack() {
-            Button(action: {
-                if mapType == .standard {
-                    mapType = .hybrid
-                } else {
-                    mapType = .standard
-                }
-            }) {
-                Image(systemName: "map.fill")
-                    .padding([.top, .bottom], 8)
-//                    .padding([.trailing, .leading], 2)
+            // Button to switch between standard and satellite map
+            Button(action: { mapType = mapType == .standard ? .hybrid : .standard }) {
+                Image(systemName: mapType == .standard ? "map" : "map.fill").padding([.top, .bottom], 8)
             }
-//            Divider()
-//            Button(action: {}) {
-//                Image(systemName: "location")
-//                    .padding()
-//            }
+            .padding(.horizontal, 12)
+
+            Divider().overlay(Color(.secondaryLabel)).frame(height: 5) //            Divider().overlay(Color(.tertiaryLabel)).frame(height: 5)
+            
+            // Button to toggle showing symbols for the accidents or not
+            Button(action: { showSymbols.toggle() }) {
+                Image(systemName: showSymbols ? "ellipsis.circle.fill" : "ellipsis.circle").padding([.top, .bottom], 8)
+            }
+            .padding(.horizontal, 12)
 
         }
+        .padding(.vertical, 10)
+        .fixedSize(horizontal: true, vertical: false)
         .foregroundColor(.secondary)
-//        .buttonStyle(.bordered)
-        .padding(10)
         .background(Color(.tertiarySystemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .padding([.trailing], 5)
-//        .tint(Color(.secondaryLabel))
-//        .tint(Color(.red))
-
     }
-    
 }
 
 
