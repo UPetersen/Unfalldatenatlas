@@ -122,9 +122,11 @@ class ViewModel: ObservableObject {
 
     @Published var accidents: [Accident] = []
     @Published var countOfAllAccidents: Int = 0
-    @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
+    @Published var region: MKCoordinateRegion = MKCoordinateRegion() //center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 1000, longitudinalMeters: 1000)
     @Published var predicates = PredicatesForAccidentCharacteristics()
     @Published var accidentDataFilters = AccidentDataFilter()
+    
+    let locationManager: LocationManager = LocationManager()
     
     private let asyncContext = PersistenceController.shared.container.newBackgroundContext()
     private let maxCountOfAccidents = 300 // Maximum number of accidents to fetched -> fetchLimit for fetch request.

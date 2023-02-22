@@ -12,10 +12,22 @@ struct MapConfigurationView: View {
     
     @Binding var mapType: MKMapType
     @Binding var showSymbols: Bool
+    @Binding var moveToCurrentLocation: Bool
+    var showLocationButton: Bool = false
     
     var body: some View {
 
         VStack() {
+            // Button to move to current location
+            if showLocationButton {
+                Button(action: { moveToCurrentLocation.toggle() }) {
+                    Image(systemName: "location").padding([.top, .bottom], 8)
+                }
+                .padding(.horizontal, 12)
+
+                Divider().overlay(Color(.secondaryLabel)).frame(height: 5) //            Divider().overlay(Color(.tertiaryLabel)).frame(height: 5)
+            }
+            
             // Button to switch between standard and satellite map
             Button(action: { mapType = mapType == .standard ? .hybrid : .standard }) {
                 Image(systemName: mapType == .standard ? "map" : "map.fill").padding([.top, .bottom], 8)

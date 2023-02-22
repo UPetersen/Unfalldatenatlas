@@ -195,7 +195,7 @@ enum Land: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
+        case .keineAuswahl: return "Keine Auswahl"
         case .schleswigHolstein: return "Schleswig-Holstein (ab 2016)"
         case .hamburg: return "Hamburg (ab 2016)"
         case .niedersachsen: return "Niedersachsen (ab 2017)"
@@ -235,7 +235,7 @@ enum StrassenZustand: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
+        case .keineAuswahl: return "Keine Auswahl"
         case .trocken: return "Trocken"
         case .nassFeuchtSchluepfrig: return "Nass/feucht/schlüpfrig 🌧️"
         case .winterglatt: return "Winterglatt ❄️"
@@ -261,7 +261,7 @@ enum LichtVerhaeltnisse: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
+        case .keineAuswahl: return "Keine Auswahl"
         case .tageslicht: return "Tageslicht"
         case .daemmerung: return "Dämmerung🌛"
         case .dunkelheit: return "Dunkelheit🌛"
@@ -291,7 +291,7 @@ enum UnfallWochentag: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
+        case .keineAuswahl: return "Keine Auswahl"
         case .sunday: return "Sonntag"
         case .monday: return "Montag"
         case .tuesday: return "Dienstag"
@@ -330,7 +330,7 @@ enum UnfallMonat: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
+        case .keineAuswahl: return "Keine Auswahl"
         case .january: return "Januar"
         case .february: return "Februar"
         case .march: return "März"
@@ -406,7 +406,7 @@ enum UnfallTyp1: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
+        case .keineAuswahl: return "Keine Auswahl"
         case .fahrUnfall: return "Fahrunfall (grün)"
         case .abbiegeUnfall: return "Abbiegeunfall (gelb)"
         case .einbiegenKreuzenUnfall: return "Einbiegen-/Kreuzenunfall (rot)"
@@ -484,7 +484,7 @@ enum UnfallKategorie: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
+        case .keineAuswahl: return "Keine Auswahl"
         case .mitGetoeteten: return "Mit Getöteten ✟"
         case .mitSchwerverletzten: return "Mit Schwerverletzten 🏥"
         case .mitLeichtVerletzten: return "Mit Leichtverletzten 🩹"
@@ -517,7 +517,7 @@ enum UnfallArt: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
+        case .keineAuswahl: return "Keine Auswahl"
         case .mitAnfahrendemAnhaltendemRuhendemFzg: return "A1 Zusammenstoß mit anfahrendem/ anhaltendem/ruhendem Fahrzeug"
         case .mitVorausFahrendemWartendemFzg: return "A2 Zusammenstoß mit vorausfahrendem / wartendem Fahrzeug"
         case .mitSeitlichFahrendemFzg: return "A3 Zusammenstoß mit seitlich in gleicher Richtung fahrendem Fahrzeug"
@@ -549,9 +549,9 @@ enum IstSonstige: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
-        case .ohneSonstige: return "ohne Sonstige-Kfz-Beteiligung"
-        case .mitSonstige: return "mit Sonstige-Kfz-Beteiligung 🚚/🚌/🚃"
+        case .keineAuswahl: return "Keine Auswahl"
+        case .ohneSonstige: return "Ohne Sonstige-Kfz-Beteiligung"
+        case .mitSonstige: return "Mit Sonstige-Kfz-Beteiligung 🚚/🚌/🚃"
         }
     }
 }
@@ -573,9 +573,9 @@ enum IstGueterKfz: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
-        case .ohneGueterKfz: return "ohne Güter-Kfz-Beteiligung"
-        case .mitGueterKfz: return "mit Güter-Kfz-Beteiligung 🚚"
+        case .keineAuswahl: return "Keine Auswahl"
+        case .ohneGueterKfz: return "Ohne Güter-Kfz-Beteiligung"
+        case .mitGueterKfz: return "Mit Güter-Kfz-Beteiligung 🚚"
         }
     }
 }
@@ -598,9 +598,9 @@ enum IstKrad: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
-        case .ohneKrad: return "ohne Kraftradbeteiligung"
-        case .mitKrad: return "mit Kraftradbeteiligung 🏍️"
+        case .keineAuswahl: return "Keine Auswahl"
+        case .ohneKrad: return "Ohne Kraftradbeteiligung"
+        case .mitKrad: return "Mit Kraftradbeteiligung 🏍️"
         }
     }
 }
@@ -622,9 +622,9 @@ enum IstPkw: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
-        case .ohnePkw: return "ohne Pkwbeteiligung"
-        case .mitPkw: return "mit Pkwbeteiligung 🚗"
+        case .keineAuswahl: return "Keine Auswahl"
+        case .ohnePkw: return "Ohne Pkwbeteiligung"
+        case .mitPkw: return "Mit Pkwbeteiligung 🚗"
         }
     }
 }
@@ -646,9 +646,9 @@ enum IstFahrrad: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
-        case .ohneFahrrad: return "ohne Fahrradbeteiligung"
-        case .mitFahrrad: return "mit Fahrradbeteiligung 🚴"
+        case .keineAuswahl: return "Keine Auswahl"
+        case .ohneFahrrad: return "Ohne Fahrradbeteiligung"
+        case .mitFahrrad: return "Mit Fahrradbeteiligung 🚴"
         }
     }
 }
@@ -670,9 +670,9 @@ enum IstFussgaenger: Int, Identifiable, CaseIterable {
     
     var sectionText: String {
         switch self {
-        case .keineAuswahl: return "keine Auswahl"
-        case .ohneFussgaenger: return "ohne Fußgängerbeteiligung"
-        case .mitFussgaenger: return "mit Fußgängerbeteiligung 🚶‍♂️"
+        case .keineAuswahl: return "Keine Auswahl"
+        case .ohneFussgaenger: return "Ohne Fußgängerbeteiligung"
+        case .mitFussgaenger: return "Mit Fußgängerbeteiligung 🚶‍♂️"
         }
     }
 }

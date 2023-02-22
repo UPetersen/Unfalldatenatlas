@@ -29,9 +29,10 @@ struct ContentView: View {
 
     @StateObject var initializationViewModel = InitializationViewModel()
     @StateObject var viewModel: ViewModel = ViewModel()
+    
+    @State private var moveToCurrentLocation = false
     @State private var showSymbols = false
     @State private var mapType: MKMapType = .standard
-    
     
 //    @State private var theRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 10000, longitudinalMeters: 10000)
         
@@ -65,18 +66,27 @@ struct ContentView: View {
                          }
                     }
                 )
-                
 //                .onChange(of: theRegion, debounceTime: 0.1) { newValue in
 //                    Task {
 //                        viewModel.fetchTheAccidents(region: theRegion) // viewModel.fetchTheAccidents(region: viewModel.region)
 //                    }
 //                }
+                
+                // User pressed button to show symbols or not
                 .onChange(of: showSymbols, debounceTime: 0.1) { showSymbols in
                     Task {
                         viewModel.refetchAccidents()
                     }
                 }
-
+                // User pressed button to move to current location
+                .onChange(of: moveToCurrentLocation) { _ in
+                    moveToCurrentLocation.toggle()
+                    viewModel.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: viewModel.locationManager.latitudeOrMiddleOfGermany,
+                                                                                         longitude: viewModel.locationManager.longitudeOrMiddleOfGermany),
+                                                          latitudinalMeters: 5000,
+                                                          longitudinalMeters: 5000)
+                }
+                // User moved map or zoomed in or out
                 .onReceive(viewModel.$region.debounce(for: 0.1, scheduler: RunLoop.main)) { region in
                     viewModel.fetchTheAccidents(region: region) // viewModel.fetchTheAccidents(region: viewModel.region)
                 }
@@ -88,7 +98,11 @@ struct ContentView: View {
                     .padding([.top, .bottom], 30)
                     HStack() {
                         Spacer()
-                        MapConfigurationView(mapType: $mapType, showSymbols: $showSymbols)
+                        MapConfigurationView(mapType: $mapType,
+                                             showSymbols: $showSymbols,
+                                             moveToCurrentLocation: $moveToCurrentLocation,
+                                             showLocationButton: viewModel.locationManager.isAuthorized
+                        )
                     }
 
                     // Initialization information if needed.
@@ -97,9 +111,29 @@ struct ContentView: View {
                     }
                 }
             }
+            .onAppear() {
+                // Request to use current position only if the user had not yet been asked.
+                if viewModel.locationManager.locationStatus == .notDetermined {
+                    viewModel.locationManager.requestAuthorization()
+                }
+                viewModel.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: viewModel.locationManager.latitudeOrMiddleOfGermany,
+                                                                                     longitude: viewModel.locationManager.longitudeOrMiddleOfGermany),
+                                                      latitudinalMeters: 5000,
+                                                      longitudinalMeters: 5000
+                )
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text("\(viewModel.accidents.count) von \(viewModel.countOfAllAccidents) Unfällen")
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        InfoView()
+                        
+                    } label: {
+                        Label("Info", systemImage: "info.circle")
+                        
+                    }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {

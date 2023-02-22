@@ -58,10 +58,11 @@
 		C642DA23299E16C200623663 /* Map+AppKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA01299E16C200623663 /* Map+AppKit.swift */; };
 		C642DA24299E16C200623663 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA02299E16C200623663 /* Map.swift */; };
 		C642DA2629A20CEC00623663 /* MapConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2529A20CEC00623663 /* MapConfigurationView.swift */; };
+		C642DA2829A5441B00623663 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2729A5441B00623663 /* InfoView.swift */; };
 		C67874732997B5180015A20C /* Task+Delayed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874712997B5180015A20C /* Task+Delayed.swift */; };
 		C67874742997B5180015A20C /* DebouncedChangeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */; };
 		C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874752997B7260015A20C /* MKCoordinateRegion+Extension.swift */; };
-		C6C0BB04298ECD15001F702C /* UnfallKategorieSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C0BB03298ECD15001F702C /* UnfallKategorieSelectionView.swift */; };
+		C695098C29A66FF600067384 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C695098B29A66FF600067384 /* LocationManager.swift */; };
 		C6CA9F64297DBCBC000D9E8B /* UnfalldatenatlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */; };
 		C6CA9F68297DBCBC000D9E8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6CA9F67297DBCBC000D9E8B /* Assets.xcassets */; };
 		C6CA9F6B297DBCBC000D9E8B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6CA9F6A297DBCBC000D9E8B /* Preview Assets.xcassets */; };
@@ -140,11 +141,12 @@
 		C642DA01299E16C200623663 /* Map+AppKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Map+AppKit.swift"; sourceTree = "<group>"; };
 		C642DA02299E16C200623663 /* Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		C642DA2529A20CEC00623663 /* MapConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapConfigurationView.swift; path = Unfalldatenatlas/MapConfigurationView.swift; sourceTree = "<group>"; };
+		C642DA2729A5441B00623663 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InfoView.swift; path = Unfalldatenatlas/InfoView.swift; sourceTree = "<group>"; };
 		C67874702992F0650015A20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C67874712997B5180015A20C /* Task+Delayed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Task+Delayed.swift"; sourceTree = "<group>"; };
 		C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebouncedChangeViewModifier.swift; sourceTree = "<group>"; };
 		C67874752997B7260015A20C /* MKCoordinateRegion+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKCoordinateRegion+Extension.swift"; sourceTree = "<group>"; };
-		C6C0BB03298ECD15001F702C /* UnfallKategorieSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfallKategorieSelectionView.swift; sourceTree = "<group>"; };
+		C695098B29A66FF600067384 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocationManager.swift; path = Unfalldatenatlas/LocationManager.swift; sourceTree = "<group>"; };
 		C6CA9F60297DBCBC000D9E8B /* Unfalldatenatlas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unfalldatenatlas.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfalldatenatlasApp.swift; sourceTree = "<group>"; };
 		C6CA9F67297DBCBC000D9E8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -280,6 +282,8 @@
 		C6CA9F57297DBCBC000D9E8B = {
 			isa = PBXGroup;
 			children = (
+				C695098B29A66FF600067384 /* LocationManager.swift */,
+				C642DA2729A5441B00623663 /* InfoView.swift */,
 				C642DA2529A20CEC00623663 /* MapConfigurationView.swift */,
 				C604E927298FF4F600E3A078 /* Unfallorte2016_LinRef.csv */,
 				C604E925298FF4F600E3A078 /* Unfallorte2017_LinRef.csv */,
@@ -287,7 +291,6 @@
 				C604E926298FF4F600E3A078 /* Unfallorte2019_LinRef.csv */,
 				C604E924298FF4D000E3A078 /* Unfallorte2020_LinRef.csv */,
 				C604E923298FF4CE00E3A078 /* Unfallorte2021_LinRef.csv */,
-				C6C0BB03298ECD15001F702C /* UnfallKategorieSelectionView.swift */,
 				C6D0D022298B0AF0000572C3 /* FilterView.swift */,
 				C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */,
 				C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */,
@@ -502,7 +505,6 @@
 				C604E938299009CB00E3A078 /* InitalizationViewModel.swift in Sources */,
 				C6CA9FA4297DC04E000D9E8B /* Accident+CoreDataProperties.swift in Sources */,
 				C642DA23299E16C200623663 /* Map+AppKit.swift in Sources */,
-				C6C0BB04298ECD15001F702C /* UnfallKategorieSelectionView.swift in Sources */,
 				C642DA15299E16C200623663 /* MapMarker.swift in Sources */,
 				C642DA09299E16C200623663 /* MapPolyline.swift in Sources */,
 				C642DA05299E16C200623663 /* MapInteractionModes.swift in Sources */,
@@ -532,6 +534,7 @@
 				C642DA0B299E16C200623663 /* RendererMapOverlay.swift in Sources */,
 				C642DA0F299E16C200623663 /* MapKit.swift in Sources */,
 				C642DA24299E16C200623663 /* Map.swift in Sources */,
+				C695098C29A66FF600067384 /* LocationManager.swift in Sources */,
 				C642DA0D299E16C200623663 /* MapPolygon.swift in Sources */,
 				C642DA04299E16C200623663 /* MapCameraZoomRange.swift in Sources */,
 				C642DA20299E16C200623663 /* Map+UIKit.swift in Sources */,
@@ -545,6 +548,7 @@
 				C642DA11299E16C200623663 /* NativeColor.swift in Sources */,
 				C6CA9F98297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */,
 				C642DA1B299E16C200623663 /* MapZoomControl.swift in Sources */,
+				C642DA2829A5441B00623663 /* InfoView.swift in Sources */,
 				C642DA2629A20CEC00623663 /* MapConfigurationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -711,8 +715,12 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Unfalldatenatlas/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Diese Applikation nutzt Ihren Standort zur Anzeige in der Karte.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Diese Applikation nutzt Ihren Standort zur Anzeige in der Karte.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Diese Applikation nutzt Ihren Standort zur Anzeige in der Karte.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Diese Applikation nutzt Ihren Standort zur Anzeige in der Karte.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -748,8 +756,12 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Unfalldatenatlas/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Diese Applikation nutzt Ihren Standort zur Anzeige in der Karte.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Diese Applikation nutzt Ihren Standort zur Anzeige in der Karte.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Diese Applikation nutzt Ihren Standort zur Anzeige in der Karte.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Diese Applikation nutzt Ihren Standort zur Anzeige in der Karte.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
