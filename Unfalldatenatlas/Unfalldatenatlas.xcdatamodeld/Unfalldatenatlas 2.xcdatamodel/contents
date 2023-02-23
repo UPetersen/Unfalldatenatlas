@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22C65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Accident" representedClassName=".Accident" syncable="YES">
+        <attribute name="accidentObjectID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="gemeinde" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="istFahrrad" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="istFussgaenger" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="istGueterKfz" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="istKrad" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="istPkw" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="istSonstige" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="jahr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="kreis" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="land" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lattitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lichtVerhaeltnisse" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lineRefX" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lineRefY" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="monat" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="regierungsBezirk" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="strassenZustand" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="stunde" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="unfallArt" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="unfallKategorie" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="unfallTyp1" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="wochentag" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <fetchIndex name="bylongitudeIndex">
+            <fetchIndexElement property="longitude" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byLattitudeIndex">
+            <fetchIndexElement property="lattitude" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byJahrIndex">
+            <fetchIndexElement property="jahr" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byGemeindeIndex">
+            <fetchIndexElement property="gemeinde" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byIstPkwIndex">
+            <fetchIndexElement property="istPkw" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byIstFahrradIndex">
+            <fetchIndexElement property="istFahrrad" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byIstFussgaengerIndex">
+            <fetchIndexElement property="istFussgaenger" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byIstKradIndex">
+            <fetchIndexElement property="istKrad" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byIsGueterKfzIndex">
+            <fetchIndexElement property="istGueterKfz" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byLichtverhaeltnisseIndex">
+            <fetchIndexElement property="lichtVerhaeltnisse" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byIstSonstigeIndex">
+            <fetchIndexElement property="istSonstige" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byMonatIndex">
+            <fetchIndexElement property="monat" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byWochentagIndex">
+            <fetchIndexElement property="wochentag" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byStrassenzustandIndex">
+            <fetchIndexElement property="strassenZustand" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byUnfallArtIndex">
+            <fetchIndexElement property="unfallArt" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byUnfallTyp1Index">
+            <fetchIndexElement property="unfallTyp1" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byUnfallKategorieIndex">
+            <fetchIndexElement property="unfallKategorie" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byKreisIndex">
+            <fetchIndexElement property="kreis" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byLandIndex">
+            <fetchIndexElement property="land" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+</model>

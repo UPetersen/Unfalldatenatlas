@@ -59,6 +59,7 @@
 		C642DA24299E16C200623663 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA02299E16C200623663 /* Map.swift */; };
 		C642DA2629A20CEC00623663 /* MapConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2529A20CEC00623663 /* MapConfigurationView.swift */; };
 		C642DA2829A5441B00623663 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2729A5441B00623663 /* InfoView.swift */; };
+		C668DDBD29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C668DDBA29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodeld */; };
 		C67874732997B5180015A20C /* Task+Delayed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874712997B5180015A20C /* Task+Delayed.swift */; };
 		C67874742997B5180015A20C /* DebouncedChangeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */; };
 		C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874752997B7260015A20C /* MKCoordinateRegion+Extension.swift */; };
@@ -72,7 +73,6 @@
 		C6CA9F86297DBCBD000D9E8B /* UnfalldatenatlasUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F85297DBCBD000D9E8B /* UnfalldatenatlasUITestsLaunchTests.swift */; };
 		C6CA9F93297DBD19000D9E8B /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F92297DBD19000D9E8B /* ViewModel.swift */; };
 		C6CA9F95297DBD4D000D9E8B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F94297DBD4D000D9E8B /* ContentView.swift */; };
-		C6CA9F98297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F96297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld */; };
 		C6CA9FA3297DC04E000D9E8B /* Accident+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */; };
 		C6CA9FA4297DC04E000D9E8B /* Accident+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */; };
 		C6D0D023298B0AF0000572C3 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D0D022298B0AF0000572C3 /* FilterView.swift */; };
@@ -96,7 +96,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C604E921298FE77A00E3A078 /* Unfalldatenatlas 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Unfalldatenatlas 2.xcdatamodel"; sourceTree = "<group>"; };
 		C604E922298FF4CB00E3A078 /* Unfallorte2018_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2018_LinRef.csv; sourceTree = "<group>"; };
 		C604E923298FF4CE00E3A078 /* Unfallorte2021_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2021_LinRef.csv; sourceTree = "<group>"; };
 		C604E924298FF4D000E3A078 /* Unfallorte2020_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2020_LinRef.csv; sourceTree = "<group>"; };
@@ -142,6 +141,8 @@
 		C642DA02299E16C200623663 /* Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		C642DA2529A20CEC00623663 /* MapConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapConfigurationView.swift; path = Unfalldatenatlas/MapConfigurationView.swift; sourceTree = "<group>"; };
 		C642DA2729A5441B00623663 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InfoView.swift; path = Unfalldatenatlas/InfoView.swift; sourceTree = "<group>"; };
+		C668DDBB29A7D09D00D6F011 /* Unfalldatenatlas 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Unfalldatenatlas 2.xcdatamodel"; sourceTree = "<group>"; };
+		C668DDBC29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Unfalldatenatlas.xcdatamodel; sourceTree = "<group>"; };
 		C67874702992F0650015A20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C67874712997B5180015A20C /* Task+Delayed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Task+Delayed.swift"; sourceTree = "<group>"; };
 		C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebouncedChangeViewModifier.swift; sourceTree = "<group>"; };
@@ -159,7 +160,6 @@
 		C6CA9F85297DBCBD000D9E8B /* UnfalldatenatlasUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfalldatenatlasUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C6CA9F92297DBD19000D9E8B /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		C6CA9F94297DBD4D000D9E8B /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		C6CA9F97297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Unfalldatenatlas.xcdatamodel; sourceTree = "<group>"; };
 		C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Accident+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Accident+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C6D0D022298B0AF0000572C3 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FilterView.swift; path = Unfalldatenatlas/FilterView.swift; sourceTree = "<group>"; };
@@ -325,7 +325,7 @@
 				C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */,
 				C604E934299009AF00E3A078 /* InitializationView.swift */,
 				C604E937299009CB00E3A078 /* InitalizationViewModel.swift */,
-				C6CA9F96297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld */,
+				C668DDBA29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodeld */,
 				C6CA9F67297DBCBC000D9E8B /* Assets.xcassets */,
 				C6CA9F6C297DBCBC000D9E8B /* Persistence.swift */,
 				C6CA9F69297DBCBC000D9E8B /* Preview Content */,
@@ -520,6 +520,7 @@
 				C642DA1E299E16C200623663 /* MapCompass.swift in Sources */,
 				C67874742997B5180015A20C /* DebouncedChangeViewModifier.swift in Sources */,
 				C642DA1D299E16C200623663 /* MapUserTrackingButton.swift in Sources */,
+				C668DDBD29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodeld in Sources */,
 				C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */,
 				C642DA0C299E16C200623663 /* MapOverlay.swift in Sources */,
 				C642DA12299E16C200623663 /* Identifiable.swift in Sources */,
@@ -546,7 +547,6 @@
 				C604E935299009AF00E3A078 /* InitializationView.swift in Sources */,
 				C642DA19299E16C200623663 /* MapAnnotation.swift in Sources */,
 				C642DA11299E16C200623663 /* NativeColor.swift in Sources */,
-				C6CA9F98297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld in Sources */,
 				C642DA1B299E16C200623663 /* MapZoomControl.swift in Sources */,
 				C642DA2829A5441B00623663 /* InfoView.swift in Sources */,
 				C642DA2629A20CEC00623663 /* MapConfigurationView.swift in Sources */,
@@ -736,7 +736,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -777,7 +777,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -902,15 +902,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		C6CA9F96297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodeld */ = {
+		C668DDBA29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				C604E921298FE77A00E3A078 /* Unfalldatenatlas 2.xcdatamodel */,
-				C6CA9F97297DBD79000D9E8B /* Unfalldatenatlas.xcdatamodel */,
+				C668DDBB29A7D09D00D6F011 /* Unfalldatenatlas 2.xcdatamodel */,
+				C668DDBC29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodel */,
 			);
-			currentVersion = C604E921298FE77A00E3A078 /* Unfalldatenatlas 2.xcdatamodel */;
-			name = Unfalldatenatlas.xcdatamodeld;
-			path = ../../UnfalldatenatlasRenamed/Unfalldatenatlas/Unfalldatenatlas.xcdatamodeld;
+			currentVersion = C668DDBB29A7D09D00D6F011 /* Unfalldatenatlas 2.xcdatamodel */;
+			path = Unfalldatenatlas.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
