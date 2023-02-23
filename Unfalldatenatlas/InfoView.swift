@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InfoView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Information zu Bedienung sowie rechtliche Hinweise werden zukünftig hier angezeigt.")
     }
 }
 
