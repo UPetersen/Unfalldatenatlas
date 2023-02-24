@@ -28,11 +28,19 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @StateObject var initializationViewModel = InitializationViewModel()
-    @StateObject var viewModel: ViewModel = ViewModel()
+    @ObservedObject var viewModel: ViewModel
     
     @State private var moveToCurrentLocation = false
     @State private var showSymbols = false
     @State private var mapType: MKMapType = .standard
+    init(viewModel: ViewModel) {
+        viewModel.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: viewModel.locationManager.latitudeOrMiddleOfGermany,
+                                                                             longitude: viewModel.locationManager.longitudeOrMiddleOfGermany),
+                                              latitudinalMeters: 5000,
+                                              longitudinalMeters: 5000
+        )
+        self.viewModel = viewModel
+    }
     
 //    @State private var theRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.6494018, longitude: 9.1091648), latitudinalMeters: 10000, longitudinalMeters: 10000)
         
@@ -66,11 +74,6 @@ struct ContentView: View {
                          }
                     }
                 )
-//                .onChange(of: theRegion, debounceTime: 0.1) { newValue in
-//                    Task {
-//                        viewModel.fetchTheAccidents(region: theRegion) // viewModel.fetchTheAccidents(region: viewModel.region)
-//                    }
-//                }
                 
                 // User pressed button to show symbols or not
                 .onChange(of: showSymbols, debounceTime: 0.1) { showSymbols in
@@ -88,7 +91,8 @@ struct ContentView: View {
                 }
                 // User moved map or zoomed in or out
                 .onReceive(viewModel.$region.debounce(for: 0.1, scheduler: RunLoop.main)) { region in
-                    viewModel.fetchTheAccidents(region: region) // viewModel.fetchTheAccidents(region: viewModel.region)
+//                    viewModel.fetchTheAccidents(region: region) // viewModel.fetchTheAccidents(region: viewModel.region)
+                    viewModel.fetchTheAccidents() // viewModel.fetchTheAccidents(region: viewModel.region)
                 }
                 // Button for changing between standard and satellite map
                 VStack {
@@ -116,11 +120,6 @@ struct ContentView: View {
                 if viewModel.locationManager.locationStatus == .notDetermined {
                     viewModel.locationManager.requestAuthorization()
                 }
-                viewModel.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: viewModel.locationManager.latitudeOrMiddleOfGermany,
-                                                                                     longitude: viewModel.locationManager.longitudeOrMiddleOfGermany),
-                                                      latitudinalMeters: 5000,
-                                                      longitudinalMeters: 5000
-                )
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -138,7 +137,8 @@ struct ContentView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
 //                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters, theRegion: theRegion)
-                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters, theRegion: viewModel.region)
+//                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters, theRegion: viewModel.region)
+                        FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters)
                     } label: {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
                     }
@@ -232,11 +232,11 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var viewModel = ViewModel()
-    static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var viewModel = ViewModel()
+//    static var previews: some View {
+//        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+//    }
+//}
 
 

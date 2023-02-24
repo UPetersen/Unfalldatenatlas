@@ -14,7 +14,6 @@ struct FilterView: View {
 
     @ObservedObject var viewModel: ViewModel
     @Binding var accidentDataFilters: AccidentDataFilter
-    var theRegion: MKCoordinateRegion
 
     private let debounceTime = 0.1
     
@@ -29,7 +28,7 @@ struct FilterView: View {
                 }
             }
 
-            Section {
+            Section(header: Text("Unfallmerkmale")) {
                 // Unfall-Kategorie
                 Picker("Unfall-Kategorie", selection: $accidentDataFilters.unfallKategorie) {
                     ForEach(UnfallKategorie.allCases, id: \.id) { Text($0.sectionText).tag($0) }
@@ -53,9 +52,9 @@ struct FilterView: View {
                 .onChange(of: accidentDataFilters.unfallTyp1 , debounceTime: debounceTime) { _ in updateMapView() }
             }
             
-            Section {
+            Section(header: Text("Umgebungsbedingungen")) {
                 // Lichtverhaeltnisse
-                Picker("Lichtverhälntisse", selection: $accidentDataFilters.lichtVerhaeltnisse) {
+                Picker("Lichtverhältnisse", selection: $accidentDataFilters.lichtVerhaeltnisse) {
                     ForEach(LichtVerhaeltnisse.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
                 .onChange(of: accidentDataFilters.lichtVerhaeltnisse , debounceTime: debounceTime) { _ in updateMapView() }
@@ -68,7 +67,7 @@ struct FilterView: View {
                 .onChange(of: accidentDataFilters.strassenZustand , debounceTime: debounceTime) { _ in updateMapView() }
             }
             
-            Section {
+            Section(header: Text("Verkehrsteilnehmer")) {
                 // Pkw-Beteiligung
                 Picker("Pkwbeteiligung", selection: $accidentDataFilters.istPkw) {
                     ForEach(IstPkw.allCases, id: \.id) { Text($0.sectionText).tag($0) }
@@ -113,7 +112,7 @@ struct FilterView: View {
 
             }
             
-            Section {
+            Section(header: Text("Datum/Zeit")) {
                 // Unfall-Jahr
                 Picker("Unfall-Jahr", selection: $accidentDataFilters.jahr) {
                     ForEach(UnfallJahr.allCases, id: \.id) { Text($0.sectionText).tag($0) }
@@ -136,7 +135,7 @@ struct FilterView: View {
 
             }
 
-            Section {
+            Section(header: Text("Örtlichkeit")) {
                 // Bundesland
                 Picker("Bundesland", selection: $accidentDataFilters.land) {
                     ForEach(Land.allCases, id: \.id) { Text($0.sectionText).tag($0) }
@@ -144,7 +143,7 @@ struct FilterView: View {
                 .onChange(of: accidentDataFilters.land , debounceTime: debounceTime) { _ in updateMapView() }
             }
             
-            Section {
+            Section(header: Text("Filterbedingung (Debugging)")) {
                 Text("Filter: \(accidentDataFilters.predicates.debugDescription)")
             }
 
@@ -154,6 +153,7 @@ struct FilterView: View {
     
     func updateMapView() {
 //        viewModel.fetchTheAccidents(region: theRegion)
+//        viewModel.fetchTheAccidents(region: viewModel.region)
         viewModel.fetchTheAccidents()
     }
 }

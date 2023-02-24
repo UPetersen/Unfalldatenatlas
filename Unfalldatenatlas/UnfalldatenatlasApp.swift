@@ -10,10 +10,11 @@ import SwiftUI
 @main
 struct UnfalldatenatlasApp: App {
     let persistenceController = PersistenceController.shared
+    let viewModel = ViewModel()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: viewModel)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
