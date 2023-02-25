@@ -5,18 +5,6 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict/>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>MKDirectionsRequest</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>com.apple.maps.directionsrequest</string>
-			</array>
-		</dict>
-	</array>
-	<key>MKDirectionsApplicationSupportedModes</key>
-	<array>
-		<string>MKDirectionsModeRideShare</string>
 	</array>
 </dict>
 </plist>
