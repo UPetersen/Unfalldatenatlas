@@ -143,7 +143,6 @@
 		C642DA2729A5441B00623663 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InfoView.swift; path = Unfalldatenatlas/InfoView.swift; sourceTree = "<group>"; };
 		C668DDBB29A7D09D00D6F011 /* Unfalldatenatlas 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Unfalldatenatlas 2.xcdatamodel"; sourceTree = "<group>"; };
 		C668DDBC29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Unfalldatenatlas.xcdatamodel; sourceTree = "<group>"; };
-		C67874702992F0650015A20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C67874712997B5180015A20C /* Task+Delayed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Task+Delayed.swift"; sourceTree = "<group>"; };
 		C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebouncedChangeViewModifier.swift; sourceTree = "<group>"; };
 		C67874752997B7260015A20C /* MKCoordinateRegion+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKCoordinateRegion+Extension.swift"; sourceTree = "<group>"; };
@@ -316,7 +315,6 @@
 			children = (
 				C642D9DA299E15EE00623663 /* MKMapViewStuff */,
 				C642D9D9299ACF8300623663 /* Unfalldatenatlas.entitlements */,
-				C67874702992F0650015A20C /* Info.plist */,
 				C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */,
 				C67874712997B5180015A20C /* Task+Delayed.swift */,
 				C6CA9F94297DBD4D000D9E8B /* ContentView.swift */,
