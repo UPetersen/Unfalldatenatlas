@@ -59,7 +59,6 @@
 		C642DA24299E16C200623663 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA02299E16C200623663 /* Map.swift */; };
 		C642DA2629A20CEC00623663 /* MapConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2529A20CEC00623663 /* MapConfigurationView.swift */; };
 		C642DA2829A5441B00623663 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2729A5441B00623663 /* InfoView.swift */; };
-		C650866929AA310200C5DE76 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C650866829AA310200C5DE76 /* Info.plist */; };
 		C668DDBD29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C668DDBA29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodeld */; };
 		C67874732997B5180015A20C /* Task+Delayed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874712997B5180015A20C /* Task+Delayed.swift */; };
 		C67874742997B5180015A20C /* DebouncedChangeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874722997B5180015A20C /* DebouncedChangeViewModifier.swift */; };
@@ -465,7 +464,6 @@
 			files = (
 				C604E92E298FF4F600E3A078 /* Unfallorte2017_LinRef.csv in Resources */,
 				C604E930298FF4F600E3A078 /* Unfallorte2019_LinRef.csv in Resources */,
-				C650866929AA310200C5DE76 /* Info.plist in Resources */,
 				C6CA9F6B297DBCBC000D9E8B /* Preview Assets.xcassets in Resources */,
 				C604E92C298FF4F600E3A078 /* Unfallorte2020_LinRef.csv in Resources */,
 				C6CA9F68297DBCBC000D9E8B /* Assets.xcassets in Resources */,
