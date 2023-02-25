@@ -11,6 +11,8 @@
 			<array>
 				<string>com.apple.maps.directionsrequest</string>
 			</array>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
 		</dict>
 		<dict/>
 	</array>
