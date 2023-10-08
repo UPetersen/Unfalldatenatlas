@@ -17,6 +17,7 @@ struct FilterView: View {
     @ObservedObject var viewModel: ViewModel
     @Binding var accidentDataFilters: AccidentDataFilter
     
+    @State private var isFetchingCountOfSelectedAccidents = false
     @State private var task: Task<Void, Never>? = nil
     
     
@@ -28,7 +29,11 @@ struct FilterView: View {
                 HStack {
                     Text("Anzahl Unfälle:")
                     Spacer()
-                    Text("\(viewModel.countOfSelectedAccidents)")
+                    if isFetchingCountOfSelectedAccidents {
+                        ProgressView()
+                    } else {
+                        Text("\(viewModel.countOfSelectedAccidents)")
+                    }
                 }
             }
             
@@ -145,10 +150,11 @@ struct FilterView: View {
         // Whenever the flter/selections changes, then update count of selected accidents and the corresponding accidents in the region.
         .onChange(of: viewModel.accidentDataFilters) {
             print("----------------- in .onChange (FilterView) due to init or accidentDataFilters change -------------------")
-            
+            isFetchingCountOfSelectedAccidents = true
             task?.cancel()
             task = Task {
                 await viewModel.fetchCountOfSelectedAccidents()
+                isFetchingCountOfSelectedAccidents = false
             }
         }
     }
