@@ -266,7 +266,7 @@ Wenn der Nutzer dem Teilen des Standorts für diese App zustimmt, wird der aktue
 
 # Haftungsausschluss
             
-Für die Richtigkeit der angezeigten Informationen wird keinerlei Haftung oder Gewähr übernommen. Bitte rechen Sie damit, dass die App fehlerhaft sein kann.
+Für die Richtigkeit der angezeigten Informationen wird keinerlei Haftung oder Gewähr übernommen. Bitte rechnen Sie damit, dass die App fehlerhaft sein kann.
 
 # Lizenz
 
