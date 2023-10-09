@@ -112,8 +112,17 @@ class ViewModel: ObservableObject {
                     return
                 }
                 let countOfAllAccidents = try asyncContext.count(for: countAllAccidentsRequest)
+
+                if Task.isCancelled {
+                    print("------Task fetchCountOfSelectedAccidents is cancelled 3 ----------")
+                    return
+                }
                 DispatchQueue.main.async {
                     print("------------ IN MAIN QUEUE OF fetchCountOfSelectedAccidents --------------")
+                    if Task.isCancelled {
+                        print("------Task fetchCountOfSelectedAccidents is cancelled 4 ----------")
+                        return
+                    }
                     self.countOfSelectedAccidents = countOfAllAccidents
                 }
             }

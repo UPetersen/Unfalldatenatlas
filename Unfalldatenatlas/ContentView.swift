@@ -32,6 +32,8 @@ struct ContentView: View {
     
     @State private var isShowingFilterView = false
     @State private var isShowingInfoView = false
+    
+    @State private var isFetchingCountOfSelectedAccidents = false
 
     var body: some View {
         NavigationStack {
@@ -243,7 +245,7 @@ struct ContentView: View {
                 // Text with count of selected accidents
                 ToolbarItem(placement: .navigationBarLeading) {
                     VStack(alignment: .leading) {
-                        Text("\(viewModel.countOfSelectedAccidents) Unfälle")
+                        CountOfSelectedAccidentsView(countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents)
                     }
                 }
                 // The (i) button
@@ -273,7 +275,7 @@ struct ContentView: View {
                 InfoView(accidentsFetchLimit: viewModel.fetchLimit)
             }
             .sheet(isPresented: $isShowingFilterView, onDismiss: { dismissAction() /* no dismiss action needed */} ) {
-                FilterView(viewModel: viewModel, accidentDataFilters: self.$viewModel.accidentDataFilters)
+                FilterView(viewModel: viewModel, accidentDataFilters: $viewModel.accidentDataFilters, isFetchingCountOfSelectedAccidents: $isFetchingCountOfSelectedAccidents)
             }
 
             // User pressed button to show symbols or not
@@ -286,9 +288,15 @@ struct ContentView: View {
             .onChange(of: initializationViewModel.initializationState) {
                 print("============================== in .onChange(of: initializationState) ======================")
 
+                isFetchingCountOfSelectedAccidents = true
                 task?.cancel()
                 task = Task {
                     await viewModel.fetchCountOfSelectedAccidents() // Triggers also fetching of accidents.
+                    if Task.isCancelled {
+                        print("------Task fetchCountOfSelectedAccidents is cancelled in ContentView ----------")
+                        return
+                    }
+                    isFetchingCountOfSelectedAccidents = false
                 }
             }
             
