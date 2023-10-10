@@ -204,7 +204,7 @@ Interessant ist noch die Verteilung der Unfälle über die letzten Jahre, siehe 
 Ein Kurvenabschnitt auf dem sich insgesamt 15 Unfälle mit Kraftradbeteiligung ereigneten sei noch besonders betrachtet, siehe nachfolgende Bilder. 14 Unfälle sind Fahrunfälle und ein Unfall ist ein Abbiegunfall bei der Abfahrt zum Parkplatz. In der Lookaround-Ansicht (Bilder von August 2019) sieht man einen sehr guten Straßenzustand. Bewegt man sich entlang der Straße, so findet man eine Geshwindigkeitsbegrenzung auf 50 km/h für diese Kurve und die dahinter liegende Kurve. Nun stammen die Bilder aus dem Jahre 2019 und es könnte sein, dass die Straßenverhältnisse in den anderen Jahren komplett anders waren. Trotzdem liegt insgesamt der Schluss nahe, dass es sich bei diesem Straßenabschnitt um eine schöne Motorradstrecke mit schönen Kurven handelt, die insbesondere von Motorradfahrern häufig gerne schnell durchfahren und dabei immer mal wieder unterschätzt wird.
 
 |![IMG_5077](https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/920ab4aa-3075-4cda-87f1-8c7700e182df)|![IMG_5077](https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/b853fa75-2378-44e7-b5d1-8759ccdf60a8)|![IMG_5077](https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/2cddad57-8c05-4492-a5ca-7046b529c2f2)|
-|:-:|:-:|:-:
+|:-:|:-:|:-:|
 |Kurve beim Parkplatz Helbingfelsen | Lookaround-Ansicht der Kurve beim Parkplatz Helbingfelsen | Geschwindigkeitsbegrenzung 50 km/h für die Kurve beim Parkplatz Helbingfelsen |
 
 Filtert man in der App auf Fahrunfälle mit Kraftradbeteiligung und sucht wenige Minuten, so findet man an vielen Orten in Deutschland Streckenabschnitte oder einzelne Kurven mit ähnlichen Unfallhäufungen bzw. -mustern. Beispielhaft dafür seien noch die Bundesstraße 308 (Alpenstraße) westlich von Scheidegg (linkes nachfolgendes Bild)  sowie die Bundesstraße 276 zwischen Schotten und Laubach genannt (rechtes Bild). Bemerkenswert an der B276 bei Schotten ist, dass die Unfallzahl in den Jahren 2021 und 2022 mit insgesamt 6 der 83 Unfälle im Kartenausschnit im Vergleich zu den fünf Vorjahren extrem gering ist. Vielleicht hat man dort entsprechende Maßnahmen ergriffen, um die Unfallhäufigkeit zu verringern.
@@ -257,6 +257,23 @@ Für die Richtigkeit der angezeigten Informationen wird keinerlei Haftung oder G
 # Lizenz
 
 GNU GENERAL PUBLIC LICENSE [Version 3](https://github.com/UPetersen/Unfalldatenatlas/blob/main/LICENSE).
-            
+
+# Daten
+
+Im Unfalldatenatlas sind nicht alle polizeiliche erfassten Unfälle mit Personenschaden enthalten. Das liegt unter anderem daran, dass von einigen Bundesländern nicht aus jedem Jahr Daten vorliegen. Für Brandenburg, Niedersachsen, Rheinland-Pfalz, das Saarland und Sachsen-Anhalt liegen Daten erst ab 2017, für Thüringen ab 2019 und für Mecklenburg-Vorpommern ab Sommer 2021. In den anderen Bundesländern liegen die Daten ab 2020 vor. Des weiteren schreibt das statistische Bundesamt, dass die Unfälle bei der Aufbereitung einen mehrstufigen Plausibilisierungsprozess durchlaufen. Während dieses Prozesses können einzelne Unfälle, die den Plausibilisierungsanforderungen nicht genügen, aussortiert werden. Diese Unfälle werden nicht im Unfallatlas abgebildet. Weiter Informationen dazu und zur Aufbereitung der Daten finden sich auf der [Webseite des Unfallatlas des statistischen Bundesamts](https://unfallatlas.statistikportal.de) unter Erläuterungen zum Unfallatlas.
+
+Die nachfolgende Tabelle zeigt einen Vergleich der Anzahl der im Unfallatlas enthaltenen polizeilich erfassten Unfälle mit Personenschaden zu den insgesamt für Deutschland polizeilich erfassten Unfälle mit Personenschaden [^2].
+
+|Jahr|Verkehrsunfälle mit Personenschaden in Deutschland|Verkehrsunfälle mit Personenschaden im Unfallatlas|proozentualer Anteil|
+|:-:|:-:|:-:|:-:|
+|2022| 289.672 | 256.492 | 89% |
+|2021| 258.987 | 233.208 | 90% |
+|2020| 264.499 | 237.994 | 90% |
+|2019| 300.143 | 268.370 | 89% |
+|2018| 308.721 | 211.868 | 69% |
+|2017| 302.656 | 195.229 | 65% |
+|2016| 308.145 | 151.673 | 49% | 
+
 
 [^1]: Im Unfalldatenatlas sind nicht alle polizeilich erfassten Unfälle mit Personenschaden enthalten, sondern grob über den Daumen ca. 90%. Beispielsweise hat DESTATIS für das Jahr 2022 insgesamt 289.672 Unfälle mit Personenschaden registriert, von denen 256.492 im Unfalldatenatlas enthalten sind. Siehe dazu die Erläuterungen zum Unfallatlas auf der [Unfallatlas-Webseit](https://unfallatlas.statistikportal.de).
+[^2]: Statistisches Bundesamt: Straßenverkehrsunfälle, Verunglückt, Anzahl, siehe [https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Tabellen/liste-strassenverkehrsunfaelle.html#251628](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Tabellen/liste-strassenverkehrsunfaelle.html#251628)
