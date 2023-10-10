@@ -72,9 +72,9 @@ struct InfoView: View {
                 
                 Text("""
             
-            **Anzeige von Unfalldetails \(Image(systemName: "ellipsis.circle"))**
+            **Anzeige von Unfalldetails \(Image(systemName: "ellipsis.rectangle"))**
             
-            Über den Button \(Image(systemName: "ellipsis.circle")) kann auf eine detaillierte Darstellung umgeschaltet werden, bei der über Text und Emojie-Symbole Zusatzinformationen zu jedem einzelnen Unfall angezeigt werden, z.B. "16🚗🚴🌝🌧️🏥A5". Folgende Information werden dabei in der dargestellten Reihenfolge hintereinander angezeigt:
+            Über den Button \(Image(systemName: "ellipsis.rectangle")) kann auf eine detaillierte Darstellung umgeschaltet werden, bei der über Text und Emojie-Symbole Zusatzinformationen zu jedem einzelnen Unfall angezeigt werden, z.B. "16🚗🚴🌝🌧️🏥A5". Folgende Information werden dabei in der dargestellten Reihenfolge hintereinander angezeigt:
             
             Unfalljahr:
             Ziffer des Unfalljahres, z.B. "16" für das Jahr 2016, "17" für das Jahre 2017 et Cetera.
@@ -84,7 +84,7 @@ struct InfoView: View {
             🏍️ für Unfälle, an denen mindestens ein Kraftrad (z.B. Mofa, Motorrad/-roller) beteiligt war.
             🚴 für Unfälle, an denen mindestens ein Fahrrad beteiligt war.
             🚶‍♂️ für Unfälle, an denen mindestens ein Fußgänger(in) beteiligt war.
-            🚚 für Unfälle, an dem mindestens ein Lastkraftwagen mit Normalaufbau und einem Gesamtgewicht über 3,5 t, ein Lastkraftwagen mit Tankauflage bzw. Spezialaufbau,eine Sattelzugmaschine oder eine andere Zugmaschine beteiligt war (diese Kategorie ist in den Jahren 2016 und 2017 in der nachfolgenden Kategorie enthalten)
+            🚚 für Unfälle, an denen mindestens ein Lastkraftwagen mit Normalaufbau und einem Gesamtgewicht über 3,5 t, ein Lastkraftwagen mit Tankauflage bzw. Spezialaufbau,eine Sattelzugmaschine oder eine andere Zugmaschine beteiligt war (diese Kategorie ist in den Jahren 2016 und 2017 in der nachfolgenden Kategorie enthalten)
             🚚/🚌/🚃 bzw. 🚌/🚃 (ab 2018) für Unfälle an denen mindestens ein oben nicht genanntes Verkehrsmittel beteiligt war, wie z.B. ein Bus oder eine Straßenbahn. Für die Jahre 2016 und 2017 einschließlich Unfall mit Güterkraftfahrzeug, ab 2018 ohne Güterkraftfahrzeuge.
                         
             Lichtverhältnisse:
@@ -99,21 +99,25 @@ struct InfoView: View {
             🩹 für Unfälle mit Leichtverletzten, d.h. alle übrigen Verletzten.
             
             [Unfallart](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Methoden/_inhalt.html#sprg371798):
-            A1 für Zusammenstoß mit anfahrendem/ anhaltendem/ruhendem Fahrzeug.
-            A2 für Zusammenstoß mit vorausfahrendem / wartendem Fahrzeug.
+            A1 für Zusammenstoß mit anfahrendem/anhaltendem/ruhendem Fahrzeug.
+            A2 für Zusammenstoß mit vorausfahrendem/wartendem Fahrzeug.
             A3 für Zusammenstoß mit seitlich in gleicher Richtung fahrendem Fahrzeug.
             A4 für Zusammenstoß mit entgegenkommendem Fahrzeug.
-            A5 für Zusammenstoß mit einbiegendem / kreuzendem Fahrzeug.
+            A5 für Zusammenstoß mit einbiegendem/kreuzendem Fahrzeug.
             A6 für Zusammenstoß zwischen Fahrzeug und Fußgänger.
             A7 für Aufprall auf Fahrbahnhindernis.
-            A8 für Abkommen von Fahrbahn nach rechts.
-            A9 für Abkommen von Fahrbahn nach links.
+            A8 für Abkommen von der Fahrbahn nach rechts.
+            A9 für Abkommen von der Fahrbahn nach links.
             A0 für Unfälle anderer Art.
             
             **Datenauswahl bzw. -filterung \(Image(systemName: "line.3.horizontal.decrease.circle"))**
             
-            Über das Menü \(Image(systemName: "line.3.horizontal.decrease.circle")) kann die Anzeige vielfältig auf bestimmte Unfälle eingegrenzt werden. Neben den Daten der Detailanzeige (Unfalljahr, Unfallbeteiligte, Lichtverhältnisse, Straßenzustand, Verletzungsschwere und Unfallart) lassen sich dabei auch der Wochentag, der Monat sowie das Bundesland auswählen bzw. eingrenzen. Alle diese Kategorien lassen sich beliebig verknüpfen, z.B. Unfälle mit Getöteten und Beteiligung von Pkw- und Radfahrern bei Nacht oder Fahrunfälle mit Beteiligung von Krafträdern ohne Beteiligung von Pkw et Cetera. Mehrfachauswahlen innerhalb einer Kategorie, z.B. Unfälle an Samstagen oder Sonntagen sind noch nicht implementiert.
-                        
+            Über den Button \(Image(systemName: "line.3.horizontal.decrease.circle")) kann die Anzeige vielfältig auf bestimmte Unfälle eingegrenzt werden. Neben den Daten der Detailanzeige (Unfalljahr, Unfallbeteiligte, Lichtverhältnisse, Straßenzustand, Verletzungsschwere und Unfallart) lassen sich dabei auch der Wochentag, der Monat sowie das Bundesland auswählen bzw. eingrenzen. Alle diese Kategorien lassen sich beliebig verknüpfen, z.B. Unfälle mit Getöteten und Beteiligung von Pkw- und Radfahrern bei Nacht oder Fahrunfälle mit Beteiligung von Krafträdern ohne Beteiligung von Pkw et Cetera. Mehrfachauswahlen innerhalb einer Kategorie, z.B. Unfälle an Samstagen oder Sonntagen sind noch nicht implementiert.
+            
+            **Lookaround-Ansicht**
+
+            Über den Button \(Image(systemName: "binoculars")) kann eine Lookaround-Ansicht des Unfallortes eingeblendet werden. Nach Zuschalten der Ansicht einfach das Kreissymbol eines Unfalles anklicken.
+            
             **Datenquelle, Rechtliche Hinweise und Datenschutz**
                         
             Die angezeigten Daten stammen vom [Unfalldatenatlas](https://unfallatlas.statistikportal.de) des Statistischen Bundesamt (DESTATIS). In einzelnen Bundesländern sind die Daten nicht für den gesamten Zeitraum verfügbar. Weitere Informationen zur Datengrundlage sind [hier](https://unfallatlas.statistikportal.de) zu finden.
