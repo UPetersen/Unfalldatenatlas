@@ -36,7 +36,7 @@ Zusätzlich kann über den Button <img height="15" style="vertical-align:middle;
 <img width="524" alt="Bildschirmfoto 2023-10-01 um 11 16 19" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/7b3caf99-a62a-4b8d-b77c-3771289566c3">
 </p>
 
-für einen Unfall des Typs *Einbiegen-/Kreuzen-Unfall* (⭕️) im Jahr 2016 mit Beteiligung mindestens eines Pkws (🚗) und Radfahrers (🚴) bei Dunkelheit (🌝), nass/feucht/schlüpfrigem Straßenzustand (🌧️) mit Schwerverletzen (🏥) und Unfallart *Zussamenstoß mit einem einbiegendem/kreuzendem Fahrzeug* (A5)
+für einen Unfall des Typs *Einbiegen-/Kreuzen-Unfall* (⭕️) im Jahr 2016 mit Beteiligung mindestens eines Pkws (🚗) und Radfahrers (🚴) bei Dunkelheit (🌝), nass/feucht/schlüpfrigem Straßenzustand (🌧️) mit Schwerverletzen (🏥) und Unfallart *Zusammenstoß mit einem einbiegendem/kreuzendem Fahrzeug* (A5)
 
 Nachfolgend sind die möglichen Zusatzinformationen im Detail beschrieben, die man auch in der App über den Button <img height="15" style="vertical-align:middle;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/094d784e-5935-460c-9ee0-ad8007209d35"> erhalten kann.
             
@@ -53,7 +53,7 @@ Die letzten zwei Ziffern des Unfalljahres, z.B.
 - 🏍️ für Unfälle, an denen mindestens ein Kraftrad (z.B. Mofa, Motorrad/-roller) beteiligt war.
 - 🚴 für Unfälle, an denen mindestens ein Fahrrad beteiligt war.
 - 🚶‍♂️ für Unfälle, an denen mindestens ein Fußgänger(in) beteiligt war.
-- 🚚 für Unfälle, an dem mindestens ein Lastkraftwagen mit Normalaufbau und einem Gesamtgewicht über 3,5 t, ein Lastkraftwagen mit Tankauflage bzw. Spezialaufbau,eine Sattelzugmaschine oder eine andere Zugmaschine beteiligt war (diese Kategorie ist in den Jahren 2016 und 2017 in der nachfolgenden Kategorie enthalten)
+- 🚚 für Unfälle, an denen mindestens ein Lastkraftwagen mit Normalaufbau und einem Gesamtgewicht über 3,5 t, ein Lastkraftwagen mit Tankauflage bzw. Spezialaufbau,eine Sattelzugmaschine oder eine andere Zugmaschine beteiligt war (diese Kategorie ist in den Jahren 2016 und 2017 in der nachfolgenden Kategorie enthalten)
 - 🚚/🚌/🚃 bzw. 🚌/🚃 (ab 2018) für Unfälle an denen mindestens ein oben nicht genanntes Verkehrsmittel beteiligt war, wie z.B. ein Bus oder eine Straßenbahn. Für die Jahre 2016 und 2017 einschließlich Unfall mit Güterkraftfahrzeug, ab 2018 ohne Güterkraftfahrzeuge.
 
                         
@@ -79,13 +79,13 @@ Die letzten zwei Ziffern des Unfalljahres, z.B.
 
 ### Unfallart
 
-Siehe [hier](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Methoden/_inhalt.html#sprg371798) zur weiteren Informationen zu Unfallarten.
+Siehe [hier](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Methoden/_inhalt.html#sprg371798) zu weiteren Informationen zu Unfallarten.
 
-- A1 für Zusammenstoß mit anfahrendem/ anhaltendem/ruhendem Fahrzeug.
-- A2 für Zusammenstoß mit vorausfahrendem / wartendem Fahrzeug.
+- A1 für Zusammenstoß mit anfahrendem/anhaltendem/ruhendem Fahrzeug.
+- A2 für Zusammenstoß mit vorausfahrendem/wartendem Fahrzeug.
 - A3 für Zusammenstoß mit seitlich in gleicher Richtung fahrendem Fahrzeug.
 - A4 für Zusammenstoß mit entgegenkommendem Fahrzeug.
-- A5 für Zusammenstoß mit einbiegendem / kreuzendem Fahrzeug.
+- A5 für Zusammenstoß mit einbiegendem/kreuzendem Fahrzeug.
 - A6 für Zusammenstoß zwischen Fahrzeug und Fußgänger.
 - A7 für Aufprall auf Fahrbahnhindernis.
 - A8 für Abkommen von Fahrbahn nach rechts.
