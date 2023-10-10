@@ -3,8 +3,9 @@
 Diese App zeigt mehr als 1,5 Millionen polizeilich registrierte Verkehrsunfälle mit getöteten oder verletzen Personen der Jahre 2016 bis 2022 auf einer Deutschlandkarte an. Zu den einzelnen Unfällen können verschiedene Attribute wie z.B. Unfallart und -typ oder Unfallbeteiligte (Pkw, Fahrrad, Fußgänger etc.) eingeblendet werden. Zudem können die angezeigten Unfälle nach vielen Attributen gefiltert werden. So lassen sich die angzeigten Unfälle z.B. auf alle Fahrunfälle mit Getöteten und Beteiligung von Krafträdern bei feucht/nass/schlüpfrigem Straßenzustand einschränken.
             
 <p align="center">
-<img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/363e952f-2de2-4e65-a769-e2f8d3895486" width=40% height=40%>
+<img width="400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/363e952f-2de2-4e65-a769-e2f8d3895486">
 </p>
+
 
 ## Einschränkungen
 
@@ -20,7 +21,7 @@ Die Unfalldaten stammen vom [Unfallatlas](https://unfallatlas.statistikportal.de
 Die einzelnen Unfälle werden auf der Karte am Unfallort durch Kreise angezeigt, die entsprechend [der Farbskala für Unfalltypen](https://de.wikipedia.org/wiki/Unfalltyp) eingefärbt sind.
 
 <p align="center">
-<img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/105b7c8c-0aa3-4436-998c-d2e14908521b" width=40% height=40%>
+<img width="400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/105b7c8c-0aa3-4436-998c-d2e14908521b">
 </p>
 
 <!--- Auskommentiert: Beispiel für Bild mit Bildunterschrift
@@ -33,7 +34,7 @@ Die einzelnen Unfälle werden auf der Karte am Unfallort durch Kreise angezeigt,
 Zusätzlich kann über den Button <img height="15" style="vertical-align:middle;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/ee97a788-6a45-4db6-88ce-ad6e3c0a933c"> auf eine detaillierte Darstellung umgeschaltet werden, bei der über Text und Emoji-Symbole Zusatzinformationen zu jedem einzelnen Unfall angezeigt werden, z.B. 
 
 <p align="center">
-<img width="524" alt="Bildschirmfoto 2023-10-01 um 11 16 19" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/7b3caf99-a62a-4b8d-b77c-3771289566c3">
+<img width="450" alt="Bildschirmfoto 2023-10-01 um 11 16 19" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/7b3caf99-a62a-4b8d-b77c-3771289566c3">
 </p>
 
 für einen Unfall des Typs *Einbiegen-/Kreuzen-Unfall* (⭕️) im Jahr 2016 mit Beteiligung mindestens eines Pkws (🚗) und Radfahrers (🚴) bei Dunkelheit (🌝), nass/feucht/schlüpfrigem Straßenzustand (🌧️) mit Schwerverletzen (🏥) und Unfallart *Zusammenstoß mit einem einbiegendem/kreuzendem Fahrzeug* (A5)
@@ -106,13 +107,13 @@ Siehe [hier](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfae
 Oben links in der App wird die Zahl aller selektierten Unfälle angezeigt. Beim Start der App sind das 1.554.384 Unfälle, alle die in der Datenbank gespeichert sind. Über das Menü  <img height="16" style="vertical-align:bottom;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e353808f-5d78-4126-98a3-f617d915c416">  kann die Auswahl vielfältig auf bestimmte Unfälle eingegrenzt werden, z.B. auf alle Unfälle mit Getöteten. Entsprechend wird oben links die Zahl der Unfälle auf diese Auswahl reduziert, im Beispiel für alle Unfälle mit Getöteten auf 15.578 entsprechende Unfälle die in der Datenbank enthalten sind. Entsprechend werden im Kartenausschnitt auch nur noch Unfälle mit Getöteten angezeigt.
 
 <p align="center">
-<img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e03a69c8-bb3f-4e61-8b8a-a486fa12bfd3" width=50% height=50%>
+<img width="400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e03a69c8-bb3f-4e61-8b8a-a486fa12bfd3">
 </p>
 
 Neben den Daten der Detailanzeige (Unfalljahr, Unfallbeteiligte, Lichtverhältnisse, Straßenzustand, Verletzungsschwere und Unfallart) lassen sich dabei auch der Wochentag, der Monat sowie das Bundesland auswählen bzw. eingrenzen. Alle diese Kategorien lassen sich beliebig verknüpfen, z.B. Unfälle mit Getöteten und Beteiligung von Pkw- und Radfahrern bei Nacht oder Fahrunfälle mit Beteiligung von Krafträdern ohne Beteiligung von Pkw et Cetera. Mehrfachauswahlen innerhalb einer Kategorie, z.B. Unfälle die sich an Samstagen oder Sonntagen ereigneten sind noch nicht implementiert.
 
 <p align="center">
-<img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/39bfbd7c-0d9a-4827-9d74-babb471f1925" width=30% height=30%>
+<img width=400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/39bfbd7c-0d9a-4827-9d74-babb471f1925">
 </p>
 
 # Wofür das Ganze?
@@ -170,10 +171,10 @@ Südlich von Geroldsau lieg ein etwa 7 km langer Abschnitt der Schwarzwaldhochst
 <table>
   <tr>
     <td>
-      <img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/be78e61a-ffed-4389-b4a2-0b73daa27071"  title="Lorem ipsum" >
+      <img  src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/be78e61a-ffed-4389-b4a2-0b73daa27071" >
     </td>
     <td>
-      <img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e80f8d27-73c9-4f2c-a5bb-eae944056fe7" title="Dolor sit">
+      <img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e80f8d27-73c9-4f2c-a5bb-eae944056fe7" >
     </td>
   </tr>
 
@@ -202,24 +203,9 @@ Interessant ist noch die Verteilung der Unfälle über die letzten Jahre, siehe 
 
 Ein Kurvenabschnitt auf dem sich insgesamt 15 Unfälle mit Kraftradbeteiligung ereigneten sei noch besonders betrachtet, siehe nachfolgende Bilder. 14 Unfälle sind Fahrunfälle und ein Unfall ist ein Abbiegunfall bei der Abfahrt zum Parkplatz. In der Lookaround-Ansicht (Bilder von August 2019) sieht man einen sehr guten Straßenzustand. Bewegt man sich entlang der Straße, so findet man eine Geshwindigkeitsbegrenzung auf 50 km/h für diese Kurve und die dahinter liegende Kurve. Nun stammen die Bilder aus dem Jahre 2019 und es könnte sein, dass die Straßenverhältnisse in den anderen Jahren komplett anders waren. Trotzdem liegt insgesamt der Schluss nahe, dass es sich bei diesem Straßenabschnitt um eine schöne Motorradstrecke mit schönen Kurven handelt, die insbesondere von Motorradfahrern häufig gerne schnell durchfahren und dabei immer mal wieder unterschätzt wird.
 
-<table>
-  <tr>
-    <td>
-      <img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/920ab4aa-3075-4cda-87f1-8c7700e182df"  title="Lorem ipsum" >
-    </td>
-    <td>
-      <img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/b853fa75-2378-44e7-b5d1-8759ccdf60a8" title="Dolor sit">
-    </td>
-    <td>
-      <img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/2cddad57-8c05-4492-a5ca-7046b529c2f2" title="Dolor sit">
-    </td>
-  </tr>
-  <tr>
-    <td align="center"> Kurve beim Parkplatz Helbingfelsen </td>
-    <td align="center"> Lookaround-Ansicht der Kurve beim Parkplatz Helbingfelsen </td>
-    <td align="center"> Geschwindigkeitsbegrenzung 50 km/h für die Kurve beim Parkplatz Helbingfelsen</td>
-  </tr>
-</table>
+|![IMG_5077](https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/920ab4aa-3075-4cda-87f1-8c7700e182df)|![IMG_5077](https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/b853fa75-2378-44e7-b5d1-8759ccdf60a8)|![IMG_5077](https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/2cddad57-8c05-4492-a5ca-7046b529c2f2)|
+|:-:|:-:|:-:
+|Kurve beim Parkplatz Helbingfelsen | Lookaround-Ansicht der Kurve beim Parkplatz Helbingfelsen | Geschwindigkeitsbegrenzung 50 km/h für die Kurve beim Parkplatz Helbingfelsen |
 
 Filtert man in der App auf Fahrunfälle mit Kraftradbeteiligung und sucht wenige Minuten, so findet man an vielen Orten in Deutschland Streckenabschnitte oder einzelne Kurven mit ähnlichen Unfallhäufungen bzw. -mustern. Beispielhaft dafür seien noch die Bundesstraße 308 (Alpenstraße) westlich von Scheidegg (linkes nachfolgendes Bild)  sowie die Bundesstraße 276 zwischen Schotten und Laubach genannt (rechtes Bild). Bemerkenswert an der B276 bei Schotten ist, dass die Unfallzahl in den Jahren 2021 und 2022 mit insgesamt 6 der 83 Unfälle im Kartenausschnit im Vergleich zu den fünf Vorjahren extrem gering ist. Vielleicht hat man dort entsprechende Maßnahmen ergriffen, um die Unfallhäufigkeit zu verringern.
 
@@ -246,7 +232,7 @@ Abschließend sei nochmals angemerkt, dass auch bei dieser Analyse zu beachten i
 Da nur eine begrenzte Menge von Unfällen im Kartenausschnitt angezeigt wird, ist die Verteilung dieser Punkte letztlich willkürlich, solange nicht alle im Kartenausschnitt enthaltenen Unfälle angezeigt werden können. Beim Start der App wird Deutschland in voller Fläche dargestellt, aber nur 400 der 1.554.383 Unfälle angezeigt und entsprechend nur die ersten 400 aus der Datenbank abgefragt, um die Anzeige schnell aktualisieren zu können. Als Konsequenz daraus werden dann meist nur 400 Punkte in einem Bundesland oder einer Ecke Deutschlands angezeigt, wo eine gleichmäßige Verteilung über die Deutschlandkarte doch etwas schöner wäre.
 
 <p align="center">
-<img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/c79be0bc-4a57-43fe-bfca-0e90b7235aa6" width=30% height=30%>
+<img width="400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/c79be0bc-4a57-43fe-bfca-0e90b7235aa6" >
 </p>
 
 Bei Auswahl nach mehreren Kriterien, welche die Unfallzahl nur wenig reduzieren, z.B. Unfälle bei Tageslicht mit Leichtverletzten und Pkw-Beteiligung verlängert sich das Laden der Daten unter Umständen erheblich. Bei mehreren Kriterien ist es grundsätzlich ratsam, das Kriterium, welches die Unfallzahl am meisten reduziert, als Erstes auszuwählen. Also z.B. für Unfälle mit Getöteten bei Tageslicht erst Unfälle mit Getöteten ( 1% der Unfälle) auswählen und danach auf Unfälle bei Tageslicht (76% der Unfälle) einschränken (statt umgekehrt). Eine weitere Empfehlung ist, erst in den Bereich auf der Karte zu zoomen, der von Interesse ist und danach zu filtern. Je kleiner der Kartenausschnitt, umso schneller werden die Daten aus der Datenbank gelesen.
