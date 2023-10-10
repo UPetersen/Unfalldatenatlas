@@ -3,7 +3,7 @@
 Diese App zeigt mehr als 1,5 Millionen polizeilich registrierte Verkehrsunfälle mit getöteten oder verletzen Personen der Jahre 2016 bis 2022 auf einer Deutschlandkarte an. Zu den einzelnen Unfällen können verschiedene Attribute wie z.B. Unfallart und -typ oder Unfallbeteiligte (Pkw, Fahrrad, Fußgänger etc.) eingeblendet werden. Zudem können die angezeigten Unfälle nach vielen Attributen gefiltert werden. So lassen sich die angzeigten Unfälle z.B. auf alle Fahrunfälle mit Getöteten und Beteiligung von Krafträdern bei feucht/nass/schlüpfrigem Straßenzustand einschränken.
             
 <p align="center">
-<img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/363e952f-2de2-4e65-a769-e2f8d3895486" width=30% height=30%>
+<img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/363e952f-2de2-4e65-a769-e2f8d3895486" width=40% height=40%>
 </p>
 
 ## Einschränkungen
@@ -20,7 +20,7 @@ Die Unfalldaten stammen vom [Unfallatlas](https://unfallatlas.statistikportal.de
 Die einzelnen Unfälle werden auf der Karte am Unfallort durch Kreise angezeigt, die entsprechend [der Farbskala für Unfalltypen](https://de.wikipedia.org/wiki/Unfalltyp) eingefärbt sind.
 
 <p align="center">
-<img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/105b7c8c-0aa3-4436-998c-d2e14908521b" width=30% height=30%>
+<img src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/105b7c8c-0aa3-4436-998c-d2e14908521b" width=40% height=40%>
 </p>
 
 <!--- Auskommentiert: Beispiel für Bild mit Bildunterschrift
