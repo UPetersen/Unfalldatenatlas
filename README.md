@@ -260,19 +260,28 @@ GNU GENERAL PUBLIC LICENSE [Version 3](https://github.com/UPetersen/Unfalldatena
 
 # Daten
 
-Im Unfalldatenatlas sind nicht alle polizeiliche erfassten Unfälle mit Personenschaden enthalten. Das liegt unter anderem daran, dass von einigen Bundesländern nicht aus jedem Jahr Daten vorliegen. Für Brandenburg, Niedersachsen, Rheinland-Pfalz, das Saarland und Sachsen-Anhalt liegen Daten erst ab 2017, für Thüringen ab 2019 und für Mecklenburg-Vorpommern ab Sommer 2021. In den anderen Bundesländern liegen die Daten ab 2020 vor. Des weiteren schreibt das statistische Bundesamt, dass die Unfälle bei der Aufbereitung einen mehrstufigen Plausibilisierungsprozess durchlaufen. Während dieses Prozesses können einzelne Unfälle, die den Plausibilisierungsanforderungen nicht genügen, aussortiert werden. Diese Unfälle werden nicht im Unfallatlas abgebildet. Weiter Informationen dazu und zur Aufbereitung der Daten finden sich auf der [Webseite des Unfallatlas des statistischen Bundesamts](https://unfallatlas.statistikportal.de) unter Erläuterungen zum Unfallatlas.
+Im Unfalldatenatlas sind nicht alle polizeiliche erfassten Unfälle mit Personenschaden enthalten. Das liegt unter anderem daran, dass von einigen Bundesländern nicht aus jedem Jahr Daten vorliegen. Für 
 
-Die nachfolgende Tabelle zeigt einen Vergleich der Anzahl der im Unfallatlas enthaltenen polizeilich erfassten Unfälle mit Personenschaden zu den insgesamt für Deutschland polizeilich erfassten Unfälle mit Personenschaden [^2].
+- Brandenburg, Niedersachsen, das Saarland und Sachsen-Anhalt liegen Daten erst ab 2017, für
+- Berlin ab 2018
+- Nordrhein-Westphalen und Thüringen ab 2019 und für
+- Mecklenburg-Vorpommern ab 2020 vor.
 
-|Jahr|Verkehrsunfälle mit Personenschaden in Deutschland|Verkehrsunfälle mit Personenschaden im Unfallatlas|proozentualer Anteil|
-|:-:|:-:|:-:|:-:|
-|2022| 289.672 | 256.492 | 89% |
-|2021| 258.987 | 233.208 | 90% |
-|2020| 264.499 | 237.994 | 90% |
-|2019| 300.143 | 268.370 | 89% |
-|2018| 308.721 | 211.868 | 69% |
-|2017| 302.656 | 195.229 | 65% |
-|2016| 308.145 | 151.673 | 49% | 
+In den anderen Bundesländern liegen die Daten ab 2016 vor. Des weiteren schreibt das statistische Bundesamt, dass die Unfälle bei der Aufbereitung einen mehrstufigen Plausibilisierungsprozess durchlaufen. Während dieses Prozesses können einzelne Unfälle, die den Plausibilisierungsanforderungen nicht genügen, aussortiert werden. Diese Unfälle werden nicht im Unfallatlas abgebildet. Weiter Informationen dazu und zur Aufbereitung der Daten finden sich auf der [Webseite des Unfallatlas des statistischen Bundesamts](https://unfallatlas.statistikportal.de) unter Erläuterungen zum Unfallatlas.
+
+Die nachfolgende Tabelle zeigt einen Vergleich der Anzahl der im Unfallatlas enthaltenen polizeilich erfassten Unfälle mit Personenschaden zu den insgesamt für Deutschland polizeilich erfassten Unfälle mit Personenschaden [^2] und den insgesamt in den Bundesländern mit Daten für den Unfallatlas polizeilich erfassten Unfälle mit Personenschaden. Die Daten wurden vom statistischen Bundesamt über deren Tabellenservice [hier](https://www-genesis.destatis.de/genesis//online?operation=table&code=46241-0022&bypass=true&levelindex=0&levelid=1696960958477#abreadcrumb) abgerufen.
+
+|Jahr|Verkehrsunfälle mit Personenschaden in Deutschland|Verkehrsunfälle mit Personenschaden in Bundeseländern mit Daten für Unfallatlas|Verkehrsunfälle mit Personenschaden im Unfallatlas|Prozentualer Anteil Im Unfallatlas|
+|:-:|:-:|:-:|:-:|:-:|
+|2022| 289.672 | 289.672 | 256.492 | 89% |
+|2021| 258.987 | 258.987 | 233.208 | 90% |
+|2020| 264.499 | 264.499 | 237.994 | 90% |
+|2019| 300.143 | 294.777 | 268.370 | 91% |
+|2018| 308.721 | 233.902 | 211.868 | 91% |
+|2017| 302.656 | 215.929 | 195.229 | 90% |
+|2016| 308.145 | 165.360 | 151.673 | 92% | 
+|**Summe**| **2.032.823** | **1.723.126** | **1.554.834** | **90%** |
+
 
 
 [^1]: Im Unfalldatenatlas sind nicht alle polizeilich erfassten Unfälle mit Personenschaden enthalten, sondern grob über den Daumen ca. 90%. Beispielsweise hat DESTATIS für das Jahr 2022 insgesamt 289.672 Unfälle mit Personenschaden registriert, von denen 256.492 im Unfalldatenatlas enthalten sind. Siehe dazu die Erläuterungen zum Unfallatlas auf der [Unfallatlas-Webseit](https://unfallatlas.statistikportal.de).
