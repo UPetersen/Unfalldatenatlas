@@ -271,7 +271,7 @@ In den anderen Bundesländern liegen die Daten ab 2016 vor. Des weiteren schreib
 
 Die nachfolgende Tabelle zeigt einen Vergleich der Anzahl der im Unfallatlas enthaltenen polizeilich erfassten Unfälle mit Personenschaden zu den insgesamt für Deutschland polizeilich erfassten Unfälle mit Personenschaden [^2] und den insgesamt in den Bundesländern mit Daten für den Unfallatlas polizeilich erfassten Unfälle mit Personenschaden. Die Daten wurden vom statistischen Bundesamt über deren Tabellenservice [hier](https://www-genesis.destatis.de/genesis//online?operation=table&code=46241-0022&bypass=true&levelindex=0&levelid=1696960958477#abreadcrumb) abgerufen.
 
-|Jahr|Verkehrsunfälle mit Personenschaden in Deutschland|Verkehrsunfälle mit Personenschaden in Bundeseländern mit Daten für Unfallatlas|Verkehrsunfälle mit Personenschaden im Unfallatlas|Prozentualer Anteil Im Unfallatlas|
+|Jahr|Verkehrsunfälle mit Personenschaden in Deutschland|Verkehrsunfälle mit Personenschaden in Bundesländern mit Daten für den Unfallatlas|Verkehrsunfälle mit Personenschaden im Unfallatlas|Prozentualer Anteil Im Unfallatlas|
 |:-:|:-:|:-:|:-:|:-:|
 |2022| 289.672 | 289.672 | 256.492 | 89% |
 |2021| 258.987 | 258.987 | 233.208 | 90% |
