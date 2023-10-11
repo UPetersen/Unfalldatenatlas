@@ -114,19 +114,19 @@ struct InfoView: View {
             
             Über den Button \(Image(systemName: "line.3.horizontal.decrease.circle")) kann die Anzeige vielfältig auf bestimmte Unfälle eingegrenzt werden. Neben den Daten der Detailanzeige (Unfalljahr, Unfallbeteiligte, Lichtverhältnisse, Straßenzustand, Verletzungsschwere und Unfallart) lassen sich dabei auch der Wochentag, der Monat sowie das Bundesland auswählen bzw. eingrenzen. Alle diese Kategorien lassen sich beliebig verknüpfen, z.B. Unfälle mit Getöteten und Beteiligung von Pkw- und Radfahrern bei Nacht oder Fahrunfälle mit Beteiligung von Krafträdern ohne Beteiligung von Pkw et Cetera. Mehrfachauswahlen innerhalb einer Kategorie, z.B. Unfälle an Samstagen oder Sonntagen sind noch nicht implementiert.
             
-            **Lookaround-Ansicht**
+            **Lookaround-Ansicht \(Image(systemName: "binoculars"))**
 
             Über den Button \(Image(systemName: "binoculars")) kann eine Lookaround-Ansicht des Unfallortes eingeblendet werden. Nach Zuschalten der Ansicht einfach das Kreissymbol eines Unfalles anklicken.
             
             **Datenquelle, Rechtliche Hinweise und Datenschutz**
                         
-            Die angezeigten Daten stammen vom [Unfalldatenatlas](https://unfallatlas.statistikportal.de) des Statistischen Bundesamt (DESTATIS). In einzelnen Bundesländern sind die Daten nicht für den gesamten Zeitraum verfügbar. Weitere Informationen zur Datengrundlage sind [hier](https://unfallatlas.statistikportal.de) zu finden.
+            Die angezeigten Daten stammen vom [Unfalldatenatlas](https://unfallatlas.statistikportal.de) des Statistischen Bundesamt (DESTATIS). In einzelnen Bundesländern sind die Daten nicht für den gesamten Zeitraum verfügbar. Weitere Informationen zur Datengrundlage sind auf der [Webseite des Unfallatlas](https://unfallatlas.statistikportal.de) zu finden. Eine Erörterung dazu findet sich [hier](https://github.com/UPetersen/Unfalldatenatlas#datenquelle-und-inhalte).
             
             Die Nutzung der Daten erfolgt auf Basis der [Datenlizenz Deutschland – Namensnennung – Version 2.0](https://www.govdata.de/dl-de/by-2-0).
             
             Die Daten sind im Download der App im Originalformat enthalten und werden beim ersten Start der App einmalig in eine lokale Datenbank umgespeichert. Dies kann mehrere Minuten dauern.
             
-            Es werden keine weiteren Daten gespeichert, insbesondere werden keine personenbezogenen Daten des Nutzers gespeichert.
+            Es werden keine personenbezogenen Daten gespeichert.
             
             Der aktuelle Standort des Anzeigegerätes (iPhone, iPad oder Mac) wird genutzt, um diesen auf der Karte anzuzeigen und einen schnellen Wechsel zu diesem Ort zu ermöglichen. Der Standort wird nicht in der App gespeichert.
             
@@ -140,7 +140,7 @@ struct InfoView: View {
             
             **Haftungsausschluss**
             
-            Für die Richtigkeit der angezeigten Informationen kann keinerlei Haftung oder Gewähr übernommen werden. Bitte rechnen Sie damit dass die App und die angzeigten Informationen fehlerhaft sein können.
+            Für die Richtigkeit der angezeigten Informationen wiird keinerlei Haftung oder Gewähr übernommen. Bitte rechnen Sie damit dass die App und die angzeigten Informationen fehlerhaft sein können.
             
             """)
             }
