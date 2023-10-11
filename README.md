@@ -124,7 +124,7 @@ Der Unterschied der App zum webbasierten [Unfallatlas](https://unfallatlas.stati
 
 ## Anwendungsfälle
 
-Im Wesentlichen sind es zwei Anwendungsfälle: Zum einen Unfallschwerpunkte zu finden, im Detail zu analysieren und mögliche Ursachen zu bestimmen sowie Verbesserungmaßnahmen zu entwickeln. Zum anderen kann über die Filterung ein Gefühl für die Statistik des Unfallgeschehens in Deutschland insgesamt erhalten werden. Dabei ist zu beachten, dass im Unfalldatenatlas nicht alle polizeilich erfassten Unfälle mit Personenschaden enthalten sind, sondern grob über den Daumen ca. 90% [^1]. Es wird angenommen, dass dies einigermaßen gleichverteilt ist und die Statistik nicht wesentlich beeinträchtigt. Nachfolgend einige Beispiele.
+Im Wesentlichen sind es zwei Anwendungsfälle: Zum einen Unfallschwerpunkte zu finden, im Detail zu analysieren und mögliche Ursachen zu bestimmen sowie Verbesserungmaßnahmen zu entwickeln. Zum anderen kann über die Filterung ein Gefühl für die Statistik des Unfallgeschehens in Deutschland insgesamt erhalten werden. Dabei ist zu beachten, dass im Unfalldatenatlas nicht alle polizeilich erfassten Unfälle mit Personenschaden enthalten sind, sondern durchschnittlich circa 90%. Siehe dazu auch die Informationen im Abschnitt [Datenquelle und Inhalte](https://github.com/UPetersen/Unfalldatenatlas/blob/main/README.md#daten). Es wird angenommen, dass dies einigermaßen gleichverteilt ist und die Statistik nicht wesentlich beeinträchtigt. Nachfolgend einige Anwendungsbeispiele.
 
 ### Statistikbeispiele 
 
@@ -225,7 +225,7 @@ Filtert man in der App auf Fahrunfälle mit Kraftradbeteiligung und sucht wenige
 </table>
 
 
-Abschließend sei nochmals angemerkt, dass auch bei dieser Analyse zu beachten ist, dass die in der Datenbank enthaltenen Unfälle nicht alle polizeilich registrierten Unfälle mit Personenschaden abbilden und das tatsächliche Unfallgeschen anders sein kann [^1]. Damit kann sich prinzipiell auch die Verteilung unterscheiden. An der insgesamt hohen Unfallzahl auf den betrachteten Straßenabschnitten ändert das jedoch wenig bzw die tatsächliche Zahl an Unfällen mit Personenschaden kann größer sein. 
+Abschließend sei nochmals angemerkt, dass auch bei dieser Analyse zu beachten ist, dass die in der Datenbank enthaltenen Unfälle nicht alle polizeilich registrierten Unfälle mit Personenschaden abbilden und das tatsächliche Unfallgeschen anders sein kann. Damit kann sich prinzipiell auch die Verteilung unterscheiden. An der insgesamt hohen Unfallzahl auf den betrachteten Straßenabschnitten ändert das jedoch wenig bzw die tatsächliche Zahl an Unfällen mit Personenschaden kann größer sein. 
 
 ## Weitere Einschränkungen
 
@@ -239,9 +239,9 @@ Bei Auswahl nach mehreren Kriterien, welche die Unfallzahl nur wenig reduzieren,
 
 Die Zahl der Unfälle im Kartenausschnitt ist nur korrekt bei nach Norden ausgerichter Karte und in der Standardkartenansicht (nicht Satellitenansicht, kein 3D) und wird deshalb nur bei nach Norden ausgerichtetet Karte mit Standardansicht angzeigt. Wird die Lookaround-Voransicht ein- oder ausgeblendet, so aktualisiert sich die Zahl der Unfälle im Kartenausschnitt nicht. Dazu bitte die Karte z. B. einmal leicht verschieben.
 
-# Datenquelle, Rechtliche Hinweise und Datenschutzerklärung
+# Rechtliche Hinweise und Datenschutzerklärung
                         
-Die angezeigten Daten stammen vom [Unfallatlas](https://unfallatlas.statistikportal.de) des Statistischen Bundesamt (DESTATIS). In einzelnen Bundesländern sind die Daten nicht für den gesamten Zeitraum verfügbar. Weitere Informationen zur Datengrundlage sind [hier](https://unfallatlas.statistikportal.de) zu finden.
+Die angezeigten Daten stammen vom [Unfallatlas](https://unfallatlas.statistikportal.de) des Statistischen Bundesamt (DESTATIS). Weitere Informationen zur Datengrundlage sind [hier](https://unfallatlas.statistikportal.de) zu finden.
             
 Die Nutzung der Daten erfolgt auf Basis der [Datenlizenz Deutschland – Namensnennung – Version 2.0](https://www.govdata.de/dl-de/by-2-0).
             
@@ -258,9 +258,9 @@ Für die Richtigkeit der angezeigten Informationen wird keinerlei Haftung oder G
 
 GNU GENERAL PUBLIC LICENSE [Version 3](https://github.com/UPetersen/Unfalldatenatlas/blob/main/LICENSE).
 
-# Daten
+# Datenquelle und Inhalte
 
-Im Unfalldatenatlas sind nicht alle polizeiliche erfassten Unfälle mit Personenschaden enthalten. Das liegt unter anderem daran, dass von einigen Bundesländern nicht aus jedem Jahr Daten vorliegen. Für 
+Die angezeigten Daten stammen vom [Unfallatlas](https://unfallatlas.statistikportal.de) des Statistischen Bundesamt (DESTATIS). Vertiefte Informationen sind auf der zugehörigen [Webseite](https://unfallatlas.statistikportal.de) zu finden. Im Unfalldatenatlas sind nicht alle polizeiliche erfassten Unfälle mit Personenschaden enthalten. Das liegt unter anderem daran, dass von einigen Bundesländern nicht aus jedem Jahr Daten vorliegen. Für 
 
 - Brandenburg, Niedersachsen, das Saarland und Sachsen-Anhalt liegen Daten erst ab 2017, für
 - Berlin ab 2018
@@ -269,7 +269,7 @@ Im Unfalldatenatlas sind nicht alle polizeiliche erfassten Unfälle mit Personen
 
 In den anderen Bundesländern liegen die Daten ab 2016 vor. Des weiteren schreibt das statistische Bundesamt, dass die Unfälle bei der Aufbereitung einen mehrstufigen Plausibilisierungsprozess durchlaufen. Während dieses Prozesses können einzelne Unfälle, die den Plausibilisierungsanforderungen nicht genügen, aussortiert werden. Diese Unfälle werden nicht im Unfallatlas abgebildet. Weiter Informationen dazu und zur Aufbereitung der Daten finden sich auf der [Webseite des Unfallatlas des statistischen Bundesamts](https://unfallatlas.statistikportal.de) unter Erläuterungen zum Unfallatlas.
 
-Die nachfolgende Tabelle zeigt einen Vergleich der Anzahl der im Unfallatlas enthaltenen polizeilich erfassten Unfälle mit Personenschaden zu den insgesamt für Deutschland polizeilich erfassten Unfälle mit Personenschaden [^2] und den insgesamt in den Bundesländern mit Daten für den Unfallatlas polizeilich erfassten Unfälle mit Personenschaden. Die Daten wurden vom statistischen Bundesamt über deren Tabellenservice [hier](https://www-genesis.destatis.de/genesis//online?operation=table&code=46241-0022&bypass=true&levelindex=0&levelid=1696960958477#abreadcrumb) abgerufen.
+Die nachfolgende Tabelle zeigt einen Vergleich der Anzahl der im Unfallatlas und der vorliegenden App enthaltenen polizeilich erfassten Unfälle mit Personenschaden zu den insgesamt für Deutschland polizeilich erfassten Unfälle mit Personenschaden [^2]. Zudem ist die Anzahl der polizeilich erfassten Unfälle mit Personenschaden angegeben, wenn man für die einzelnen Jahre nur die Bundesländer betrachtet, welche auch Daten für den Unfallatlas geliefert haben. Letztgenannte Daten wurden vom statistischen Bundesamt über deren Genesis-Datenbank [hier](https://www-genesis.destatis.de/genesis//online?operation=table&code=46241-0022&bypass=true&levelindex=0&levelid=1696960958477#abreadcrumb) abgerufen. Es zeigt sich, dass der Anteil von Unfällen im Unfallatlas im Mittel über die Jahre bei gut 90% liegt.
 
 |Jahr|Verkehrsunfälle mit Personenschaden in Deutschland|Verkehrsunfälle mit Personenschaden in Bundesländern mit Daten für den Unfallatlas|Verkehrsunfälle mit Personenschaden im Unfallatlas|Prozentualer Anteil Im Unfallatlas|
 |:-:|:-:|:-:|:-:|:-:|
@@ -285,4 +285,4 @@ Die nachfolgende Tabelle zeigt einen Vergleich der Anzahl der im Unfallatlas ent
 
 
 [^1]: Im Unfalldatenatlas sind nicht alle polizeilich erfassten Unfälle mit Personenschaden enthalten, sondern grob über den Daumen ca. 90%. Beispielsweise hat DESTATIS für das Jahr 2022 insgesamt 289.672 Unfälle mit Personenschaden registriert, von denen 256.492 im Unfalldatenatlas enthalten sind. Siehe dazu die Erläuterungen zum Unfallatlas auf der [Unfallatlas-Webseit](https://unfallatlas.statistikportal.de).
-[^2]: Statistisches Bundesamt: Straßenverkehrsunfälle, Verunglückt, Anzahl, siehe [https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Tabellen/liste-strassenverkehrsunfaelle.html#251628](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Tabellen/liste-strassenverkehrsunfaelle.html#251628)
+[^2]: Statistisches Bundesamt: Straßenverkehrsunfälle, Verunglückte, Anzahl, siehe [https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Tabellen/liste-strassenverkehrsunfaelle.html#251628](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfaelle/Tabellen/liste-strassenverkehrsunfaelle.html#251628)
