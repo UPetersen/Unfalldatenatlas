@@ -124,7 +124,7 @@ Der Unterschied der App zum webbasierten [Unfallatlas](https://unfallatlas.stati
 
 ## Anwendungsfälle
 
-Im Wesentlichen sind es zwei Anwendungsfälle: Zum einen Unfallschwerpunkte zu finden, im Detail zu analysieren und mögliche Ursachen zu bestimmen sowie Verbesserungmaßnahmen zu entwickeln. Zum anderen kann über die Filterung ein Gefühl für die Statistik des Unfallgeschehens in Deutschland insgesamt erhalten werden. Dabei ist zu beachten, dass im Unfalldatenatlas nicht alle polizeilich erfassten Unfälle mit Personenschaden enthalten sind, sondern durchschnittlich circa 90%. Siehe dazu auch die Informationen im Abschnitt [Datenquelle und Inhalte](https://github.com/UPetersen/Unfalldatenatlas/blob/main/README.md#daten). Es wird angenommen, dass dies einigermaßen gleichverteilt ist und die Statistik nicht wesentlich beeinträchtigt. Nachfolgend einige Anwendungsbeispiele.
+Im Wesentlichen sind es zwei Anwendungsfälle: Zum einen Unfallschwerpunkte zu finden, im Detail zu analysieren und mögliche Ursachen zu bestimmen sowie Verbesserungmaßnahmen zu entwickeln. Zum anderen kann über die Filterung ein Gefühl für die Statistik des Unfallgeschehens in Deutschland insgesamt erhalten werden. Dabei ist zu beachten, dass im Unfalldatenatlas nicht alle polizeilich erfassten Unfälle mit Personenschaden enthalten sind, sondern durchschnittlich circa 90%. Siehe dazu auch die Informationen im Abschnitt [Datenquelle und Inhalte](https://github.com/UPetersen/Unfalldatenatlas/blob/main/README.md#datenquelle-und-inhalte). Es wird angenommen, dass dies einigermaßen gleichverteilt ist und die Statistik nicht wesentlich beeinträchtigt. Nachfolgend einige Anwendungsbeispiele.
 
 ### Statistikbeispiele 
 
