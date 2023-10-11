@@ -6,6 +6,7 @@ Diese App zeigt mehr als 1,5 Millionen polizeilich registrierte Verkehrsunfälle
 <img width="400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/363e952f-2de2-4e65-a769-e2f8d3895486">
 </p>
 
+Die App ist als iOS App für iPhone und iPad [Link]{https://apps.apple.com/de/app/unfalldatenatlas/id6445810921} und als Mac App [hier](https://apps.apple.com/de/app/unfalldatenatlas/id6445810921) erhältlich.
 
 ## Einschränkungen
 
