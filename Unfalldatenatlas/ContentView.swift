@@ -29,7 +29,8 @@ struct ContentView: View {
     @State private var lookAroundScene: MKLookAroundScene?
     @State private var selectedCoordinate: CLLocationCoordinate2D? // = LocationManager.regionForGermany.center
     @State private var showLookAroundPreview = false
-    
+    @State private var showStatisticsView = false
+
     @State private var isShowingFilterView = false
     @State private var isShowingInfoView = false
     
@@ -129,6 +130,28 @@ struct ContentView: View {
                                 }
                         }
                         
+                        if showStatisticsView { // selectedCoordinate != nil {
+                            StatisticsView(accidents: viewModel.accidents)
+                                .frame (height: 128)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
+//                            LookAroundPreview(initialScene: lookAroundScene)
+//                                .overlay() {
+//                                    Text("Keine Lookaround-Ansicht vorhanden, kein Unfall ausgewählt oder Internetverbindung eingeschränkt.")
+//                                        .padding(.horizontal) // left and right distance to edges of dark colored box
+//                                        .multilineTextAlignment(.center)
+//                                        .foregroundStyle(.white)
+//                                        .frame(maxWidth: .infinity) // extend dark colored box horizontally to edge of LookAroundPreview
+//                                        .frame(maxHeight: .infinity) // extend dark colored box verticall to edge or LookAroundPreview
+//                                        .background(Color(red: 0.2, green: 0.2, blue: 0.2))
+//                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+//                                        .padding(.horizontal, 10) // apply same padding as LookAroundPreview
+//                                        .padding(.vertical, 5)    // apply same padding as LookAroundPreview
+//                                        .opacity((lookAroundScene == nil) ? 1 : 0)
+//                                }
+                        }
+                        
                         Divider()
                         
                         // Buttons at the bottom of the screen
@@ -154,8 +177,26 @@ struct ContentView: View {
                             .padding(.horizontal)
                             
                             // Button to toggle between showing look around preview or not
-                            Button(action: { showLookAroundPreview.toggle() }) {
+                            Button(action: {
+                                showLookAroundPreview.toggle()
+                                if showLookAroundPreview {
+                                    showStatisticsView = false
+                                }
+                            }) {
                                 Image(systemName: showLookAroundPreview ? "binoculars.fill" : "binoculars")
+                                    .font(.system(size: 18)) // keep size independent to system font size, because of above mentioned bug
+                                    .padding([.top, .bottom], 8)
+                            }
+                            .padding(.horizontal)
+                            
+                            // Button to toggle between showing statistics or not
+                            Button(action: {
+                                showStatisticsView.toggle()
+                                if showStatisticsView {
+                                    showLookAroundPreview = false // only one view can be shown
+                                }
+                            }) {
+                                Image(systemName: showStatisticsView ? "chart.bar.fill" : "chart.bar")
                                     .font(.system(size: 18)) // keep size independent to system font size, because of above mentioned bug
                                     .padding([.top, .bottom], 8)
                             }
