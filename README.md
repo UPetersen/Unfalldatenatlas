@@ -248,7 +248,7 @@ Die Nutzung der Daten erfolgt auf Basis der [Datenlizenz Deutschland – Namensn
             
 Es werden keine personenbezogenen Daten gespeichert.
 
-Wenn der Nutzer dem Teilen des Standorts für diese App zustimmt, wird der aktuelle Standort des Anzeigegerätes (iPhone, iPad oder Mac) genutzt, um diesen auf der Karte anzuzeigen und einen schnellen Wechsel zu diesem Ort zu ermöglichen. Der Standort wird nicht in der App gespeichert.
+Wenn dem Teilen des Standorts für diese App zugestimmt wurde, wird der aktuelle Standort des Anzeigegerätes (iPhone, iPad oder Mac) genutzt, um diesen auf der Karte anzuzeigen und einen schnellen Wechsel zu diesem Ort zu ermöglichen. Der Standort wird nicht in der App gespeichert.
             
 
 # Haftungsausschluss
