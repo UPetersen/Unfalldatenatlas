@@ -128,7 +128,8 @@ struct InfoView: View {
             
             Es werden keine personenbezogenen Daten gespeichert.
             
-            Der aktuelle Standort des Anzeigegerätes (iPhone, iPad oder Mac) wird genutzt, um diesen auf der Karte anzuzeigen und einen schnellen Wechsel zu diesem Ort zu ermöglichen. Der Standort wird nicht in der App gespeichert.
+            Wenn dem Teilen des Standorts für diese App zugestimmt wurde, wird der aktuelle Standort des Anzeigegerätes (iPhone, iPad oder Mac) genutzt, um diesen auf der Karte anzuzeigen und einen schnellen Wechsel zu diesem Ort zu ermöglichen. Der Standort wird nicht in der App gespeichert.
+
             
             **Einschränkungen**
             
