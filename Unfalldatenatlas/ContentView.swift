@@ -135,7 +135,9 @@ struct ContentView: View {
                         HStack {
                             // Caveat: the first two buttons do not scale with the system font, but the latter three do.
                             // I did not find a ways to scale the first two buttons.
-                            MapUserLocationButton(scope: mapScope)
+                            if locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways {
+                                MapUserLocationButton(scope: mapScope)
+                            }
                             MapPitchToggle(scope: mapScope)
                             
                             // Button to toggle between standard and hybrid view
