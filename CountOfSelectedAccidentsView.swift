@@ -46,4 +46,5 @@ struct CountOfSelectedAccidentsView: View {
 //    CountOfSelectedAccidentsView(countOfSelectedAccidents: Int(15.54834), isFetchingCountOfSelectedAccidents: false)
     CountOfSelectedAccidentsView(countOfSelectedAccidents: Int(1), isFetchingCountOfSelectedAccidents: false)
 //    CountOfSelectedAccidentsView(countOfSelectedAccidents: 1554834, isFetchingCountOfSelectedAccidents: false)
+    
 }
