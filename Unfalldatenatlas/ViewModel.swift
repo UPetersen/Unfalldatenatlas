@@ -180,6 +180,7 @@ class ViewModel: ObservableObject {
                 request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.objectID, ascending: true)]
 
                 request.fetchLimit = fetchLimit
+                request.fetchBatchSize = 50
                 let accidents =  try self.asyncContext.fetch(request)
 
                 if Task.isCancelled {
