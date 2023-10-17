@@ -8,8 +8,25 @@
 import SwiftUI
 import Charts
 
+struct AccidentPlotData: Identifiable {
+    var color: String
+    var type: String
+    var count: Double
+    var id = UUID()
+}
+
+
+
 struct StatisticsView: View {
     var accidents: [Accident]
+    
+    var stackedBarData: [AccidentPlotData] = [
+        .init(color: "Green", type: "Cube", count: 2),
+        .init(color: "Green", type: "Sphere", count: 0),
+        .init(color: "Green", type: "Pyramid", count: 1),
+        .init(color: "Purple", type: "Cube", count: 1),
+        .init(color: "Purple", type: "Sphere", count: 1),
+     ]
     
     
     var body: some View {
