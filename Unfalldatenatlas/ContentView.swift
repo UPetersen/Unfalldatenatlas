@@ -73,7 +73,8 @@ struct ContentView: View {
                                         selectedAccident = accident
                                         getLookAroundScene(forAccident: selectedAccident)
                                     }) {
-                                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: accident == selectedAccident ? 10 : 5)
+                                        Circle()
+                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
                                             .padding()
                                             .overlay() {
                                                 SymbolsTextView(accident: accident).allowsHitTesting(false)
@@ -91,7 +92,8 @@ struct ContentView: View {
                                         selectedAccident = accident
                                         getLookAroundScene(forAccident: selectedAccident)
                                     }) {
-                                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: accident == selectedAccident ? 10 : 5)
+                                        Circle()
+                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
                                             .padding()
                                     }
                                     .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
@@ -275,10 +277,10 @@ struct ContentView: View {
             .toolbarBackground(.visible, for: .navigationBar) // to map not sneak unterneath
             
             // SHEET for INFOVIEW and FILTERVIEW
-            .sheet(isPresented: $isShowingInfoView, onDismiss: { dismissAction() /* no dismiss action needed */} ) {
+            .sheet(isPresented: $isShowingInfoView, onDismiss: { dismissFilterViewAction() } ) {
                 InfoView(accidentsFetchLimit: viewModel.fetchLimit)
             }
-            .sheet(isPresented: $isShowingFilterView, onDismiss: { dismissAction() /* no dismiss action needed */} ) {
+            .sheet(isPresented: $isShowingFilterView, onDismiss: { dismissFilterViewAction() } ) {
                 FilterView(viewModel: viewModel, accidentDataFilters: $viewModel.accidentDataFilters, isFetchingCountOfSelectedAccidents: $isFetchingCountOfSelectedAccidents)
             }
 
@@ -350,7 +352,7 @@ struct ContentView: View {
     }
     
     // Action when dismissing InfoView or FilterView
-    func dismissAction() {
+    func dismissFilterViewAction() {
         print("============================== in func dismissAction ======================")
         cancelTaskAndFetchAccidentsAsync()
     }
@@ -360,22 +362,6 @@ struct ContentView: View {
         task?.cancel()
         task = Task {
             await viewModel.fetchAccidentsAsync(region: visibleRegion)
-        }
-    }
-
-
-    /// Returns the color to use for Unfall Type 1, as of https://de.wikipedia.org/wiki/Unfalltyp
-    func colorForAccidentType1(accident: Accident) -> Color {
-        switch accident.unfallTyp1 {
-        case 1: return Color.green   // 1 = Fahrunfall
-        case 2: return Color.yellow  // 2 = Abbiegeunfall
-        case 3: return Color.red     // 3 = Einbiegen / Kreuzen-Unfall
-        case 4: return Color.white   // 4 = Überschreiten-Unfall
-        case 5: return Color.blue    // 5 = Unfall durch ruhenden Verkehr
-        case 6: return Color.orange  // 6 = Unfall im Längsverkehr
-        case 7: return Color.black   // 7 = sonstiger Unfall
-        default:
-            fatalError("Wrong Unfalltyp 1: \(accident.unfallTyp1). Must be one out of 1 to 7.")
         }
     }
     
