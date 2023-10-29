@@ -27,7 +27,7 @@ struct ContentView: View {
     @Namespace var mapScope
 
     @State private var lookAroundScene: MKLookAroundScene?
-    @State private var selectedCoordinate: CLLocationCoordinate2D? // = LocationManager.regionForGermany.center
+    @State private var selectedAccident: Accident?
     @State private var showLookAroundPreview = false
     
     @State private var isShowingFilterView = false
@@ -64,15 +64,16 @@ struct ContentView: View {
                     if !viewModel.accidents.isEmpty {
                         // Some sppeed up to distinguish the two cases of displaying symbols or not in the following way
                         if showSymbols {
+                            // Circles with text symbols (the emojis) for each accident
                             ForEach(viewModel.accidents) { accident in
-                                // MARK: BEWARE: Annotaton text could also be useed for symbols information text
+                                // MARK: BEWARE: Annotation text could also be used for symbols information text
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-                                        selectedCoordinate = accident.coordinate
-                                        getLookAroundScene()
+                                        selectedAccident = accident
+                                        getLookAroundScene(forAccident: selectedAccident)
                                     }) {
-                                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+                                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: accident == selectedAccident ? 10 : 5)
                                             .padding()
                                             .overlay() {
                                                 SymbolsTextView(accident: accident).allowsHitTesting(false)
@@ -82,14 +83,15 @@ struct ContentView: View {
                                 }
                             }
                         } else {
+                            // Plain circles (no emojis here)
                             ForEach(viewModel.accidents) { accident in
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-                                        selectedCoordinate = accident.coordinate
-                                        getLookAroundScene()
+                                        selectedAccident = accident
+                                        getLookAroundScene(forAccident: selectedAccident)
                                     }) {
-                                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: 5)
+                                        Circle().stroke(colorForAccidentType1(accident: accident), lineWidth: accident == selectedAccident ? 10 : 5)
                                             .padding()
                                     }
                                     .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
@@ -108,7 +110,7 @@ struct ContentView: View {
                     VStack(spacing: 0) {
                         
                         // Look around preview
-                        if showLookAroundPreview { // selectedCoordinate != nil {
+                        if showLookAroundPreview { // selectedAccident != nil {
                             LookAroundPreview(initialScene: lookAroundScene)
                                 .frame (height: 128)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -377,12 +379,11 @@ struct ContentView: View {
         }
     }
     
-    func getLookAroundScene () {
+    func getLookAroundScene (forAccident accident: Accident?) {
         lookAroundScene = nil
         Task {
-            if let selectedCoordinate {
-                let request = MKLookAroundSceneRequest(coordinate: selectedCoordinate)
-//                lookAroundScene = try? await request.scene
+            if let accident {
+                let request = MKLookAroundSceneRequest(coordinate: accident.coordinate)
                 do {
                     lookAroundScene = try await request.scene
                 } catch  {
