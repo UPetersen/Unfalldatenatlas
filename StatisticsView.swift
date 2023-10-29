@@ -8,62 +8,87 @@
 import SwiftUI
 import Charts
 
-struct AccidentPlotData: Identifiable {
+struct Unfalltyp1ChartData: Identifiable {
     var color: String
     var type: String
-    var count: Double
+    var value: Double
     var id = UUID()
 }
 
-
-
 struct StatisticsView: View {
-    var accidents: [Accident]
+    //    var accidents: [Accident]
     
-    var stackedBarData: [AccidentPlotData] = [
-        .init(color: "Green", type: "Cube", count: 2),
-        .init(color: "Green", type: "Sphere", count: 0),
-        .init(color: "Green", type: "Pyramid", count: 1),
-        .init(color: "Purple", type: "Cube", count: 1),
-        .init(color: "Purple", type: "Sphere", count: 1),
-     ]
-    
+    var unfalltyp1ChartData: [Unfalltyp1ChartData] = [
+        .init(color: "Fahrunfall", type: "Cube", value: 2),
+        .init(color: "Abbiegen", type: "Sphere", value: 0),
+        .init(color: "Einbiegen-/Kreuzen", type: "Pyramid", value: 1),
+        .init(color: "Überschreiten", type: "Cube", value: 1),
+        .init(color: "ruhender Verkehr", type: "Sphere", value: 1),
+        .init(color: "im Längsverkehr", type: "Sphere", value: 1),
+        .init(color: "Sonstige", type: "Sphere", value: 1),
+    ]
     
     var body: some View {
-        if accidents.count >= 3 {
+        
+        VStack(alignment: .trailing) {
+            
+            Text("Unfalltyp")
+            //        if accidents.count >= 3 {
             Chart {
-                BarMark(x: .value("TYP", accidents[0].jahr.description) , y: .value("WERT", 1))
-                    .foregroundStyle(by: .value("Shape Color", "2022"))
-                BarMark(x: .value("TYP", UnfallTyp1.fahrUnfall.sectionText) , y: .value("WERT", 5))
-                    .foregroundStyle(by: .value("Shape Color", "Purple"))
-                BarMark(x: .value("TYP", UnfallTyp1.abbiegeUnfall.sectionText) , y: .value("WERT", 55))
-                BarMark(x: .value("TYP", UnfallTyp1.einbiegenKreuzenUnfall.sectionText) , y: .value("WERT", 12))
-                BarMark(x: .value("TYP", UnfallTyp1.ueberschreitenUnfall.sectionText) , y: .value("WERT", 33))
-                BarMark(x: .value("TYP", UnfallTyp1.unfallDurchRuhendenVerkehr.sectionText) , y: .value("WERT", 7))
-                BarMark(x: .value("TYP", UnfallTyp1.unfallImLaengsverkehr.sectionText) , y: .value("WERT", 0))
-                BarMark(x: .value("TYP", UnfallTyp1.sonstigerUnfall.sectionText) , y: .value("WERT", 3))
+                BarMark(x: .value("WERT", 5))
+                    .foregroundStyle(by: .value("Shape Color", "Fahrunfall"))
+                BarMark(x: .value("WERT", 35))
+                    .foregroundStyle(by: .value("Shape Color", "Abbiegen"))
+                    .annotation(position: .overlay, alignment: .center) { // Plot values into the bars
+                        Text("\(35, format: .number.precision(.fractionLength(0)))")
+                            .foregroundColor(.white)
+                            .bold()
+                    }
+                BarMark(x: .value("WERT", 10))
+                    .foregroundStyle(by: .value("Shape ", "Einbiegen-/Kreuzen"))
+                BarMark(x: .value("WERT", 30))
+                    .foregroundStyle(by: .value("Shape Color", "Überschreiten"))
+                BarMark(x: .value("WERT", 15))
+                    .foregroundStyle(by: .value("Shape Color", "ruhender Verkehr"))
+                BarMark(x: .value("WERT", 5))
+                    .foregroundStyle(by: .value("Shape Color", "im Längsverkehr"))
+                BarMark(x: .value("WERT", 5))
+                    .foregroundStyle(by: .value("Shape Color", "Sonstige"))
+                
+                
+                //                BarMark(x: .value("TYP", accidents[0].jahr.description) , y: .value("WERT", 1))
+                //                    .foregroundStyle(by: .value("Shape Color", "2022"))
+                //                BarMark(x: .value("TYP", UnfallTyp1.fahrUnfall.sectionText) , y: .value("WERT", 5))
+                //                    .foregroundStyle(by: .value("Shape Color", "Purple"))
+                //                BarMark(x: .value("TYP", UnfallTyp1.abbiegeUnfall.sectionText) , y: .value("WERT", 55))
+                //                BarMark(x: .value("TYP", UnfallTyp1.einbiegenKreuzenUnfall.sectionText) , y: .value("WERT", 12))
+                //                BarMark(x: .value("TYP", UnfallTyp1.ueberschreitenUnfall.sectionText) , y: .value("WERT", 33))
+                //                BarMark(x: .value("TYP", UnfallTyp1.unfallDurchRuhendenVerkehr.sectionText) , y: .value("WERT", 7))
+                //                BarMark(x: .value("TYP", UnfallTyp1.unfallImLaengsverkehr.sectionText) , y: .value("WERT", 0))
+                //                BarMark(x: .value("TYP", UnfallTyp1.sonstigerUnfall.sectionText) , y: .value("WERT", 3))
             }
+            .padding()
+            .bold()
             .chartForegroundStyleScale([
-                "2022": .green, "Purple": .purple, "Pink": .pink, "Yellow": .yellow
+                "Fahrunfall": .green,
+                "Abbiegen": .yellow,
+                "Einbiegen-/Kreuzen": .red,
+                "Überschreiten": .white,
+                "ruhender Verkehr": .blue,
+                "im Längsverkehr": .orange,
+                "Sonstige": .black,
             ])
+            .frame(maxWidth: .infinity)
+            //            .frame(width: 360, height: 150)
+            .background(Color(.tertiarySystemBackground))
+            //            .background(Color(.lightGray))
+            
+            //        }
+            
+            
         }
-       
-//        Chart {
-//                    ForEach(stackedBarNutrientData) { shape in
-//                        BarMark(
-//                            x: .value("Total Count", shape.value)
-//                            //                        y: .value("Shape Type", shape.type)
-//                        )
-//                        .foregroundStyle(by: .value("Shape Color", shape.category.name))
-//                        .annotation(position: .overlay, alignment: .center) { // Plot values into the bars
-//                            if shape.value >= 5 {
-//                                Text("\(shape.value, format: .number.precision(.fractionLength(0)))")
-//                                    .foregroundColor(.white)
-//                                    .bold()
-//                            }
-//                        }
-//                    }
-//                }
+        
+        
     }
     
     
@@ -82,9 +107,9 @@ struct StatisticsView: View {
             fatalError("Wrong Unfalltyp 1: . Must be one out of 1 to 7.")
         }
     }
-
+    
 }
 
-//#Preview {
-//    StatisticsView()
-//}
+#Preview {
+    StatisticsView()
+}

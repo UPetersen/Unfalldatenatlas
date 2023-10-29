@@ -131,7 +131,8 @@ struct ContentView: View {
                         }
                         
                         if showStatisticsView { // selectedCoordinate != nil {
-                            StatisticsView(accidents: viewModel.accidents)
+//                            StatisticsView(accidents: viewModel.accidents)
+                            StatisticsView()
                                 .frame (height: 128)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .padding(.horizontal, 10)
