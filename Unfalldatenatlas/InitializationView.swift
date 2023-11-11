@@ -12,10 +12,9 @@ struct InitializationView: View {
     
     var body: some View {
         ProgressView(viewModel.initializationState.text, value: viewModel.progress, total: 1.0)
-            .padding()
+            .padding(.horizontal)
             .background(Color(.tertiarySystemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-//            .padding([.trailing], 5)
     }
 }
 

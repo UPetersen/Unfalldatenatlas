@@ -21,13 +21,19 @@ struct CountOfSelectedAccidentsView: View {
     
     var countOfSelectedAccidents: Int
     var isFetchingCountOfSelectedAccidents: Bool
+    var displayPercentage: Bool
+    
     let countOfAllAccidents = Double(ViewModel.countOfAllAccidents)
     
     var body: some View {
         if isFetchingCountOfSelectedAccidents {
             ProgressView()
         } else {
-            Text("\(countOfSelectedAccidents) Unfälle\(percentage())")
+            if displayPercentage {
+                Text("\(countOfSelectedAccidents) Unfälle\(percentage())")
+            } else {
+                Text("\(countOfSelectedAccidents) Unfälle")
+            }
         }
     }
     
@@ -43,8 +49,6 @@ struct CountOfSelectedAccidentsView: View {
 }
 
 #Preview {
-//    CountOfSelectedAccidentsView(countOfSelectedAccidents: Int(15.54834), isFetchingCountOfSelectedAccidents: false)
-    CountOfSelectedAccidentsView(countOfSelectedAccidents: Int(1), isFetchingCountOfSelectedAccidents: false)
-//    CountOfSelectedAccidentsView(countOfSelectedAccidents: 1554834, isFetchingCountOfSelectedAccidents: false)
+    CountOfSelectedAccidentsView(countOfSelectedAccidents: Int(1), isFetchingCountOfSelectedAccidents: false, displayPercentage: true)
     
 }

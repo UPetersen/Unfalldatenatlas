@@ -17,6 +17,7 @@ struct ContentView: View {
     @StateObject var locationManager = LocationManager()
 
     @State private var task: Task<Void, Never>? = nil
+    @State private var taskForCountingSelectedAccidents: Task<Void, Never>? = nil
 
     @State private var showSymbols = false
     @State private var mapCameraPosition: MapCameraPosition = .region(LocationManager.regionForGermany)
@@ -107,9 +108,14 @@ struct ContentView: View {
                 }
                 .mapStyle(mapStyleIsStandard ? .standard : .hybrid(elevation: .realistic))
                 
-                // LOOK AROUND PREVIEW AND BOTTOM TOOLBAR
+                // LOOK AROUND PREVIEW AND BOTTOM TOOLBAR AND INITIALIZATION VIEW
                 .safeAreaInset(edge: .bottom) {
                     VStack(spacing: 0) {
+                        
+                        // Initialization information if needed.
+                        if initializationViewModel.initializationState != .initalized {
+                            InitializationView(viewModel: initializationViewModel)
+                        }
                         
                         // Look around preview
                         if showLookAroundPreview { // selectedAccident != nil {
@@ -223,13 +229,6 @@ struct ContentView: View {
                     }
                     .padding(.horizontal)
                     .background(Color(.tertiarySystemBackground)).opacity(0.75)
-                    .padding([.bottom], 30)
-
-                    // Initialization information if needed.
-                    if initializationViewModel.initializationState != .initalized {
-                        InitializationView(viewModel: initializationViewModel)
-                    }
-
                     
                     // Seems to be a bug in mac catalyst, but compass is not displayed on map using the .mapControls modifier, thus manually here
                     HStack{
@@ -251,7 +250,7 @@ struct ContentView: View {
                 // Text with count of selected accidents
                 ToolbarItem(placement: .navigationBarLeading) {
                     VStack(alignment: .leading) {
-                        CountOfSelectedAccidentsView(countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents)
+                        CountOfSelectedAccidentsView(countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents, displayPercentage: initializationViewModel.isInitialized)
                     }
                 }
                 // The (i) button
@@ -281,7 +280,7 @@ struct ContentView: View {
                 InfoView(accidentsFetchLimit: viewModel.fetchLimit)
             }
             .sheet(isPresented: $isShowingFilterView, onDismiss: { dismissFilterViewAction() } ) {
-                FilterView(viewModel: viewModel, accidentDataFilters: $viewModel.accidentDataFilters, isFetchingCountOfSelectedAccidents: $isFetchingCountOfSelectedAccidents)
+                FilterView(viewModel: viewModel, accidentDataFilters: $viewModel.accidentDataFilters, isFetchingCountOfSelectedAccidents: $isFetchingCountOfSelectedAccidents, displayPercentage: initializationViewModel.isInitialized)
             }
 
             // User pressed button to show symbols or not
@@ -295,14 +294,16 @@ struct ContentView: View {
                 print("============================== in .onChange(of: initializationState) ======================")
 
                 isFetchingCountOfSelectedAccidents = true
-                task?.cancel()
-                task = Task {
+                taskForCountingSelectedAccidents?.cancel()
+                taskForCountingSelectedAccidents = Task {
                     await viewModel.fetchCountOfSelectedAccidents() // Triggers also fetching of accidents.
                     if Task.isCancelled {
                         print("------Task fetchCountOfSelectedAccidents is cancelled in ContentView ----------")
                         return
                     }
-                    isFetchingCountOfSelectedAccidents = false
+                    DispatchQueue.main.async {
+                        isFetchingCountOfSelectedAccidents = false
+                    }
                 }
             }
             

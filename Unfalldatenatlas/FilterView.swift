@@ -17,6 +17,7 @@ struct FilterView: View {
     @ObservedObject var viewModel: ViewModel
     @Binding var accidentDataFilters: AccidentDataFilter
     @Binding var isFetchingCountOfSelectedAccidents: Bool
+    var displayPercentage: Bool
     
     @State private var task: Task<Void, Never>? = nil
     
@@ -29,7 +30,7 @@ struct FilterView: View {
                 HStack {
                     Text("Anzahl Unfälle:")
                     Spacer()
-                    CountOfSelectedAccidentsView(countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents)
+                    CountOfSelectedAccidentsView(countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents, displayPercentage: displayPercentage)
                 }
             }
             
@@ -154,8 +155,9 @@ struct FilterView: View {
                     print("------Task fetchCountOfSelectedAccidents is cancelled in FilterView ----------")
                     return
                 }
-
-                isFetchingCountOfSelectedAccidents = false
+                DispatchQueue.main.async {
+                    isFetchingCountOfSelectedAccidents = false
+                }
             }
         }
     }

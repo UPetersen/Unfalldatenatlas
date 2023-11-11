@@ -40,15 +40,16 @@ import CoreData
 
 enum InitializationState: Equatable {
     case initializationRequired
-    case clearingDatabase
+//    case clearingDatabase
     case loadingData(year: String)
     case initalized
     
     var text: String {
         switch self {
         case .initializationRequired: return "Initalisierung ..."
-        case .clearingDatabase: return "Initalisierung wurde nicht erfolgreich abgeschlossen und muss wiederholt werden. Bereinige Unfalldatenbank, bitte warten ..."
-        case .loadingData(let year): return "Konfiguriere Unfalldaten für das Jahr \(year) ... \n\nDas erfolgt nur einmalig beim allerersten Start der App für die Unfalljahre 2016 bis 2022 (in umgekehrter Reihenfolge). \nDas dauert bis zu 10 Minuten. Bitte nicht abbrechen, sonst muss der Vorgang wiederholt werden.\nDie App kann in dieser Zeit schon  mit den ersten Daten benutzt werden."
+//        case .clearingDatabase: return "Initalisierung wurde nicht erfolgreich abgeschlossen und muss wiederholt werden. Bereinige Unfalldatenbank, bitte warten ..."
+//        case .loadingData(let year): return "Konfiguriere Unfalldaten für das Jahr \(year) ... \n\nDas erfolgt nur einmalig beim allerersten Start der App für die Unfalljahre 2016 bis 2022 (in umgekehrter Reihenfolge). \nDas dauert bis zu 10 Minuten. Bitte nicht abbrechen, sonst muss der Vorgang wiederholt werden.\nDie App kann in dieser Zeit schon  mit den ersten Daten benutzt werden."
+        case .loadingData(let year): return "Importiere Unfalldaten für das Jahr \(year) ... "
         case .initalized: return "... Initalisierung beendet"
         }
     }
@@ -64,6 +65,7 @@ class InitializationViewModel: ObservableObject {
     private var backgroundContext = PersistenceController.shared.container.newBackgroundContext()
     private var countOfAccidentsBy100000: Int = 0
     private var countOFAccidents: Int = 0
+    private var countOfAccidentsInDatabase: Int = 0
     
     init() {
         
@@ -75,7 +77,8 @@ class InitializationViewModel: ObservableObject {
         let totalCount =  try? viewContext.count(for: countRequest)
         print("Initalisierung. Total Count ist: \(String(describing: totalCount))")
 
-        if let totalCount = totalCount, totalCount == ViewModel.countOfAllAccidents { // 1_298_342 + 256_492 = 1_554_834
+        //
+        if let totalCount = totalCount, totalCount == ViewModel.countOfAllAccidents { // 1_554_834
             DispatchQueue.main.async {
                 self.initializationState = .initalized
             }
@@ -83,36 +86,39 @@ class InitializationViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self.initializationState = .initializationRequired
             }
-
             Task.init() {
                 do {
-                    await deleteAllAccidentEntries()
+                    countOfAccidentsInDatabase = totalCount ?? 0
                     try await loadDataIntoDatabase()
                 } catch {
                     print("An errror occured during initialization.")
                 }
             }
         }
-        
+
         backgroundContext.automaticallyMergesChangesFromParent = true
     }
     
-    func deleteAllAccidentEntries() async {
-        DispatchQueue.main.async {
-            self.initializationState = .clearingDatabase
-        }
-        progress = nil
-        
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Accident.fetchRequest()
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        backgroundContext.performAndWait { [unowned self] in
-            do {
-                try PersistenceController.shared.container.persistentStoreCoordinator.execute(deleteRequest, with: backgroundContext)
-            } catch let error {
-                print("Error deleting Accident entities : \(error).")
-            }
-        }
+    var isInitialized: Bool {
+        return self.initializationState == .initalized
     }
+    
+//    func deleteAllAccidentEntries() async {
+//        DispatchQueue.main.async {
+//            self.initializationState = .clearingDatabase
+//        }
+//        progress = nil
+//        
+//        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Accident.fetchRequest()
+//        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+//        backgroundContext.performAndWait { [unowned self] in
+//            do {
+//                try PersistenceController.shared.container.persistentStoreCoordinator.execute(deleteRequest, with: backgroundContext)
+//            } catch let error {
+//                print("Error deleting Accident entities : \(error).")
+//            }
+//        }
+//    }
     
     
     /// Reads al files and stores the content in cord data. Uncomment relevant lines for respective files.
@@ -123,8 +129,8 @@ class InitializationViewModel: ObservableObject {
         let countOFRecordsForYear: [String: Double] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492]
 
         for year in years {
-            
-            let countOfRecords = countOFRecordsForYear[year]!
+                    
+        let countOfRecords = countOFRecordsForYear[year]!
             let url = Bundle.main.url(forResource: "Unfallorte\(year)_LinRef", withExtension: "csv")!
             
             print("Reading File: \(url.description) ...")
@@ -137,31 +143,34 @@ class InitializationViewModel: ObservableObject {
             for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
                 
                 countOFAccidents += 1
-                countOfAccidentsBy100000 = countOFAccidents - (countOFAccidents % 100_000)
                 
-                let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
-                
-                backgroundContext.performAndWait { [unowned self] in
+                // Skip records that have already been read and stored in database
+                if countOfAccidentsInDatabase < countOFAccidents {
+
+                    countOfAccidentsBy100000 = countOFAccidents - (countOFAccidents % 100_000)
                     
-                    let accident = Accident(context: backgroundContext)
-                    fillObjectWithData(year: year, accident: accident, csvComponents: components)
-                    accident.countOfAccidentsBy100000 = Int32(countOfAccidentsBy100000)
+                    let components = line.components(separatedBy: ";") // split csv data of one line into its compontents (columns)
                     
-                    //                print("Nr.: \(accident.accidentObjectID)")
-                    
-                    // Save context and update UI with info on progress every n recorda:
-                    let currentObjectID = accident.accidentObjectID
-                    if currentObjectID % 10_000 == 0 {
-                        DispatchQueue.main.async { [weak self] in
-                            self?.progress = Double(currentObjectID) / countOfRecords
-                            //                        print("Nr.: \(accident.accidentObjectID)")
+                    backgroundContext.performAndWait { [unowned self] in
+                        
+                        let accident = Accident(context: backgroundContext)
+                        fillObjectWithData(year: year, accident: accident, csvComponents: components)
+                        accident.countOfAccidentsBy100000 = Int32(countOfAccidentsBy100000)
+                        
+                        //                print("Nr.: \(accident.accidentObjectID)")
+                        
+                        // Save context and update UI with info on progress every n recorda:
+                        let currentObjectID = accident.accidentObjectID
+                        if currentObjectID % 10_000 == 0 {
+                            DispatchQueue.main.async { [weak self] in
+                                self?.progress = Double(currentObjectID) / countOfRecords
+                            }
+                        }
+                        // Save in chunks, only to have a progress bar that steps up repeatedly (and thus not stall for a while at 100%)
+                        if currentObjectID % 20_000 == 0 {
+                            try? backgroundContext.save()
                         }
                     }
-                    // Save in chunks, only to have a progress bar that steps up repeatedly (and thus not stall for a while at 100%)
-                    if currentObjectID % 20_000 == 0 {
-                        try? backgroundContext.save()
-                    }
-
                 }
             }
         }
