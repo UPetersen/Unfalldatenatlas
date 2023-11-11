@@ -53,7 +53,7 @@ struct AccidentDataFilter: Equatable {
     }
 }
 
-class ViewModel: ObservableObject {
+final class ViewModel: ObservableObject {
     
     static let countOfAllAccidents = 1_554_834 // To be filled in by hand, whenever new data files for new years are added.
 

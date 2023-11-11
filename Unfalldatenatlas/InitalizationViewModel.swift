@@ -55,7 +55,7 @@ enum InitializationState: Equatable {
     }
 }
 
-class InitializationViewModel: ObservableObject {
+final class InitializationViewModel: ObservableObject {
     
     @Published var progress: Double? = 0.0
     @Published var initializationState: InitializationState

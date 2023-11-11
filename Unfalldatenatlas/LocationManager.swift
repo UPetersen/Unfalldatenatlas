@@ -10,7 +10,7 @@ import CoreLocation
 import Combine
 import MapKit
 
-class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     private let locationManager = CLLocationManager()
     @Published var authorizationStatus: CLAuthorizationStatus?
