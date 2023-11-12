@@ -65,9 +65,15 @@ final class ViewModel: ObservableObject {
             
     private let asyncContext = PersistenceController.shared.container.newBackgroundContext()
     private (set) var fetchLimit = 400 //300 // Maximum number of accidents to fetched -> fetchLimit for fetch request.
+    private var taskForCountingSelectedAccidents: Task<Void, Never>? = nil
+
     
     init(initFromFile: Bool = false) {
         asyncContext.automaticallyMergesChangesFromParent = true
+        
+        let didSaveNotification = NSManagedObjectContext.didSaveObjectsNotification
+           NotificationCenter.default.addObserver(self, selector: #selector(didSave(_:)),
+                                                   name: didSaveNotification, object: nil)
         
         #if DEBUG
             print("Running in debug mode.")
@@ -76,6 +82,13 @@ final class ViewModel: ObservableObject {
         #endif
     }
     
+    @objc func didSave(_ notification: Notification) {
+       // handle the save notification
+        taskForCountingSelectedAccidents?.cancel()
+        taskForCountingSelectedAccidents = Task(priority: .low) {
+            await self.fetchCountOfSelectedAccidents()
+        }
+     }
 
     /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
     func fetchAccidentsAsync(region: MKCoordinateRegion) async {
