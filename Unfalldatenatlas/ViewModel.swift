@@ -55,7 +55,8 @@ struct AccidentDataFilter: Equatable {
 
 final class ViewModel: ObservableObject {
     
-    static let countOfAllAccidents = 1_554_834 // To be filled in by hand, whenever new data files for new years are added.
+    // static let countOfAllAccidents = 1_554_834 // with 2022 date. Value to be filled in by hand, whenever new data files for new years are added.
+    static let countOfAllAccidents = 1_823_882 // with 2023 date. Value to filled in by hand, whenever new data files for new years are added.
 
     @Published var accidents: [Accident] = [] // needs to be a publisher due to showSymbols in content view, but this gives a Zirkelbezug?
     @Published var countOfAccidentsInRegion: Int = 0

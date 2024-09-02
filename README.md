@@ -1,6 +1,8 @@
 # Unfalldatenatlas Deutschland
 
-Diese App zeigt mehr als 1,5 Millionen polizeilich registrierte Verkehrsunfälle mit getöteten oder verletzen Personen der Jahre 2016 bis 2022 auf einer Deutschlandkarte an. Zu den einzelnen Unfällen können verschiedene Attribute wie z.B. Unfallart und -typ oder Unfallbeteiligte (Pkw, Fahrrad, Fußgänger etc.) eingeblendet werden. Zudem können die angezeigten Unfälle nach vielen Attributen gefiltert werden. So lassen sich die angzeigten Unfälle z.B. auf alle Fahrunfälle mit Getöteten und Beteiligung von Krafträdern bei feucht/nass/schlüpfrigem Straßenzustand einschränken.
+Update im September 2024: Es wurden die Unfälle des Jahres 2022 hinzugefügt. Damit sind nun über 1,8 Millionen Unfälle in der Datenbank enthalten. 
+
+Diese App zeigt mehr als 1,8 Millionen polizeilich registrierte Verkehrsunfälle mit getöteten oder verletzen Personen der Jahre 2016 bis 2023 auf einer Deutschlandkarte an. Zu den einzelnen Unfällen können verschiedene Attribute wie z.B. Unfallart und -typ oder Unfallbeteiligte (Pkw, Fahrrad, Fußgänger etc.) eingeblendet werden. Zudem können die angezeigten Unfälle nach vielen Attributen gefiltert werden. So lassen sich die angzeigten Unfälle z.B. auf alle Fahrunfälle mit Getöteten und Beteiligung von Krafträdern bei feucht/nass/schlüpfrigem Straßenzustand einschränken.
             
 <p align="center">
 <img width="400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/363e952f-2de2-4e65-a769-e2f8d3895486">
@@ -105,7 +107,7 @@ Siehe [hier](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfae
 
 ## Datenauswahl bzw. -filterung <img height="25" style="vertical-align:middle;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e353808f-5d78-4126-98a3-f617d915c416">
             
-Oben links in der App wird die Zahl aller selektierten Unfälle angezeigt. Beim Start der App sind das 1.554.384 Unfälle, alle die in der Datenbank gespeichert sind. Über das Menü  <img height="16" style="vertical-align:bottom;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e353808f-5d78-4126-98a3-f617d915c416">  kann die Auswahl vielfältig auf bestimmte Unfälle eingegrenzt werden, z.B. auf alle Unfälle mit Getöteten. Entsprechend wird oben links die Zahl der Unfälle auf diese Auswahl reduziert, im Beispiel für alle Unfälle mit Getöteten auf 15.578 entsprechende Unfälle die in der Datenbank enthalten sind. Entsprechend werden im Kartenausschnitt auch nur noch Unfälle mit Getöteten angezeigt.
+Oben links in der App wird die Zahl aller selektierten Unfälle angezeigt. Beim Start der App sind das 1.554.834 Unfälle, alle die in der Datenbank gespeichert sind. Über das Menü  <img height="16" style="vertical-align:bottom;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e353808f-5d78-4126-98a3-f617d915c416">  kann die Auswahl vielfältig auf bestimmte Unfälle eingegrenzt werden, z.B. auf alle Unfälle mit Getöteten. Entsprechend wird oben links die Zahl der Unfälle auf diese Auswahl reduziert, im Beispiel für alle Unfälle mit Getöteten auf 15.578 entsprechende Unfälle die in der Datenbank enthalten sind. Entsprechend werden im Kartenausschnitt auch nur noch Unfälle mit Getöteten angezeigt.
 
 <p align="center">
 <img width="400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e03a69c8-bb3f-4e61-8b8a-a486fa12bfd3">
@@ -129,7 +131,7 @@ Im Wesentlichen sind es zwei Anwendungsfälle: Zum einen Unfallschwerpunkte zu f
 
 ### Statistikbeispiele 
 
-Die 1.554.834 in der Datenbank enthalten Unfälle teilen sich wie folgt auf:
+Die nachfolgende Auswertung beruht auf den Daten der Jahre 2016 bis 2022. Die dazu 1.554.834 in der Datenbank enthalten Unfälle teilen sich wie folgt auf:
 
 - 15.578 (1%) Unfälle mit Getöteten
 - 289.961 (19%) Unfälle mit Schwerverletzen
@@ -230,7 +232,7 @@ Abschließend sei nochmals angemerkt, dass auch bei dieser Analyse zu beachten i
 
 ## Weitere Einschränkungen
 
-Da nur eine begrenzte Menge von Unfällen im Kartenausschnitt angezeigt wird, ist die Verteilung dieser Punkte letztlich willkürlich, solange nicht alle im Kartenausschnitt enthaltenen Unfälle angezeigt werden können. Beim Start der App wird Deutschland in voller Fläche dargestellt, aber nur 400 der 1.554.383 Unfälle angezeigt und entsprechend nur die ersten 400 aus der Datenbank abgefragt, um die Anzeige schnell aktualisieren zu können. Als Konsequenz daraus werden dann meist nur 400 Punkte in einem Bundesland oder einer Ecke Deutschlands angezeigt, wo eine gleichmäßige Verteilung über die Deutschlandkarte doch etwas schöner wäre.
+Da nur eine begrenzte Menge von Unfällen im Kartenausschnitt angezeigt wird, ist die Verteilung dieser Punkte letztlich willkürlich, solange nicht alle im Kartenausschnitt enthaltenen Unfälle angezeigt werden können. Beim Start der App wird Deutschland in voller Fläche dargestellt, aber nur 400 der 1.823.882 Unfälle angezeigt und entsprechend nur die ersten 400 aus der Datenbank abgefragt, um die Anzeige schnell aktualisieren zu können. Als Konsequenz daraus werden dann meist nur 400 Punkte in einem Bundesland oder einer Ecke Deutschlands angezeigt, wo eine gleichmäßige Verteilung über die Deutschlandkarte doch etwas schöner wäre.
 
 <p align="center">
 <img width="400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/c79be0bc-4a57-43fe-bfca-0e90b7235aa6" >

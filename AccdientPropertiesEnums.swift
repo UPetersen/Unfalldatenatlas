@@ -208,7 +208,8 @@ enum UnfallJahr: Int, Identifiable, CaseIterable, Equatable {
     case jahr2020 = 2020
     case jahr2021 = 2021
     case jahr2022 = 2022
-    
+    case jahr2023 = 2023
+
     var id: Self { self }
     
     var predicate: NSPredicate? {
@@ -230,6 +231,7 @@ enum UnfallJahr: Int, Identifiable, CaseIterable, Equatable {
         case .jahr2020: return "2020"
         case .jahr2021: return "2021"
         case .jahr2022: return "2022"
+        case .jahr2023: return "2023"
         }
     }
 }

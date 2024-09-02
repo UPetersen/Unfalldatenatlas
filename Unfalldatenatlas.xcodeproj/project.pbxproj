@@ -45,6 +45,7 @@
 		C6CA9FA3297DC04E000D9E8B /* Accident+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */; };
 		C6CA9FA4297DC04E000D9E8B /* Accident+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */; };
 		C6D0D023298B0AF0000572C3 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D0D022298B0AF0000572C3 /* FilterView.swift */; };
+		C6DEFDAA2C8625D500C302A4 /* Unfallorte2023_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C6DEFDA92C8625D400C302A4 /* Unfallorte2023_LinRef.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +103,7 @@
 		C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Accident+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Accident+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C6D0D022298B0AF0000572C3 /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FilterView.swift; path = Unfalldatenatlas/FilterView.swift; sourceTree = "<group>"; };
+		C6DEFDA92C8625D400C302A4 /* Unfallorte2023_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2023_LinRef.csv; sourceTree = "<group>"; };
 		C6E64FC42AC8895A00EE5D6C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,6 +147,7 @@
 				C604E924298FF4D000E3A078 /* Unfallorte2020_LinRef.csv */,
 				C604E923298FF4CE00E3A078 /* Unfallorte2021_LinRef.csv */,
 				C67972222AA730A700F85251 /* Unfallorte2022_LinRef.csv */,
+				C6DEFDA92C8625D400C302A4 /* Unfallorte2023_LinRef.csv */,
 				C6D0D022298B0AF0000572C3 /* FilterView.swift */,
 				C6CA9FA1297DC04E000D9E8B /* Accident+CoreDataClass.swift */,
 				C6CA9FA2297DC04E000D9E8B /* Accident+CoreDataProperties.swift */,
@@ -321,6 +324,7 @@
 				C6CA9F6B297DBCBC000D9E8B /* Preview Assets.xcassets in Resources */,
 				C604E92C298FF4F600E3A078 /* Unfallorte2020_LinRef.csv in Resources */,
 				C67972232AA730A700F85251 /* Unfallorte2022_LinRef.csv in Resources */,
+				C6DEFDAA2C8625D500C302A4 /* Unfallorte2023_LinRef.csv in Resources */,
 				C6CA9F68297DBCBC000D9E8B /* Assets.xcassets in Resources */,
 				C604E928298FF4F600E3A078 /* Unfallorte2018_LinRef.csv in Resources */,
 				C604E92A298FF4F600E3A078 /* Unfallorte2021_LinRef.csv in Resources */,
@@ -559,7 +563,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.1;
 				OTHER_SWIFT_FLAGS = "-enable-upcoming-feature BareSlashRegexLiterals -enable-upcoming-feature ConciseMagicFile -enable-upcoming-feature ExistentialAny -enable-upcoming-feature ForwardTrailingClosures -enable-upcoming-feature ImplicitOpenExistentials -enable-upcoming-feature StrictConcurrency -warn-concurrency -enable-actor-data-race-checks";
 				PRODUCT_BUNDLE_IDENTIFIER = UPP.Unfalldatenatlas;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -604,7 +608,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.1;
 				OTHER_SWIFT_FLAGS = "-enable-upcoming-feature BareSlashRegexLiterals -enable-upcoming-feature ConciseMagicFile -enable-upcoming-feature ExistentialAny -enable-upcoming-feature ForwardTrailingClosures -enable-upcoming-feature ImplicitOpenExistentials -enable-upcoming-feature StrictConcurrency -warn-concurrency -enable-actor-data-race-checks";
 				PRODUCT_BUNDLE_IDENTIFIER = UPP.Unfalldatenatlas;
 				PRODUCT_NAME = "$(TARGET_NAME)";

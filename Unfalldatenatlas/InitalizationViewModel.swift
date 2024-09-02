@@ -26,13 +26,13 @@
 //   0           509497,179245107     5392224,05191507 9,12902797500004 48,682987865
 //
 // Vergleich Unfälle mit Personenschaden insgesamt laut Destatis (Obermenge der Daten des Unfalldatenatlas) und Daten des Unfalldatenatlas:
-// Jahr:                       2019       2020       2021       2022
-// Unfälle mit Personenschaden 300_143    264_499    258_987    289_672
-// Unfälle im Unfalldatenatlas 268_370,   237_994, " 233_208,   256_492
+// Jahr:                       2019       2020       2021       2022      2023
+// Unfälle mit Personenschaden 300_143    264_499    258_987    289_672,    ?
+// Unfälle im Unfalldatenatlas 268_370,   237_994, " 233_208,   256_492,  269_048
 //
-// Unfälle in der App insgesamt: 1_554_834
+// Unfälle in der App insgesamt mit Daten von 2016 bis einschlie0ßlich 2023: 1_823_882 (Mit Daten von 2016 einschließlich 2022: 1_554_834)
 // Unfälle pro Jahr:
-//   ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492]
+//   ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
 
 import Foundation
 import CoreData
@@ -48,7 +48,7 @@ enum InitializationState: Equatable {
         switch self {
         case .initializationRequired: return "Initalisierung ..."
 //        case .clearingDatabase: return "Initalisierung wurde nicht erfolgreich abgeschlossen und muss wiederholt werden. Bereinige Unfalldatenbank, bitte warten ..."
-//        case .loadingData(let year): return "Konfiguriere Unfalldaten für das Jahr \(year) ... \n\nDas erfolgt nur einmalig beim allerersten Start der App für die Unfalljahre 2016 bis 2022 (in umgekehrter Reihenfolge). \nDas dauert bis zu 10 Minuten. Bitte nicht abbrechen, sonst muss der Vorgang wiederholt werden.\nDie App kann in dieser Zeit schon  mit den ersten Daten benutzt werden."
+//        case .loadingData(let year): return "Konfiguriere Unfalldaten für das Jahr \(year) ... \n\nDas erfolgt nur einmalig beim allerersten Start der App für die Unfalljahre 2016 bis 2023 (in der Reihenfolge 2022, 2021, ..., 2016, 2023). \nDas dauert bis zu 10 Minuten oder länger. Bitte nicht abbrechen, sonst muss der Vorgang teilweise wiederholt werden.\nDie App kann in dieser Zeit schon  mit den ersten Daten benutzt werden."
         case .loadingData(let year): return "Importiere Unfalldaten für das Jahr \(year) ... "
         case .initalized: return "... Initalisierung beendet"
         }
@@ -72,14 +72,14 @@ final class InitializationViewModel: ObservableObject {
         
         print(" In Gesamtinitialisierung.")
         initializationState = .initializationRequired
-        // Check lines in database, if 1_554_834, then all data for 2016 to 2022 is loaded.
+        // Check lines in database, if 1_823_882 (formerly 1_554_834), then all data for 2016 to 2023 (formerly 2022) is loaded.
         // Fetch count of accidents from database (overall and for the respective years) and print to console
         let countRequest = Accident.fetchRequest()
         let totalCount =  try? viewContext.count(for: countRequest)
         print("Initalisierung. Total Count ist: \(String(describing: totalCount))")
 
         //
-        if let totalCount = totalCount, totalCount == ViewModel.countOfAllAccidents { // 1_554_834
+        if let totalCount = totalCount, totalCount == ViewModel.countOfAllAccidents { // 1_823_882 (formerly 1_554_834)
             DispatchQueue.main.async {
                 self.initializationState = .initalized
             }
@@ -126,8 +126,8 @@ final class InitializationViewModel: ObservableObject {
 //    @MainActor 
     func loadDataIntoDatabase() async throws {
 
-        let years = ["2022", "2021", "2020", "2019", "2018", "2017", "2016"]
-        let countOFRecordsForYear: [String: Double] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492]
+        let years = ["2022", "2021", "2020", "2019", "2018", "2017", "2016", "2023"]
+        let countOFRecordsForYear: [String: Double] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
 
         for year in years {
                     
@@ -317,14 +317,14 @@ final class InitializationViewModel: ObservableObject {
             accident.istKrad = csvComponents[17] == "1" ? true : false
             accident.istGueterKfz = csvComponents[18] == "1" ? true : false
             accident.istSonstige = csvComponents[19] == "1" ? true : false
-            
 //            accident.lineRefX = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
 //            accident.lineRefY = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
             accident.longitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
             accident.lattitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
             accident.strassenZustand = Int16(csvComponents[24])!
-        case "2021", "2022": // 2022 is of equal order (although one name in the csv file is different)
-            accident.accidentObjectID = Int32(csvComponents[0])!
+        case "2021", "2022", "2023":
+            // 2022 is of equal order as 2021 (although one name in the csv file is different).
+            // Same for 2023 (although it has one additional column at the end)accident.accidentObjectID = Int32(csvComponents[0])!
             accident.land = Int16(csvComponents[2])!
 //            accident.regierungsBezirk = Int16(csvComponents[3])!
 //            accident.kreis = Int16(csvComponents[4])!
