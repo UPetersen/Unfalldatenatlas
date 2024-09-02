@@ -62,7 +62,7 @@ enum Land: Int, Identifiable, CaseIterable, Equatable {
         case .mecklenburgVorpommern: return "Mecklenburg-Vorpommern (ab 2020)"
         case .sachsen: return "Sachsen (ab 2016)"
         case .sachsenAnhalt: return "Sachsen-Anhalt (ab 2017)"
-        case .thueringen: return "Thürungen (ab 2019)"
+        case .thueringen: return "Thüringen (ab 2019)"
         }
     }
 }
