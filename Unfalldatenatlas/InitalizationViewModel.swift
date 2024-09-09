@@ -140,7 +140,6 @@ final class InitializationViewModel: ObservableObject {
                 self?.initializationState = .loadingData(year: year)
                 self?.progress = 0
             }
-            
             for try await line in url.lines.dropFirst() { // Skip first line which contains heaader information
                 
                 countOFAccidents += 1

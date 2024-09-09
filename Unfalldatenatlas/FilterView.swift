@@ -30,7 +30,7 @@ struct FilterView: View {
                 HStack {
                     Text("Anzahl Unfälle:")
                     Spacer()
-                    CountOfSelectedAccidentsView(countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents, displayPercentage: displayPercentage)
+                    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents, displayPercentage: displayPercentage)
                 }
             }
             

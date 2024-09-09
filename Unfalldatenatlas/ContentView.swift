@@ -250,7 +250,7 @@ struct ContentView: View {
                 // Text with count of selected accidents
                 ToolbarItem(placement: .navigationBarLeading) {
                     VStack(alignment: .leading) {
-                        CountOfSelectedAccidentsView(countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents, displayPercentage: initializationViewModel.isInitialized)
+                        CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents, displayPercentage: initializationViewModel.isInitialized)
                     }
                 }
                 // The (i) button

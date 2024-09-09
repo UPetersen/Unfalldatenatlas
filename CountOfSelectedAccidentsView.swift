@@ -19,12 +19,13 @@ fileprivate let formatter: NumberFormatter =  {() -> NumberFormatter in
 /// Displays count of selected accidents or a ProgressView while the count is still being fetched.
 struct CountOfSelectedAccidentsView: View {
     
+    //    let countOfAllAccidents = Double(ViewModel.countOfAllAccidents)
+    var countOfAllAccidents: Int
     var countOfSelectedAccidents: Int
     var isFetchingCountOfSelectedAccidents: Bool
     var displayPercentage: Bool
     
-    let countOfAllAccidents = Double(ViewModel.countOfAllAccidents)
-    
+
     var body: some View {
         if isFetchingCountOfSelectedAccidents {
             ProgressView()
@@ -39,7 +40,7 @@ struct CountOfSelectedAccidentsView: View {
     
     func percentage() -> String {
         if countOfAllAccidents > 1 { // Never divide by zero
-            let percentage = Double(countOfSelectedAccidents) * 100.0 / countOfAllAccidents
+            let percentage = Double(countOfSelectedAccidents) * 100.0 / Double(countOfAllAccidents)
             if let text = formatter.string(from: NSNumber(value: percentage)) {
                 return " (\(text) %)"
             }
@@ -49,6 +50,6 @@ struct CountOfSelectedAccidentsView: View {
 }
 
 #Preview {
-    CountOfSelectedAccidentsView(countOfSelectedAccidents: Int(1), isFetchingCountOfSelectedAccidents: false, displayPercentage: true)
+    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: Int(1), isFetchingCountOfSelectedAccidents: false, displayPercentage: true)
     
 }
