@@ -53,6 +53,7 @@ struct AccidentDataFilter: Equatable {
     }
 }
 
+//@MainActor
 final class ViewModel: ObservableObject {
     
     // static let countOfAllAccidents = 1_554_834 // with 2022 date. Value to be filled in by hand, whenever new data files for new years are added.
@@ -97,8 +98,9 @@ final class ViewModel: ObservableObject {
             print("------Task is cancelled 0 ----------")
             return
         }
+//        Task.detached(priority: .high) {
         Task() {
-            fetchAccidents(region: region)
+            self.fetchAccidents(region: region)
         }
     }
 
@@ -150,6 +152,7 @@ final class ViewModel: ObservableObject {
     /// Loads accidents for the region from the database.
     func fetchAccidents(region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.66, longitude: 9.11), latitudinalMeters: 1000, longitudinalMeters: 1000)) {
         
+//        @MainActor self.isFetchingAccidents = true
         DispatchQueue.main.async {
             self.isFetchingAccidents = true
         }
@@ -165,13 +168,16 @@ final class ViewModel: ObservableObject {
                 let request = Accident.fetchRequest()
                 print("AccidentDataFilters.predicates: \(accidentDataFilters.predicates)")
                 
-                if region.areaInSquareKilometers >= 15000 {
+                // If area is large, reduce the amount of data selected using the so called countPrdicate.
+                // This may not be used (and is not necessary) if a certain year is selected, sincethe count predicate omits some years and results could be wrong.
+                if region.areaInSquareKilometers >= 15000 && accidentDataFilters.jahr.predicate == nil {
                     
                     let countPredicate = self.countPredicate(region: region, countOfSelectedAccidents: countOfSelectedAccidents)
                     request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [countPredicate] + [region.predicate] + accidentDataFilters.predicates)
-                } else if region.areaInSquareKilometers < 15000 {
+                } else {
                     request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [region.predicate] + accidentDataFilters.predicates)
                 }
+                
                                 
                 if Task.isCancelled {
                     print("------Task is in fetchAccidents 1 ----------")
@@ -217,11 +223,11 @@ final class ViewModel: ObservableObject {
         }
     }
     
-    /// Special predicate that reduces the overall number of accidents with respect to the region and the overall amount of selected accidents, such that always enough accidents are in the region, but not much mor.
+    /// Special predicate that reduces the overall number of accidents with respect to the region and the overall amount of selected accidents, such that always enough accidents are in the region, but not much more.
     func countPredicate(region: MKCoordinateRegion, countOfSelectedAccidents: Int, allAccidentsCount: Int = ViewModel.countOfAllAccidents) -> NSPredicate {
         
-        let areaGermany = 357_588.0
-        let neededAccidentsForArea = 20_000.0
+        let areaGermany = 357_588.0 // Area of Germany in square kilometers
+        let neededAccidentsForArea = 20_000.0 // We want at least 20_000 accidents as a basis in the respective area
         
         var neededDensityForArea = neededAccidentsForArea / region.areaInSquareKilometers
         if countOfSelectedAccidents != 0 {
@@ -229,15 +235,16 @@ final class ViewModel: ObservableObject {
         }
         var neededCountForGermany = min( Int(ceil(areaGermany * neededDensityForArea)), allAccidentsCount)
         neededCountForGermany = max(neededCountForGermany, 200_000)
-        let setOfCounts = Array(stride(from: 0, through: 1_500_000, by: 100_000))
+//        let setOfCounts = Array(stride(from: 0, through: 1_500_000, by: 100_000))
+        let setOfCounts = Array(stride(from: 0, through: 1_800_000, by: 100_000))
         let lastIndex = setOfCounts.lastIndex(where: {$0 <= neededCountForGermany})!
 
         let setOfCountsForFetch = Array(setOfCounts[0...lastIndex])
 
-//        print("Area: \(region.areaInSquareKilometers), needed density for area: \(neededDensityForArea), needed count for Germany: \(neededCountForGermany)")
-//        print("Set of Counts: \(setOfCounts)")
-//        print("Last index: \(lastIndex)")
-//        print("Resulting set: \(setOfCountsForFetch)")
+        print("Area: \(region.areaInSquareKilometers), needed density for area: \(neededDensityForArea), needed count for Germany: \(neededCountForGermany)")
+        print("Set of Counts: \(setOfCounts)")
+        print("Last index: \(lastIndex)")
+        print("Resulting set: \(setOfCountsForFetch)")
                                                     
         let countPredicate = NSPredicate(format: "countOfAccidentsBy100000 IN %@", setOfCountsForFetch)
         
