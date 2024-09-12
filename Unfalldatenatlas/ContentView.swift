@@ -62,7 +62,7 @@ struct ContentView: View {
                     
                     // Draw Circle on map for each Accident and conditionally show symbols text
                     // Big sppeed up to separate
-                    if !viewModel.accidents.isEmpty {
+                    if !viewModel.accidents.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
                         // Some sppeed up to distinguish the two cases of displaying symbols or not in the following way
                         if showSymbols {
                             // Circles with text symbols (the emojis) for each accident
