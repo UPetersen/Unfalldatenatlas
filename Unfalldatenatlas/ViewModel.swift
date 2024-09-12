@@ -53,7 +53,7 @@ struct AccidentDataFilter: Equatable {
     }
 }
 
-//@MainActor
+@MainActor
 final class ViewModel: ObservableObject {
     
     // static let countOfAllAccidents = 1_554_834 // with 2022 date. Value to be filled in by hand, whenever new data files for new years are added.
@@ -68,6 +68,7 @@ final class ViewModel: ObservableObject {
     private let asyncContext = PersistenceController.shared.container.newBackgroundContext()
     private (set) var fetchLimit = 400 //300 // Maximum number of accidents to fetched -> fetchLimit for fetch request.
     private var taskForCountingSelectedAccidents: Task<Void, Never>? = nil
+    private var detachedTask: Task<Void, Never>? = nil
 
     
     init(initFromFile: Bool = false) {
@@ -98,61 +99,18 @@ final class ViewModel: ObservableObject {
             print("------Task is cancelled 0 ----------")
             return
         }
-//        Task.detached(priority: .high) {
-        Task() {
-            self.fetchAccidents(region: region)
-        }
-    }
-
-    /// Loads the count of selected accidents from the database.
-    ///
-    /// This is for whole Germany, dependent on e.g. day/night, type of accident et Cetera. It is independent of the region.
-    func fetchCountOfSelectedAccidents() async {
         
-        if Task.isCancelled {
-            print("------Task fetchCountOfSelectedAccidents is cancelled 0 ----------")
-            return
-        }
-
-        asyncContext.performAndWait { [unowned self] in
-            do {
-                if Task.isCancelled {
-                    print("------Task fetchCountOfSelectedAccidents is cancelled 1 ----------")
-                    return
-                }
-                let countAllAccidentsRequest = Accident.fetchRequest()
-                countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: accidentDataFilters.predicates)
-
-                if Task.isCancelled {
-                    print("------Task fetchCountOfSelectedAccidents is cancelled 2 ----------")
-                    return
-                }
-                let countOfAllAccidents = try asyncContext.count(for: countAllAccidentsRequest)
-
-                if Task.isCancelled {
-                    print("------Task fetchCountOfSelectedAccidents is cancelled 3 ----------")
-                    return
-                }
-                DispatchQueue.main.async {
-                    print("------------ IN MAIN QUEUE OF fetchCountOfSelectedAccidents --------------")
-                    if Task.isCancelled {
-                        print("------Task fetchCountOfSelectedAccidents is cancelled 4 ----------")
-                        return
-                    }
-                    self.countOfSelectedAccidents = countOfAllAccidents
-                }
-            }
-            catch {
-                fatalError()
-            }
+        // Detached task does NOT run on the main thread and needs to be called with await.
+        detachedTask?.cancel()
+        detachedTask = Task.detached(priority: .high) {
+//        Task() { // Using just Task() runs on the main thread and does not need await
+            await self.fetchAccidents(region: region)
         }
     }
-    
-    
-    /// Loads accidents for the region from the database.
+
+   /// Loads accidents for the region from the database.
     func fetchAccidents(region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 48.66, longitude: 9.11), latitudinalMeters: 1000, longitudinalMeters: 1000)) {
         
-//        @MainActor self.isFetchingAccidents = true
         DispatchQueue.main.async {
             self.isFetchingAccidents = true
         }
@@ -207,6 +165,7 @@ final class ViewModel: ObservableObject {
                     print("------Task is cancelled in fetchAccidents 3 ----------")
                     return
                 }
+
                 DispatchQueue.main.async {
                     self.accidents = accidents
                     self.isFetchingAccidents = false
@@ -252,5 +211,53 @@ final class ViewModel: ObservableObject {
         
         return countPredicate
     }
+    
+    
+    /// Loads the count of selected accidents from the database.
+    ///
+    /// This is for whole Germany, dependent on e.g. day/night, type of accident et Cetera. It is independent of the region.
+    func fetchCountOfSelectedAccidents() async {
+        
+        if Task.isCancelled {
+            print("------Task fetchCountOfSelectedAccidents is cancelled 0 ----------")
+            return
+        }
+
+        asyncContext.performAndWait { [unowned self] in
+            do {
+                if Task.isCancelled {
+                    print("------Task fetchCountOfSelectedAccidents is cancelled 1 ----------")
+                    return
+                }
+                let countAllAccidentsRequest = Accident.fetchRequest()
+                countAllAccidentsRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: accidentDataFilters.predicates)
+
+                if Task.isCancelled {
+                    print("------Task fetchCountOfSelectedAccidents is cancelled 2 ----------")
+                    return
+                }
+                let countOfAllAccidents = try asyncContext.count(for: countAllAccidentsRequest)
+
+                if Task.isCancelled {
+                    print("------Task fetchCountOfSelectedAccidents is cancelled 3 ----------")
+                    return
+                }
+                DispatchQueue.main.async {
+                    print("------------ IN MAIN QUEUE OF fetchCountOfSelectedAccidents --------------")
+                    if Task.isCancelled {
+                        print("------Task fetchCountOfSelectedAccidents is cancelled 4 ----------")
+                        return
+                    }
+                    self.countOfSelectedAccidents = countOfAllAccidents
+                }
+            }
+            catch {
+                fatalError()
+            }
+        }
+    }
+    
+    
+ 
 
 }

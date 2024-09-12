@@ -9,10 +9,10 @@ import SwiftUI
 import CoreData
 import MapKit
 
-struct ContentView: View {
-//    @Environment(\.managedObjectContext) private var viewContext
 
-    @ObservedObject var viewModel: ViewModel
+struct ContentView: View {
+
+    @StateObject var viewModel = ViewModel()
     @StateObject var initializationViewModel = InitializationViewModel()
     @StateObject var locationManager = LocationManager()
 
@@ -198,7 +198,7 @@ struct ContentView: View {
                     self.mapCamera = context.camera
                     self.visibleRegion = context.region
                     
-                    // Works, could overall be more responsive
+                    // This task runs on the main thread
                     task?.cancel()
                     task = Task {
                         try? await Task.sleep(nanoseconds: 300_000_000) // Delay (debounce) for some time
@@ -371,11 +371,7 @@ struct ContentView: View {
         Task {
             if let accident {
                 let request = MKLookAroundSceneRequest(coordinate: accident.coordinate)
-                do {
-                    lookAroundScene = try await request.scene
-                } catch  {
-                    lookAroundScene = nil
-                }
+                let lookAroundScene = try? await request.scene
             }
             print("getLookAroundScene finished")
         }
