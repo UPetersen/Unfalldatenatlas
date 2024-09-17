@@ -57,11 +57,16 @@ struct AccidentDataFilter: Equatable {
 final class ViewModel: ObservableObject {
     
     // static let countOfAllAccidents = 1_554_834 // with 2022 date. Value to be filled in by hand, whenever new data files for new years are added.
-    static let countOfAllAccidents = 1_823_882 // with 2023 date. Value to filled in by hand, whenever new data files for new years are added.
-
-    @Published var accidents: [Accident] = [] // needs to be a publisher due to showSymbols in content view, but this gives a Zirkelbezug?
-    @Published var countOfAccidentsInRegion: Int = 0
+    // count of all accidents in the database when all the years are imported into the database
+    static let countOfAllAccidents = 1_823_882 // With 2023 data. Value to filled in by hand, whenever new data files for new years are added.
+    // count of all accidents in the database if no filter/seletion is applied, otherwhise the count of the accidents in the database after filtering/selection
     @Published var countOfSelectedAccidents: Int = 0
+    // count of the subset of the accidents in the database that lies in the respective region (geographic rectangular), filter/selection applied.
+    // Number is limited by fetchlimit, thus it can be a number from 0 up to fetchLimit.
+    @Published var countOfAccidentsInRegion: Int = 0
+    // Accidents to be displayed, i.e. the accidents in the respective region (0 up to fetchLimit accidents)
+    @Published var accidents: [Accident] = []
+
     @Published var isFetchingAccidents = false
     @Published var accidentDataFilters = AccidentDataFilter()
             
@@ -205,11 +210,15 @@ final class ViewModel: ObservableObject {
         print("Last index: \(lastIndex)")
         print("Resulting set: \(setOfCountsForFetch)")
                                                     
-        let countPredicate = NSPredicate(format: "countOfAccidentsBy100000 IN %@", setOfCountsForFetch)
-        
-        print("Predicate for counts: \(countPredicate.description)")
-        
-        return countPredicate
+//        let countPredicate = NSPredicate(format: "countOfAccidentsBy100000 IN %@", setOfCountsForFetch)
+//        print("Predicate for counts: \(countPredicate.description)")
+//        return countPredicate
+
+        // Test with new approach just selection 2022 if no year is selected and density is correct.
+//        let newCountPredicate = UnfallJahr.jahr2022.predicate!
+        let newCountPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [UnfallJahr.jahr2022.predicate!] + [UnfallJahr.jahr2021.predicate!])
+        print("Predicate for counts: \(newCountPredicate.description)")
+        return newCountPredicate
     }
     
     

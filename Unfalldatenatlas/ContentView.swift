@@ -325,9 +325,9 @@ struct ContentView: View {
             .onChange(of: mapStyleIsStandard) {
                 print("============================== in .onChange(of: mapStyleIsStandard) ======================")
                 
-                // When the user changes the map type, the region is mostly changed, too. Might be due to different tile
+                // When the user changes the map type, the region is usualy changed, too. Might be due to different tile
                 // sizes. However, in this case the accidents must be fetched again for the new region.
-                // Here position is needed sind it fires the redrawing of the map and thus the recaculation of the
+                // Here position is needed sind it fires the redrawing of the map and thus the recalculation of the
                 // visible region (after its change) and thereafter the respective accidents for this new region are
                 // fetched automatically in .onMapCameraChange.
                 mapCameraPosition = .region(visibleRegion)
