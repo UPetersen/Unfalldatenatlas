@@ -14,7 +14,8 @@ struct SymbolsTextView: View {
     
     var body: some View {
         // MARK: Todo: text is mainly gray since one of the latest changes. Should be black or white.
-        Text("\(accident.jahr - 2000)\("-")\(["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"][Int(accident.monat) - 1])\("-")\(["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"][Int(accident.wochentag) - 1])\(":")\(accident.stunde)\("h ")\(symbolsForAccident(accident: accident))")
+//        Text("\(accident.jahr - 2000)\("-")\(["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"][Int(accident.monat) - 1])\("-")\(["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"][Int(accident.wochentag) - 1])\(":")\(accident.stunde)\("h ")\(symbolsForAccident(accident: accident))")
+        Text("\(accident.stunde)\("h,")\(["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"][Int(accident.wochentag) - 1])\(",")\(["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"][Int(accident.monat) - 1])\(accident.jahr - 2000)\(symbolsForAccident(accident: accident))")
             .padding(.horizontal, 5)
             .background(Color(.systemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
