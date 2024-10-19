@@ -76,8 +76,7 @@ final class ViewModel: ObservableObject {
     private var taskForFetchingAccidents: Task<Void, Never>? = nil
     
     @Published var isFetchingCountOfSelectedAccidents = false
-//    private var fetchOperation: FetchOperationForCountFetchRequest? = nil
-    private var fetchOperation2: FetchOperation? = nil
+    private var fetchOperation: FetchOperation? = nil
     private var taskForCountingSelectedAccidents: Task<Void, Error>? = nil
     
     init(initFromFile: Bool = false) {
@@ -167,7 +166,6 @@ final class ViewModel: ObservableObject {
                         )
                     )
                 }
-
             }
             
             if Task.isCancelled {
@@ -186,7 +184,6 @@ final class ViewModel: ObservableObject {
             await print("AccidentDataFilters.predicates: \(self.accidentDataFilters.predicates)")
         }
     }
-    
 
    
     /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
@@ -194,7 +191,7 @@ final class ViewModel: ObservableObject {
         
         isFetchingAccidents = true
         
-        // Fetchrequest. Must use NSFetchedRequestResult as type for general handling in class FetchOperation. (Then works with fetching managed objects as well as just the count.
+        // Fetchrequest. Must use NSFetchedRequestResult as type, this enables general handling in class FetchOperation. (Then works with fetching managed objects as well as just the count.)
 //        let request = Accident.fetchRequest()
         let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Accident")
         request.fetchLimit = fetchLimit
@@ -259,8 +256,8 @@ final class ViewModel: ObservableObject {
         fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: accidentDataFilters.predicates)
         fetchRequest.resultType = .countResultType
 
-        fetchOperation2?.cancel()
-        fetchOperation2 = performFetchRequest(fetchRequest: fetchRequest)
+        fetchOperation?.cancel()
+        fetchOperation = performFetchRequest(fetchRequest: fetchRequest)
 
         // Task needed for polling the results from the fetch operation
         taskForCountingSelectedAccidents = Task {
@@ -271,14 +268,14 @@ final class ViewModel: ObservableObject {
                     print("I task was cancelled")
                     break
                 }
-                if let fetchOperation2, fetchOperation2.isCancelled {
+                if let fetchOperation, fetchOperation.isCancelled {
                     print("fetchOperation cancelled")
                     break
                 }
-                if let fetchOperation2, fetchOperation2.isFinished {
+                if let fetchOperation, fetchOperation.isFinished {
                     print("fetchOperation finished")
                     isFetchingCountOfSelectedAccidents = false
-                    countOfSelectedAccidents = fetchOperation2.count ?? 0
+                    countOfSelectedAccidents = fetchOperation.count ?? 0
                     print("# of accidents: \(countOfSelectedAccidents)")
                     break
                 }

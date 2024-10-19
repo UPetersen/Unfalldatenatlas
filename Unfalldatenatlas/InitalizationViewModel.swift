@@ -85,7 +85,7 @@ final class InitializationViewModel: ObservableObject {
     
     private var files: [String] = ["Unfallorte2016_LinRef.csv", "Unfallorte2017_LinRef.csv", "Unfallorte2018_LinRef.csv", "Unfallorte2019_LinRef.csv", "Unfallorte2020_LinRef.csv", "Unfallorte2021_LinRef.csv"]
     private var viewContext = PersistenceController.shared.container.viewContext
-    private var backgroundContext = PersistenceController.shared.container.newBackgroundContext()
+//    private var backgroundContext = PersistenceController.shared.container.newBackgroundContext()
     private var countOfAccidentsBy100000: Int = 0
     private var countOFAccidents: Int = 0
     private var countOfAccidentsInDatabase: Int = 0
@@ -118,7 +118,7 @@ final class InitializationViewModel: ObservableObject {
                     // TODO: nur für das Testen auskommentiert.
                     //                                        countOfAccidentsInDatabase = totalCount ?? 0
                     
-                    try await self.loadDataIntoDatabase4()
+                    try await self.loadDataIntoDatabase()
                     
                 } catch {
                     print("An errror occured during initialization.")
@@ -129,7 +129,7 @@ final class InitializationViewModel: ObservableObject {
     
     
     /// Reads al files and stores the content in cord data. Uncomment relevant lines for respective files.
-    nonisolated private func loadDataIntoDatabase4() async throws {
+    nonisolated private func loadDataIntoDatabase() async throws {
         
         let beginDate = Date.now
         
@@ -173,7 +173,7 @@ final class InitializationViewModel: ObservableObject {
             }
             
             // Final import is needed for the remaining accidents (beyond the 20.000 units)
-            try? await self.importAccidents4(from: Array(lines), year: year)
+            try? await self.importAccidents(from: Array(lines), year: year)
             print("year: \(year), duration: \(DateInterval(start: beginDate, end: Date.now).duration) s, \(countOfRecordsForYear) Records, \(lines.count) lines")
         }
         
@@ -185,7 +185,7 @@ final class InitializationViewModel: ObservableObject {
     
     
     /// Uses `NSBatchInsertRequest` (BIR) to import accidents from a CSV file  into the Core Data store on a private queue.
-    nonisolated private func importAccidents4(from lines: [String], year: String) async throws {
+    nonisolated private func importAccidents(from lines: [String], year: String) async throws {
         guard !lines.isEmpty else { return }
         
         let taskContext = PersistenceController.shared.container.newBackgroundContext()
@@ -199,7 +199,7 @@ final class InitializationViewModel: ObservableObject {
             
             // Execute the batch insert.
             /// - Tag: batchInsertRequest
-            let batchInsertRequest = self.newBatchInsertRequestForLines(with: lines, year: year)
+            let batchInsertRequest = self.batchInsertRequest(with: lines, year: year)
             if let fetchResult = try? taskContext.execute(batchInsertRequest),
                let batchInsertResult = fetchResult as? NSBatchInsertResult,
                let success = batchInsertResult.result as? Bool, success {
@@ -216,7 +216,7 @@ final class InitializationViewModel: ObservableObject {
     }
     
     
-    nonisolated private func newBatchInsertRequestForLines(with lines: [String], year: String) -> NSBatchInsertRequest {
+    nonisolated private func batchInsertRequest(with lines: [String], year: String) -> NSBatchInsertRequest {
         var index = 0
         let total = lines.count
         
