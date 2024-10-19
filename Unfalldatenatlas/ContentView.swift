@@ -27,7 +27,7 @@ struct ContentView: View {
     @Namespace var mapScope
 
     @State private var lookAroundScene: MKLookAroundScene?
-//    @State private var selectedAccident: Accident?
+    @State private var selectedAccident: Accident?
     @State private var selectedAccidentStruct: AccidentStruct?
     @State private var showLookAroundPreview = false
     
@@ -62,25 +62,20 @@ struct ContentView: View {
                     
                     // Draw Circle on map for each Accident and conditionally show symbols text
                     // Big sppeed up to separate
-//                    if !viewModel.accidents.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
                     if !viewModel.accidentStructs.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
                         // Some sppeed up to distinguish the two cases of displaying symbols or not in the following way
                         if showSymbols {
                             // Circles with text symbols (the emojis) for each accident
-//                            ForEach(viewModel.accidents) { accident in
                             ForEach(viewModel.accidentStructs) { accident in
                                 // MARK: BEWARE: Annotation text could also be used for symbols information text
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-//                                        selectedAccident = accident
                                         selectedAccidentStruct = accident
-//                                        print("Selected Accident: \(selectedAccidentStruct.id)")
                                         getLookAroundScene(forAccident: selectedAccidentStruct)
                                     }) {
                                         Circle()
                                             .stroke(accident.color, lineWidth: accident == selectedAccidentStruct ? 12 : 5)
-//                                            .stroke(accident.color, lineWidth: 5)
                                             .padding()
                                             .overlay() {
                                                 SymbolsTextView(accident: accident).allowsHitTesting(false)
@@ -91,19 +86,15 @@ struct ContentView: View {
                             }
                         } else {
                             // Plain circles (no emojis here)
-//                            ForEach(viewModel.accidents) { accident in
                             ForEach(viewModel.accidentStructs) { accident in
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-//                                        selectedAccident = accident
                                         selectedAccidentStruct = accident
-//                                        print("Selected Accident: \(selectedAccidentStruct.description)")
                                         getLookAroundScene(forAccident: selectedAccidentStruct)
                                     }) {
                                         Circle()
                                             .stroke(accident.color, lineWidth: accident == selectedAccidentStruct ? 12 : 5)
-//                                            .stroke(accident.color, lineWidth: 5)
                                             .padding()
                                     }
                                     .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
@@ -200,9 +191,6 @@ struct ContentView: View {
 
                     viewModel.isFetchingAccidents = true
                     // General decision: raises responsiveness dramatically, but instantly no accidents shown any more while moving the map
-//                    if viewModel.accidents.count > 100 {
-//                        viewModel.accidents = []
-//                    }
                     if viewModel.accidentStructs.count > 100 {
                         viewModel.accidentStructs = []
                     }
@@ -263,7 +251,6 @@ struct ContentView: View {
                 // Text with count of selected accidents
                 ToolbarItem(placement: .navigationBarLeading) {
                     VStack(alignment: .leading) {
-//                        CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents, displayPercentage: initializationViewModel.isInitialized)
                         CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: viewModel.isFetchingCountOfSelectedAccidents, displayPercentage: initializationViewModel.isInitialized)
                     }
                 }
@@ -271,7 +258,6 @@ struct ContentView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         isShowingInfoView.toggle()
-//                        viewModel.accidents = [] // neded for speedup and responsiveness
                         viewModel.accidentStructs = [] // neded for speedup and responsiveness
                     }) {
                         Label("Info", systemImage: "info.circle")
@@ -282,7 +268,6 @@ struct ContentView: View {
                     // Use sheet, because there is some significant lag if using NavigationLink.
                     Button(action: {
                         isShowingFilterView.toggle()
-//                        viewModel.accidents = [] // neded for speedup and responsiveness
                         viewModel.accidentStructs = [] // neded for speedup and responsiveness
                     }) {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
@@ -303,36 +288,13 @@ struct ContentView: View {
             .onChange(of: showSymbols) {
                 print("============================== in .onChange(of: showSymbols) ===============================")
                 viewModel.fetchAccidents(region: visibleRegion)
-//                cancelTaskAndFetchAccidentsAsync()
             }
 
-//            // Update UI each time the initalization state changes (e.g. database deleted, a year is imported or finally fully initialized).
-//            .onChange(of: initializationViewModel.initializationState) {
-//                print("============================== in .onChange(of: initializationState) ======================")
-//
-//                isFetchingCountOfSelectedAccidents = true
-//                taskForCountingSelectedAccidents?.cancel()
-//                taskForCountingSelectedAccidents = Task {
-//                    await viewModel.fetchCountOfSelectedAccidents() // Triggers also fetching of accidents.
-//                    if Task.isCancelled {
-//                        print("------Task fetchCountOfSelectedAccidents is cancelled in ContentView ----------")
-//                        return
-//                    }
-//                    DispatchQueue.main.async {
-//                        isFetchingCountOfSelectedAccidents = false
-//                    }
-//                }
-//            }
 
             // Update UI each time the initalization state changes (e.g. database deleted, a year is imported or finally fully initialized).
             // Will be called when view appears and each time the initialization state changes. Exactly what we want.
             .task(id: initializationViewModel.initializationState) {
                 print("============================== in .task(of: initializationState) ======================")
-//                if Task.isCancelled {
-//                    print("------Task fetchCountOfSelectedAccidents is cancelled in ContentView ----------")
-//                    return
-//                }
-                
                 viewModel.getCountOfSelectedAccidents()
             }
             
@@ -360,7 +322,6 @@ struct ContentView: View {
                     }
                 }
                 viewModel.fetchAccidents(region: visibleRegion)
-//                await viewModel.fetchAccidentsAsync(region: visibleRegion)
             }
         }
     }
@@ -369,29 +330,7 @@ struct ContentView: View {
     func dismissFilterViewAction() {
         print("============================== in func dismissAction ======================")
         viewModel.fetchAccidents(region: visibleRegion)
-//        cancelTaskAndFetchAccidentsAsync()
     }
-    
-//    func cancelTaskAndFetchAccidentsAsync() {
-//        print("============================== in func cancelTaskAndFetchAccidentsAsync ======================")
-//        viewModel.fetchAccidentsAsync7(region: visibleRegion)
-//        
-////        task?.cancel()
-////        task = Task {
-////            await viewModel.fetchAccidentsAsync(region: visibleRegion)
-////        }
-//    }
-    
-//    func getLookAroundScene (forAccident accident: Accident?) {
-//        lookAroundScene = nil
-//        Task {
-//            if let accident {
-//                let request = MKLookAroundSceneRequest(coordinate: accident.coordinate)
-//                lookAroundScene = try? await request.scene
-//            }
-//            print("getLookAroundScene finished")
-//        }
-//    }
     
     func getLookAroundScene (forAccident accident: AccidentStruct?) {
         lookAroundScene = nil
@@ -411,11 +350,9 @@ struct ContentView: View {
             // Camera is not standard map, not in north or pitch is no zero (not in 2D) -> no count information in visible region since not accurate
             text = "Unfallzahl für Kartenausschnitt nur bei Standardkarte in Nordausrichtung"
         } else {
-//            if viewModel.accidents.count >= viewModel.fetchLimit {
             if viewModel.accidentStructs.count >= viewModel.fetchLimit {
                 text = "\(viewModel.fetchLimit) oder mehr Unfälle im Kartenausschnitt (\(viewModel.fetchLimit) angezeigt)"
             } else {
-//                text = "\(viewModel.accidents.count) Unfälle im Kartenausschnitt"
                 text = "\(viewModel.accidentStructs.count) Unfälle im Kartenausschnitt"
             }
 //            #if DEBUG
