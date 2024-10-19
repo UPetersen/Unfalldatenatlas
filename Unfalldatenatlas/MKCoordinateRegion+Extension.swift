@@ -9,7 +9,7 @@ import Foundation
 import MapKit
 
 
-extension MKCoordinateRegion: Equatable
+extension MKCoordinateRegion: @retroactive Equatable
 {
    public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool
    {

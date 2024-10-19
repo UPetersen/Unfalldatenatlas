@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SymbolsTextView: View {
     
-    var accident: Accident
+    var accident: AccidentStruct
 //    var showSymbols: Bool
     
     var body: some View {
@@ -25,7 +25,7 @@ struct SymbolsTextView: View {
         
     }
     
-    func symbolsForAccident(accident: Accident) -> String {
+    func symbolsForAccident(accident: AccidentStruct) -> String {
         var symbol = ""
         
         // Type of vehicles/persones involved. https://www.destatis.de/DE/ Themen/Gesellschaft- Umwelt/Verkehrsunfaelle/M ethoden/_inhalt.html#sprg37 1798

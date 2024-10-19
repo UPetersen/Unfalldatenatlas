@@ -19,8 +19,10 @@ struct FilterView: View {
     @Binding var isFetchingCountOfSelectedAccidents: Bool
     var displayPercentage: Bool
     
-    @State private var task: Task<Void, Never>? = nil
-    
+//    @State private var task: Task<Void, Never>? = nil
+//    @State private var backgroundContext = PersistenceController.shared.container.newBackgroundContext()
+//    @State private var fetchOperation: FetchOperationForCountFetchRequest? = nil
+//    @State private var task2: Task<Void, Error>? = nil
     
     var body: some View {
         
@@ -30,7 +32,7 @@ struct FilterView: View {
                 HStack {
                     Text("Anzahl Unfälle:")
                     Spacer()
-                    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: isFetchingCountOfSelectedAccidents, displayPercentage: displayPercentage)
+                    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: viewModel.isFetchingCountOfSelectedAccidents, displayPercentage: displayPercentage)
                 }
             }
             
@@ -50,7 +52,6 @@ struct FilterView: View {
                     ForEach(UnfallTyp1.allCases, id: \.id) { $0.sectionTextView(colorScheme: colorScheme).tag($0) }
                 }
             }
-            
             
             Section(header: Text("Umgebungsbedingungen")) {
                 // Lichtverhaeltnisse
@@ -147,18 +148,70 @@ struct FilterView: View {
         // Whenever the flter/selections changes, then update count of selected accidents and the corresponding accidents in the region.
         .onChange(of: viewModel.accidentDataFilters) {
             print("----------------- in .onChange (FilterView) due to init or accidentDataFilters change -------------------")
-            isFetchingCountOfSelectedAccidents = true
-            task?.cancel()
-            task = Task {
-                await viewModel.fetchCountOfSelectedAccidents()
-                if Task.isCancelled {
-                    print("------Task fetchCountOfSelectedAccidents is cancelled in FilterView ----------")
-                    return
-                }
-                DispatchQueue.main.async {
-                    isFetchingCountOfSelectedAccidents = false
-                }
-            }
+            
+            viewModel.getCountOfSelectedAccidents()
+
+//            isFetchingCountOfSelectedAccidents = true
+//            let hugo = 4
+//            if hugo == 1 { // As implemented in first version of distributed app
+//                task?.cancel()
+//                task = Task {
+//                    await viewModel.fetchCountOfSelectedAccidents()
+//                    DispatchQueue.main.async {
+//                        isFetchingCountOfSelectedAccidents = false
+//                    }
+//                }
+//            } else if hugo == 2 { // intermediate test version
+//                task?.cancel()
+//                task = Task.detached(priority: .high) {
+//                    await viewModel.fetchCountOfSelectedAccidents3()
+//                    DispatchQueue.main.async {
+//                        isFetchingCountOfSelectedAccidents = false
+//                    }
+//                    if Task.isCancelled {
+//                        print("------Task fetchCountOfSelectedAccidents is cancelled in FilterView ----------")
+//                        return
+//                    }
+//                }
+//            } else if hugo == 3 { // Version that uses operations, which can be cancelled directly
+//                
+//                task2?.cancel()
+//                fetchOperation?.cancel()
+//                fetchOperation = viewModel.performCountFetchRequest(predicate: NSCompoundPredicate(andPredicateWithSubpredicates: accidentDataFilters.predicates))
+//
+//                // Task needed for polling the results from the fetch operation
+//                task2 = Task {
+//                    // Do something
+//
+//                    while true {
+//                        guard !Task.isCancelled else {
+//                            print("I task was cancelled")
+//                            break
+//                        }
+//                        if let fetchOperation, fetchOperation.isCancelled {
+//                            print("fetchOperation cancelled")
+//                            break
+//                        }
+//                        if let fetchOperation, fetchOperation.isFinished {
+//                            print("fetchOperation finished")
+//                            isFetchingCountOfSelectedAccidents = false
+//                            viewModel.countOfSelectedAccidents = fetchOperation.count ?? 0
+//                            print("# of accidents: \(viewModel.countOfSelectedAccidents)")
+//                            break
+//                        }
+//                        print("I will wail a little bit...")
+//
+//                        try await Task.sleep(nanoseconds: 100_000_000) // Polling every 100 ms
+//                    }
+//                    print("I will return...")
+//                    return
+//                }
+//
+//            } else {
+//                viewModel.countOfSelectedAccidents()
+//            }
+
+
         }
     }
 }
@@ -169,3 +222,4 @@ struct FilterView: View {
 //        FilterView()
 //    }
 //}
+

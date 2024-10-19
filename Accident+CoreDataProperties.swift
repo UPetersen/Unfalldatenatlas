@@ -17,7 +17,7 @@ extension Accident {
     }
 
     @NSManaged public var accidentObjectID: Int32
-    @NSManaged public var countOfAccidentsBy100000: Int32
+//    @NSManaged public var countOfAccidentsBy100000: Int32
     @NSManaged public var istFahrrad: Bool
     @NSManaged public var istFussgaenger: Bool
     @NSManaged public var istGueterKfz: Bool
@@ -42,3 +42,7 @@ extension Accident {
 extension Accident : Identifiable {
 
 }
+
+//extension Accident : Sendable {
+//    
+//}
