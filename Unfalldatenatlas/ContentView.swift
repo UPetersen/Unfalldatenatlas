@@ -27,7 +27,7 @@ struct ContentView: View {
     @Namespace var mapScope
 
     @State private var lookAroundScene: MKLookAroundScene?
-    @State private var selectedAccident: Accident?
+//    @State private var selectedAccident: Accident?
     @State private var selectedAccidentStruct: AccidentStruct?
     @State private var showLookAroundPreview = false
     
@@ -78,7 +78,7 @@ struct ContentView: View {
                                             .stroke(accident.color, lineWidth: accident == selectedAccidentStruct ? 12 : 5)
                                             .padding()
                                             .overlay() {
-                                                SymbolsTextView(accident: accident).allowsHitTesting(false)
+                                                SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
                                             }
                                     }
                                     .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
@@ -97,7 +97,7 @@ struct ContentView: View {
                                             .stroke(accident.color, lineWidth: accident == selectedAccidentStruct ? 12 : 5)
                                             .padding()
                                     }
-                                    .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
+                                    .disabled(!showLookAroundPreview)  // Button disable (to still have double tap zoom when no preview)
                                 }
                             }
                         }

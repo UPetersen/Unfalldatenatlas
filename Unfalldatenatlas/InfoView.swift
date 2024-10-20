@@ -74,10 +74,10 @@ struct InfoView: View {
             
             **Anzeige von Unfalldetails \(Image(systemName: "ellipsis.rectangle"))**
             
-            Über den Button \(Image(systemName: "ellipsis.rectangle")) kann auf eine detaillierte Darstellung umgeschaltet werden, bei der über Text und Emojie-Symbole Zusatzinformationen zu jedem einzelnen Unfall angezeigt werden, z.B. "16🚗🚴🌝🌧️🏥A5". Folgende Information werden dabei in der dargestellten Reihenfolge hintereinander angezeigt:
+            Über den Button \(Image(systemName: "ellipsis.rectangle")) kann auf eine detaillierte Darstellung umgeschaltet werden, bei der über Text und Emojie-Symbole Zusatzinformationen zu jedem einzelnen Unfall angezeigt werden, z.B. "21h,Mi,Jun16🚗🚴🌝🌧️🏥A5". Folgende Information werden dabei in der dargestellten Reihenfolge hintereinander angezeigt:
             
-            Unfalljahr:
-            Ziffer des Unfalljahres, z.B. "16" für das Jahr 2016, "17" für das Jahre 2017 et Cetera.
+            Unfallzeit:
+            Stunde des Tages, Wochentag, Monat und Jahr, z.B. "21h,Mi,Jun16" für einen Unfall zwischen 21 und 22 Uhr, an einem Mittwoch im Juni 2016. Das genaue Datum und die genaue Uhrzeit sind aus Datenschutzgründen nicht verfügbar.
             
             Unfallbeteiligte:
             🚗 für Unfälle, an denen mindestens ein Pkw beteiligt war.

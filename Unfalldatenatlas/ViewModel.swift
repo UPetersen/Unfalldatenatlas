@@ -142,6 +142,7 @@ final class ViewModel: ObservableObject {
                 for accident in accidents {
                     accidentStructs.append(
                         AccidentStruct(
+                            id: accident.objectID,
                             accidentObjectID: accident.accidentObjectID,
                             istFahrrad: accident.istFahrrad,
                             istFussgaenger: accident.istFussgaenger,
@@ -363,6 +364,7 @@ class FetchOperation: Operation, @unchecked Sendable {
                         for accident in accidents {
                             self.accidentStructs.append(
                                 AccidentStruct(
+                                    id: accident.objectID,
                                     accidentObjectID: accident.accidentObjectID,
                                     istFahrrad: accident.istFahrrad,
                                     istFussgaenger: accident.istFussgaenger,

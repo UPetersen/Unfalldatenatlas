@@ -8,9 +8,11 @@
 import Foundation
 import MapKit
 import SwiftUI
+import CoreData
 
 struct AccidentStruct: Sendable, Identifiable {
-    let id: UUID = UUID()
+//    let id: UUID = UUID()
+    let id: NSManagedObjectID
     let accidentObjectID: Int32
     //    let countOfAccidentsBy100000: Int32
     let istFahrrad: Bool

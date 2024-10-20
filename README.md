@@ -1,6 +1,6 @@
 # Unfalldatenatlas Deutschland
 
-Update im September 2024: Es wurden die Unfälle des Jahres 2022 hinzugefügt. Damit sind nun über 1,8 Millionen Unfälle in der Datenbank enthalten. 
+Update im Oktober 2024: Es wurden die Unfälle des Jahres 2023 hinzugefügt. Damit sind nun über 1,8 Millionen Unfälle in der Datenbank enthalten. Die nachfolgenden Texte sind teilweise aktualisiert, die Grafiken sind noch nicht aktualisiert.
 
 Diese App zeigt mehr als 1,8 Millionen polizeilich registrierte Verkehrsunfälle mit getöteten oder verletzen Personen der Jahre 2016 bis 2023 auf einer Deutschlandkarte an. Zu den einzelnen Unfällen können verschiedene Attribute wie z.B. Unfallart und -typ oder Unfallbeteiligte (Pkw, Fahrrad, Fußgänger etc.) eingeblendet werden. Zudem können die angezeigten Unfälle nach vielen Attributen gefiltert werden. So lassen sich die angzeigten Unfälle z.B. auf alle Fahrunfälle mit Getöteten und Beteiligung von Krafträdern bei feucht/nass/schlüpfrigem Straßenzustand einschränken.
             
@@ -34,22 +34,21 @@ Die einzelnen Unfälle werden auf der Karte am Unfallort durch Kreise angezeigt,
 </figure>
 --->
 
-Zusätzlich kann über den Button <img height="15" style="vertical-align:middle;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/ee97a788-6a45-4db6-88ce-ad6e3c0a933c"> auf eine detaillierte Darstellung umgeschaltet werden, bei der über Text und Emoji-Symbole Zusatzinformationen zu jedem einzelnen Unfall angezeigt werden, z.B. 
+Zusätzlich kann über den Button <img height="15" style="vertical-align:middle;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/ee97a788-6a45-4db6-88ce-ad6e3c0a933c"> auf eine detaillierte Darstellung umgeschaltet werden, bei der über Text und Emoji-Symbole Zusatzinformationen zu jedem einzelnen Unfall angezeigt werden. Nachfolgendes Bild zeigt das Beispiel eines Unfalls, der sich zwischen 21 und 22 Uhr ("21h") an einem Mittwoch im Junit 2026 ("Mi,Jun16") ereignete. 
 
 <p align="center">
 <img width="450" alt="Bildschirmfoto 2023-10-01 um 11 16 19" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/7b3caf99-a62a-4b8d-b77c-3771289566c3">
 </p>
 
-für einen Unfall des Typs *Einbiegen-/Kreuzen-Unfall* (⭕️) im Jahr 2016 mit Beteiligung mindestens eines Pkws (🚗) und Radfahrers (🚴) bei Dunkelheit (🌝), nass/feucht/schlüpfrigem Straßenzustand (🌧️) mit Schwerverletzen (🏥) und Unfallart *Zusammenstoß mit einem einbiegendem/kreuzendem Fahrzeug* (A5)
+    Es handelte sich um einen *Einbiegen-/Kreuzen-Unfall* als Unfalltyp (⭕️) mit Beteiligung mindestens eines Pkws (🚗) und eines Radfahrers (🚴) bei Dunkelheit (🌝), nass/feucht/schlüpfrigem Straßenzustand (🌧️) mit Schwerverletzen (🏥) und mit der Unfallart *Zusammenstoß mit einem einbiegendem/kreuzendem Fahrzeug* (A5)
 
 Nachfolgend sind die möglichen Zusatzinformationen im Detail beschrieben, die man auch in der App über den Button <img height="15" style="vertical-align:middle;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/094d784e-5935-460c-9ee0-ad8007209d35"> erhalten kann.
             
-### Unfalljahr
+### Zeitpunkt des Unfalls
 
-Die letzten zwei Ziffern des Unfalljahres, z.B. 
-- "16" für das Jahr 2016,
-- "17" für das Jahr 2017
-- ...
+Aus Datenschutzgründen ist der genaue Zeitpunkt eines Umfalls nicht in den Daten des Unfallatlas enthalten. Es stehen jedoch die Stunde des Tages, Wochentag, Monat und Jahr zur Verfügung. Nachfolgend ein Beispiel für die Darstellung dieser Zeitinformationen:
+
+- "21h,Mi,Jun16" ... für einen Unfall zwischen 21 und 22 Uhr ("21h") an einem Mittwoch ("Mi") im Juni ("Jun") des Jahres ("2016")
             
 ### Unfallbeteiligte
 
@@ -107,7 +106,7 @@ Siehe [hier](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Verkehrsunfae
 
 ## Datenauswahl bzw. -filterung <img height="25" style="vertical-align:middle;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e353808f-5d78-4126-98a3-f617d915c416">
             
-Oben links in der App wird die Zahl aller selektierten Unfälle angezeigt. Beim Start der App sind das 1.554.834 Unfälle, alle die in der Datenbank gespeichert sind. Über das Menü  <img height="16" style="vertical-align:bottom;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e353808f-5d78-4126-98a3-f617d915c416">  kann die Auswahl vielfältig auf bestimmte Unfälle eingegrenzt werden, z.B. auf alle Unfälle mit Getöteten. Entsprechend wird oben links die Zahl der Unfälle auf diese Auswahl reduziert, im Beispiel für alle Unfälle mit Getöteten auf 15.578 entsprechende Unfälle die in der Datenbank enthalten sind. Entsprechend werden im Kartenausschnitt auch nur noch Unfälle mit Getöteten angezeigt.
+Oben links in der App wird die Zahl aller selektierten Unfälle angezeigt. Beim Start der App sind das 1.823.882 Unfälle, alle die in der Datenbank gespeichert sind. Über das Menü  <img height="16" style="vertical-align:bottom;" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e353808f-5d78-4126-98a3-f617d915c416">  kann die Auswahl vielfältig auf bestimmte Unfälle eingegrenzt werden, z.B. auf alle Unfälle mit Getöteten. Entsprechend wird oben links die Zahl der Unfälle auf diese Auswahl reduziert, im Beispiel für alle Unfälle mit Getöteten auf 18.107 entsprechende Unfälle die in der Datenbank enthalten sind. Entsprechend werden im Kartenausschnitt auch nur noch Unfälle mit Getöteten angezeigt.
 
 <p align="center">
 <img width="400" src="https://github.com/UPetersen/Unfalldatenatlas/assets/10375483/e03a69c8-bb3f-4e61-8b8a-a486fa12bfd3">
