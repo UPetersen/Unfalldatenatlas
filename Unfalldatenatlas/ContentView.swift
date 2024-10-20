@@ -16,7 +16,6 @@ struct ContentView: View {
     @StateObject var locationManager = LocationManager()
 
     @State private var task: Task<Void, Never>? = nil
-//    @State private var taskForCountingSelectedAccidents: Task<Void, Never>? = nil
 
     @State private var showSymbols = false
     @State private var mapCameraPosition: MapCameraPosition = .region(LocationManager.regionForGermany)
@@ -27,8 +26,7 @@ struct ContentView: View {
     @Namespace var mapScope
 
     @State private var lookAroundScene: MKLookAroundScene?
-//    @State private var selectedAccident: Accident?
-    @State private var selectedAccidentStruct: AccidentStruct?
+    @State private var selectedAccident: AccidentStruct?
     @State private var showLookAroundPreview = false
     
     @State private var isShowingFilterView = false
@@ -71,16 +69,15 @@ struct ContentView: View {
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-//                                        selectedAccidentStruct = accident
-                                        if accident == selectedAccidentStruct {
-                                            selectedAccidentStruct = nil
+                                        if accident == selectedAccident {
+                                            selectedAccident = nil
                                         } else {
-                                            selectedAccidentStruct = accident
+                                            selectedAccident = accident
                                         }
-                                        getLookAroundScene(forAccident: selectedAccidentStruct)
+                                        getLookAroundScene(forAccident: selectedAccident)
                                     }) {
                                         Circle()
-                                            .stroke(accident.color, lineWidth: accident == selectedAccidentStruct ? 12 : 5)
+                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
                                             .padding()
                                             .overlay() {
                                                 SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
@@ -95,23 +92,21 @@ struct ContentView: View {
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-//                                        selectedAccidentStruct = accident
-                                        if accident == selectedAccidentStruct {
-                                            selectedAccidentStruct = nil
+                                        if accident == selectedAccident {
+                                            selectedAccident = nil
                                         } else {
-                                            selectedAccidentStruct = accident
+                                            selectedAccident = accident
                                         }
-                                        getLookAroundScene(forAccident: selectedAccidentStruct)
+                                        getLookAroundScene(forAccident: selectedAccident)
                                     }) {
                                         Circle()
-                                            .stroke(accident.color, lineWidth: accident == selectedAccidentStruct ? 12 : 5)
+                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
                                             .padding()
                                     }
                                     .overlay() {
                                         SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
-                                            .opacity(accident == selectedAccidentStruct ? 1 : 0)
+                                            .opacity(accident == selectedAccident ? 1 : 0)
                                     }
-//                                    .disabled(!showLookAroundPreview)  // Button disable (to still have double tap zoom when no preview)
                                 }
                             }
                         }
@@ -119,10 +114,7 @@ struct ContentView: View {
                 }
                 // Click on anywhere in the map (which is not the circle of an accident) deselects the previously selected accident.
                 .simultaneousGesture(TapGesture(count: 1).onEnded { // Simultaneous gesture needed for retaining zoom on double click.
-                    selectedAccidentStruct = nil
-//                    if selectedAccidentStruct != nil {
-//                        selectedAccidentStruct = nil
-//                    }
+                    selectedAccident = nil
                 })
 
                 .mapControls {
@@ -157,7 +149,7 @@ struct ContentView: View {
                                         .clipShape(RoundedRectangle(cornerRadius: 10))
                                         .padding(.horizontal, 10) // apply same padding as LookAroundPreview
                                         .padding(.vertical, 5)    // apply same padding as LookAroundPreview
-                                        .opacity((lookAroundScene == nil || selectedAccidentStruct == nil) ? 1 : 0)
+                                        .opacity((lookAroundScene == nil || selectedAccident == nil) ? 1 : 0)
                                 }
                                 .overlay() { // xmark in top right to discard the preview.
                                     HStack(alignment: .top) {

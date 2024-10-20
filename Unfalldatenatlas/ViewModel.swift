@@ -223,25 +223,25 @@ final class ViewModel: ObservableObject {
 
             while true {
                 guard !Task.isCancelled else {
-                    print("I task was cancelled")
+//                    print("I task was cancelled")
                     break
                 }
                 if let fetchOperation3, fetchOperation3.isCancelled {
-                    print("fetchOperation cancelled")
+//                    print("fetchOperation cancelled")
                     break
                 }
                 if let fetchOperation3, fetchOperation3.isFinished {
-                    print("fetchOperation3 finished")
+//                    print("fetchOperation3 finished")
                     isFetchingAccidents = false
                     accidentStructs = fetchOperation3.accidentStructs
 //                    print("Erster: \(accidentStructs.first?.accidentObjectID ?? -99)")
                     break
                 }
-                print("I will wail a little bit...")
+//                print("I will wail a little bit...")
 
                 try await Task.sleep(nanoseconds: 100_000_000) // Polling every 100 ms
             }
-            print("I will return...")
+//            print("I will return...")
             return
         }
     }
@@ -266,25 +266,25 @@ final class ViewModel: ObservableObject {
 
             while true {
                 guard !Task.isCancelled else {
-                    print("I task was cancelled")
+//                    print("I task was cancelled")
                     break
                 }
                 if let fetchOperation, fetchOperation.isCancelled {
-                    print("fetchOperation cancelled")
+//                    print("fetchOperation cancelled")
                     break
                 }
                 if let fetchOperation, fetchOperation.isFinished {
-                    print("fetchOperation finished")
+//                    print("fetchOperation finished")
                     isFetchingCountOfSelectedAccidents = false
                     countOfSelectedAccidents = fetchOperation.count ?? 0
                     print("# of accidents: \(countOfSelectedAccidents)")
                     break
                 }
-                print("I will wail a little bit...")
+//                print("I will wail a little bit...")
 
                 try await Task.sleep(nanoseconds: 100_000_000) // Polling every 100 ms
             }
-            print("I will return...")
+//            print("I will return...")
             return
         }
     }
