@@ -137,6 +137,27 @@ struct ContentView: View {
                                         .padding(.vertical, 5)    // apply same padding as LookAroundPreview
                                         .opacity((lookAroundScene == nil) ? 1 : 0)
                                 }
+                                .overlay() { // xmark in top right to discard the preview.
+                                    HStack(alignment: .top) {
+                                        Spacer()
+                                        VStack(alignment: .trailing) {
+                                            Button(action: {
+                                                showLookAroundPreview.toggle()
+                                            }) {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .resizable()
+                                                    .frame(width: 30, height: 30)
+                                                    .background(Color.white)
+                                                    .clipShape(Circle())
+                                                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+                                            }
+                                            .padding(.trailing, 15)
+                                            .padding(.top, 10)
+//                                            .padding(horizontal: 10, vertical: 5)
+                                            Spacer()
+                                        }
+                                    }
+                                }
                         }
                         
                         Divider()
