@@ -71,7 +71,12 @@ struct ContentView: View {
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-                                        selectedAccidentStruct = accident
+//                                        selectedAccidentStruct = accident
+                                        if accident == selectedAccidentStruct {
+                                            selectedAccidentStruct = nil
+                                        } else {
+                                            selectedAccidentStruct = accident
+                                        }
                                         getLookAroundScene(forAccident: selectedAccidentStruct)
                                     }) {
                                         Circle()
@@ -90,19 +95,36 @@ struct ContentView: View {
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-                                        selectedAccidentStruct = accident
+//                                        selectedAccidentStruct = accident
+                                        if accident == selectedAccidentStruct {
+                                            selectedAccidentStruct = nil
+                                        } else {
+                                            selectedAccidentStruct = accident
+                                        }
                                         getLookAroundScene(forAccident: selectedAccidentStruct)
                                     }) {
                                         Circle()
                                             .stroke(accident.color, lineWidth: accident == selectedAccidentStruct ? 12 : 5)
                                             .padding()
                                     }
-                                    .disabled(!showLookAroundPreview)  // Button disable (to still have double tap zoom when no preview)
+                                    .overlay() {
+                                        SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
+                                            .opacity(accident == selectedAccidentStruct ? 1 : 0)
+                                    }
+//                                    .disabled(!showLookAroundPreview)  // Button disable (to still have double tap zoom when no preview)
                                 }
                             }
                         }
                     }
                 }
+                // Click on anywhere in the map (which is not the circle of an accident) deselects the previously selected accident.
+                .simultaneousGesture(TapGesture(count: 1).onEnded { // Simultaneous gesture needed for retaining zoom on double click.
+                    selectedAccidentStruct = nil
+//                    if selectedAccidentStruct != nil {
+//                        selectedAccidentStruct = nil
+//                    }
+                })
+
                 .mapControls {
                     MapScaleView()
                 }
@@ -135,7 +157,7 @@ struct ContentView: View {
                                         .clipShape(RoundedRectangle(cornerRadius: 10))
                                         .padding(.horizontal, 10) // apply same padding as LookAroundPreview
                                         .padding(.vertical, 5)    // apply same padding as LookAroundPreview
-                                        .opacity((lookAroundScene == nil) ? 1 : 0)
+                                        .opacity((lookAroundScene == nil || selectedAccidentStruct == nil) ? 1 : 0)
                                 }
                                 .overlay() { // xmark in top right to discard the preview.
                                     HStack(alignment: .top) {
