@@ -25,7 +25,7 @@ extension Accident {
     @NSManaged public var istPkw: Bool
     @NSManaged public var istSonstige: Bool
     @NSManaged public var jahr: Int16
-    @NSManaged public var land: Int16
+//    @NSManaged public var land: Int16
     @NSManaged public var lattitude: Double
     @NSManaged public var lichtVerhaeltnisse: Int16
     @NSManaged public var longitude: Double

@@ -220,7 +220,7 @@ struct ContentView: View {
                 // fires after each finish of moving the fingers plus the delay time, even if the user
                 // continued moving his finger on the map again within the delay time.
                 .onMapCameraChange(frequency: .continuous) { context in
-                    print("==============================  in .onMapCameraChange(...) ============================")
+//                    print("==============================  in .onMapCameraChange(...) ============================")
                     // BEWARE: contex has always a camera, a rect and a region as properties.
                     // We need camera (for its heading property) and region
 
@@ -236,15 +236,15 @@ struct ContentView: View {
                     // This task runs on the main thread
                     task?.cancel()
                     task = Task {
-                        try? await Task.sleep(nanoseconds: 300_000_000) // Delay (debounce) for some time
+                        try? await Task.sleep(nanoseconds: 400_000_000) // Delay (debounce) for some time
                         if Task.isCancelled {
 //                            print("Task cancelled")
                         } else {
-                            print("Task, not cancelled, starting")
+//                            print("Task, not cancelled, starting")
                             // async seems to result in more responsive UI
 //                            viewModel.fetchAccidents2(region: context.region)
                             viewModel.fetchAccidents(region: context.region)
-                            print("In Task, not cancelled, ended")
+//                            print("In Task, not cancelled, ended")
                         }
                     }
                 }
@@ -329,7 +329,7 @@ struct ContentView: View {
             // Update UI each time the initalization state changes (e.g. database deleted, a year is imported or finally fully initialized).
             // Will be called when view appears and each time the initialization state changes. Exactly what we want.
             .task(id: initializationViewModel.initializationState) {
-                print("============================== in .task(of: initializationState) ======================")
+                print("============================== in .task(of: initializationState) at \(Date.now.formatted(date: .complete, time: .complete)) ======================")
                 viewModel.getCountOfSelectedAccidents()
             }
             
@@ -349,7 +349,7 @@ struct ContentView: View {
             // This is not called when returning from InfoView or FilterView (as long as they remain sheets).
             .task() {
                 print("==============================  in .task() ===================================")
-
+                
                 // Request to use current position only if the user had not yet been asked, must run async
                 if locationManager.authorizationStatus == .notDetermined {
                     DispatchQueue.main.async {
@@ -375,7 +375,7 @@ struct ContentView: View {
                 lookAroundScene = try? await request.scene
             }
             print("getLookAroundScene finished")
-        }
+        }        
     }
     
     var infoTextForRegion: String {
@@ -390,15 +390,10 @@ struct ContentView: View {
             } else {
                 text = "\(viewModel.accidentStructs.count) Unfälle im Kartenausschnitt"
             }
-//            #if DEBUG
-//            text = "\(viewModel.countOfAccidentsInRegion) Unfälle im Kartenausschnitt (\(viewModel.accidents.count) angezeigt)"
-//            #endif
         }
-//        print("Mapcamera: style standard: \(mapStyleIsStandard), heading is \(String(describing: mapCamera?.heading)), pitch is \(String(describing: mapCamera?.pitch)) ")
         return text
     }
     
-
 }
 
 //struct ContentView_Previews: PreviewProvider {

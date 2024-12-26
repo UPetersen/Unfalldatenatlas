@@ -103,8 +103,7 @@ final class InitializationViewModel: ObservableObject {
         let countRequest = Accident.fetchRequest()
         let totalCount =  try? viewContext.count(for: countRequest)
         
-        countOfAccidentsInDatabase = (try? viewContext.count(for: countRequest))!
-        
+        countOfAccidentsInDatabase = totalCount!
         print("Initalisierung. Total Count ist: \(String(describing: totalCount))")
         
         //
@@ -114,10 +113,6 @@ final class InitializationViewModel: ObservableObject {
             self.initializationState = .initializationRequired
             Task.detached(priority: .high) {
                 do {
-                    // WARNING:
-                    // TODO: nur für das Testen auskommentiert.
-                    //                                        countOfAccidentsInDatabase = totalCount ?? 0
-                    
                     try await self.loadDataIntoDatabase()
                     
                 } catch {
@@ -247,7 +242,7 @@ final class InitializationViewModel: ObservableObject {
         switch year {
         case "2016":
             accident.accidentObjectID = Int32(csvComponents[1])! // Unterschied 2016
-            accident.land = Int16(csvComponents[2])! // Unterschied 2018 und 2019
+//            accident.land = Int16(csvComponents[2])! // Unterschied 2018 und 2019
             //            accident.regierungsBezirk = Int16(csvComponents[3])!
             //            accident.kreis = Int16(csvComponents[4])!
             //            accident.gemeinde = Int16(csvComponents[5])!
@@ -272,7 +267,7 @@ final class InitializationViewModel: ObservableObject {
             accident.lattitude = Double(csvComponents[24].replacingOccurrences(of: ",", with: "."))!
         case "2017":
             accident.accidentObjectID = Int32(csvComponents[0])!
-            accident.land = Int16(csvComponents[2])!
+//            accident.land = Int16(csvComponents[2])!
             //            accident.regierungsBezirk = Int16(csvComponents[3])!
             //            accident.kreis = Int16(csvComponents[4])!
             //            accident.gemeinde = Int16(csvComponents[5])!
@@ -302,7 +297,7 @@ final class InitializationViewModel: ObservableObject {
             accident.lattitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
         case "2018":
             accident.accidentObjectID = Int32(csvComponents[0])!
-            accident.land = Int16(csvComponents[1])!
+//            accident.land = Int16(csvComponents[1])!
             //            accident.regierungsBezirk = Int16(csvComponents[2])!
             //            accident.kreis = Int16(csvComponents[3])!
             //            accident.gemeinde = Int16(csvComponents[4])!
@@ -329,7 +324,7 @@ final class InitializationViewModel: ObservableObject {
             accident.lattitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
         case "2019":
             accident.accidentObjectID = Int32(csvComponents[0])!
-            accident.land = Int16(csvComponents[1])!
+//            accident.land = Int16(csvComponents[1])!
             //            accident.regierungsBezirk = Int16(csvComponents[2])!
             //            accident.kreis = Int16(csvComponents[3])!
             //            accident.gemeinde = Int16(csvComponents[4])!
@@ -356,7 +351,7 @@ final class InitializationViewModel: ObservableObject {
             accident.strassenZustand = Int16(csvComponents[23])!
         case "2020":
             accident.accidentObjectID = Int32(csvComponents[0])!
-            accident.land = Int16(csvComponents[2])!
+//            accident.land = Int16(csvComponents[2])!
             //            accident.regierungsBezirk = Int16(csvComponents[3])!
             //            accident.kreis = Int16(csvComponents[4])!
             //            accident.gemeinde = Int16(csvComponents[5])!
@@ -384,7 +379,7 @@ final class InitializationViewModel: ObservableObject {
             // 2022 is of equal order as 2021 (although one name in the csv file is different).
             // Same for 2023 (although it has one additional column at the end)accident.accidentObjectID = Int32(csvComponents[0])!
             accident.accidentObjectID = Int32(csvComponents[0])!
-            accident.land = Int16(csvComponents[2])!
+//            accident.land = Int16(csvComponents[2])!
             //            accident.regierungsBezirk = Int16(csvComponents[3])!
             //            accident.kreis = Int16(csvComponents[4])!
             //            accident.gemeinde = Int16(csvComponents[5])!

@@ -10,6 +10,9 @@ import MapKit
 import SwiftUI
 import CoreData
 
+/// Struct that contains the accident data that is displayed to the user.
+///
+/// This is a mirror, or say copy, of the core data class Accident which is used by the core data store. Contrary to NSMangedObject's it is Sendable. Introduced when changing to Swift 6.
 struct AccidentStruct: Sendable, Identifiable {
 //    let id: UUID = UUID()
     let id: NSManagedObjectID
@@ -22,7 +25,7 @@ struct AccidentStruct: Sendable, Identifiable {
     let istPkw: Bool
     let istSonstige: Bool
     let jahr: Int16
-    let land: Int16
+//    let land: Int16
     let lattitude: Double
     let lichtVerhaeltnisse: Int16
     let longitude: Double

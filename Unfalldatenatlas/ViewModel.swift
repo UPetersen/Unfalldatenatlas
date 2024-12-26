@@ -22,7 +22,7 @@ struct AccidentDataFilter: Equatable {
     var istSonstige = IstSonstige.keineAuswahl
     var jahr = UnfallJahr.keineAuswahl
 //    var kreis: NSPredicate?
-    var land = Land.keineAuswahl
+//    var land = Land.keineAuswahl
     var lichtVerhaeltnisse = LichtVerhaeltnisse.keineAuswahl
     var monat = UnfallMonat.keineAuswahl
 //    var regierungsBezirk: NSPredicate?
@@ -47,8 +47,9 @@ struct AccidentDataFilter: Equatable {
                 strassenZustand.predicate,
                 jahr.predicate,
                 monat.predicate,
-                wochentag.predicate,
-                land.predicate
+                wochentag.predicate
+//                wochentag.predicate,
+//                land.predicate
         ].compactMap{$0}
     }
 }
@@ -127,7 +128,7 @@ final class ViewModel: ObservableObject {
             request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.objectID, ascending: true)]
             
             if Task.isCancelled {
-                print("------Task is cancelled in new fetchAccidents 0 ----------")
+//                print("------Task is cancelled in new fetchAccidents 0 ----------")
                 return
             }
             
@@ -136,7 +137,7 @@ final class ViewModel: ObservableObject {
             var accidents: [Accident] = []
             var accidentStructs: [AccidentStruct] = []
             try? newContext.performAndWait {
-                print("Im Context")
+//                print("Im Context")
                 accidents =  try newContext.fetch(request)
                 
                 for accident in accidents {
@@ -151,7 +152,7 @@ final class ViewModel: ObservableObject {
                             istPkw: accident.istPkw,
                             istSonstige: accident.istSonstige,
                             jahr: accident.jahr,
-                            land: accident.land,
+//                            land: accident.land,
                             lattitude: accident.lattitude,
                             lichtVerhaeltnisse: accident.lichtVerhaeltnisse,
                             longitude: accident.longitude,
@@ -170,19 +171,19 @@ final class ViewModel: ObservableObject {
             }
             
             if Task.isCancelled {
-                print("------Task is cancelled in new fetchAccidents 1 ----------")
+//                print("------Task is cancelled in new fetchAccidents 1 ----------")
                 return
             }
             
             
             Task { @MainActor [unowned self, accidentStructs ] in
                 self.accidentStructs = accidentStructs
-                print("Count of accidents is: \(accidentStructs.count)")
+//                print("Count of accidents is: \(accidentStructs.count)")
 
                 self.isFetchingAccidents = false
             }
             
-            await print("AccidentDataFilters.predicates: \(self.accidentDataFilters.predicates)")
+//            await print("AccidentDataFilters.predicates: \(self.accidentDataFilters.predicates)")
         }
     }
 
@@ -247,7 +248,6 @@ final class ViewModel: ObservableObject {
     }
 
     
-    
     func getCountOfSelectedAccidents() {
         
         isFetchingCountOfSelectedAccidents = true
@@ -277,7 +277,7 @@ final class ViewModel: ObservableObject {
 //                    print("fetchOperation finished")
                     isFetchingCountOfSelectedAccidents = false
                     countOfSelectedAccidents = fetchOperation.count ?? 0
-                    print("# of accidents: \(countOfSelectedAccidents)")
+//                    print("# of accidents: \(countOfSelectedAccidents)")
                     break
                 }
 //                print("I will wail a little bit...")
@@ -373,7 +373,7 @@ class FetchOperation: Operation, @unchecked Sendable {
                                     istPkw: accident.istPkw,
                                     istSonstige: accident.istSonstige,
                                     jahr: accident.jahr,
-                                    land: accident.land,
+//                                    land: accident.land,
                                     lattitude: accident.lattitude,
                                     lichtVerhaeltnisse: accident.lichtVerhaeltnisse,
                                     longitude: accident.longitude,
