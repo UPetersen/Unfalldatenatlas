@@ -255,12 +255,34 @@ final class InitializationViewModel: ObservableObject {
             accident.unfallTyp1 = Int16(csvComponents[12])!
             accident.lichtVerhaeltnisse = Int16(csvComponents[13])!
             accident.strassenZustand = Int16(csvComponents[14])!
-            accident.istFahrrad = csvComponents[15] == "1" ? true : false
-            accident.istPkw = csvComponents[16] == "1" ? true : false
-            accident.istFussgaenger = csvComponents[17] == "1" ? true : false
-            accident.istKrad = csvComponents[18] == "1" ? true : false
-            accident.istGueterKfz = csvComponents[19] == "1" ? true : false
-            accident.istSonstige = csvComponents[20] == "1" ? true : false
+            
+//            let values = [
+//                "fahrrad": csvComponents[15],
+//                "pkw": csvComponents[16],
+//                "fussgaenger": csvComponents[17],
+//                "krad": csvComponents[18],
+//                "gueterKfz": csvComponents[19],
+//                "sonstige": csvComponents[20]
+//            ]
+//            let mask = VehicleMask.from(stringFlags: values)
+//            accident.vehicleMask = mask.rawValue
+            
+            var mask: Int16 = 0
+            if csvComponents[15] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+            if csvComponents[16] == "1" { mask |= VehicleMask.pkw.rawValue }
+            if csvComponents[17] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+            if csvComponents[18] == "1" { mask |= VehicleMask.krad.rawValue }
+            if csvComponents[19] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+            if csvComponents[20] == "1" { mask |= VehicleMask.sonstige.rawValue }
+            accident.vehicleMask = mask
+            
+//            accident.istFahrrad = csvComponents[15] == "1" ? true : false
+//            accident.istPkw = csvComponents[16] == "1" ? true : false
+//            accident.istFussgaenger = csvComponents[17] == "1" ? true : false
+//            accident.istKrad = csvComponents[18] == "1" ? true : false
+//            accident.istGueterKfz = csvComponents[19] == "1" ? true : false
+//            accident.istSonstige = csvComponents[20] == "1" ? true : false
+//            
             //            accident.lineRefX = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
             //            accident.lineRefY = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
             accident.longitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
@@ -279,14 +301,32 @@ final class InitializationViewModel: ObservableObject {
             accident.unfallArt = Int16(csvComponents[11])!
             accident.unfallTyp1 = Int16(csvComponents[12])!
             
-            accident.istFahrrad = csvComponents[13] == "1" ? true : false
-            accident.istPkw = csvComponents[14] == "1" ? true : false
-            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
-            accident.istKrad = csvComponents[16] == "1" ? true : false
-            
-            // TODO: how to handle this property, when information is not present? Make optional?
-            accident.istGueterKfz = false // Column not present in 2017 data -> denote as false
-            accident.istSonstige = csvComponents[17] == "1" ? true : false
+//            accident.istFahrrad = csvComponents[13] == "1" ? true : false
+//            accident.istPkw = csvComponents[14] == "1" ? true : false
+//            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
+//            accident.istKrad = csvComponents[16] == "1" ? true : false
+//            // TODO: how to handle this property, when information is not present? Make optional?
+//            accident.istGueterKfz = false // Column not present in 2017 data -> denote as false
+//            accident.istSonstige = csvComponents[17] == "1" ? true : false
+
+//            let values = [
+//                "fahrrad": csvComponents[13],
+//                "pkw": csvComponents[14],
+//                "fussgaenger": csvComponents[15],
+//                "krad": csvComponents[16],
+//                "gueterKfz": "0",
+//                "sonstige": csvComponents[17]
+//            ]
+//            let mask = VehicleMask.from(stringFlags: values)
+//            accident.vehicleMask = mask.rawValue
+            var mask: Int16 = 0
+            if csvComponents[13] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+            if csvComponents[14] == "1" { mask |= VehicleMask.pkw.rawValue }
+            if csvComponents[15] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+            if csvComponents[16] == "1" { mask |= VehicleMask.krad.rawValue }
+//            if csvComponents[17] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+            if csvComponents[17] == "1" { mask |= VehicleMask.sonstige.rawValue }
+            accident.vehicleMask = mask
             
             accident.lichtVerhaeltnisse = Int16(csvComponents[18])!
             accident.strassenZustand = Int16(csvComponents[19])!
@@ -310,13 +350,32 @@ final class InitializationViewModel: ObservableObject {
             accident.unfallTyp1 = Int16(csvComponents[11])!
             accident.lichtVerhaeltnisse = Int16(csvComponents[12])!
             
-            accident.istFahrrad = csvComponents[13] == "1" ? true : false
-            accident.istPkw = csvComponents[14] == "1" ? true : false
-            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
-            accident.istKrad = csvComponents[16] == "1" ? true : false
-            accident.istGueterKfz = csvComponents[17] == "1" ? true : false
-            
-            accident.istSonstige = csvComponents[18] == "1" ? true : false
+//            accident.istFahrrad = csvComponents[13] == "1" ? true : false
+//            accident.istPkw = csvComponents[14] == "1" ? true : false
+//            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
+//            accident.istKrad = csvComponents[16] == "1" ? true : false
+//            accident.istGueterKfz = csvComponents[17] == "1" ? true : false
+//            accident.istSonstige = csvComponents[18] == "1" ? true : false
+
+//            let values = [
+//                "fahrrad": csvComponents[13],
+//                "pkw": csvComponents[14],
+//                "fussgaenger": csvComponents[15],
+//                "krad": csvComponents[16],
+//                "gueterKfz": csvComponents[17],
+//                "sonstige": csvComponents[18]
+//            ]
+//            let mask = VehicleMask.from(stringFlags: values)
+//            accident.vehicleMask = mask.rawValue
+            var mask: Int16 = 0
+            if csvComponents[13] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+            if csvComponents[14] == "1" { mask |= VehicleMask.pkw.rawValue }
+            if csvComponents[15] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+            if csvComponents[16] == "1" { mask |= VehicleMask.krad.rawValue }
+            if csvComponents[17] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+            if csvComponents[18] == "1" { mask |= VehicleMask.sonstige.rawValue }
+            accident.vehicleMask = mask
+
             accident.strassenZustand = Int16(csvComponents[19])!
             //            accident.lineRefX = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
             //            accident.lineRefY = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
@@ -337,13 +396,31 @@ final class InitializationViewModel: ObservableObject {
             accident.unfallTyp1 = Int16(csvComponents[11])!
             accident.lichtVerhaeltnisse = Int16(csvComponents[12])!
             
-            accident.istFahrrad = csvComponents[13] == "1" ? true : false
-            accident.istPkw = csvComponents[14] == "1" ? true : false
-            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
-            accident.istKrad = csvComponents[16] == "1" ? true : false
-            accident.istGueterKfz = csvComponents[17] == "1" ? true : false
-            
-            accident.istSonstige = csvComponents[18] == "1" ? true : false
+//            accident.istFahrrad = csvComponents[13] == "1" ? true : false
+//            accident.istPkw = csvComponents[14] == "1" ? true : false
+//            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
+//            accident.istKrad = csvComponents[16] == "1" ? true : false
+//            accident.istGueterKfz = csvComponents[17] == "1" ? true : false
+//            accident.istSonstige = csvComponents[18] == "1" ? true : false
+//            let values = [
+//                "fahrrad": csvComponents[13],
+//                "pkw": csvComponents[14],
+//                "fussgaenger": csvComponents[15],
+//                "krad": csvComponents[16],
+//                "gueterKfz": csvComponents[17],
+//                "sonstige": csvComponents[18]
+//            ]
+//            let mask = VehicleMask.from(stringFlags: values)
+//            accident.vehicleMask = mask.rawValue
+            var mask: Int16 = 0
+            if csvComponents[13] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+            if csvComponents[14] == "1" { mask |= VehicleMask.pkw.rawValue }
+            if csvComponents[15] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+            if csvComponents[16] == "1" { mask |= VehicleMask.krad.rawValue }
+            if csvComponents[17] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+            if csvComponents[18] == "1" { mask |= VehicleMask.sonstige.rawValue }
+            accident.vehicleMask = mask
+
             //            accident.lineRefX = Double(csvComponents[19].replacingOccurrences(of: ",", with: "."))!
             //            accident.lineRefY = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
             accident.longitude = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
@@ -364,12 +441,31 @@ final class InitializationViewModel: ObservableObject {
             accident.unfallTyp1 = Int16(csvComponents[12])!
             accident.lichtVerhaeltnisse = Int16(csvComponents[13])!
             
-            accident.istFahrrad = csvComponents[14] == "1" ? true : false
-            accident.istPkw = csvComponents[15] == "1" ? true : false
-            accident.istFussgaenger = csvComponents[16] == "1" ? true : false
-            accident.istKrad = csvComponents[17] == "1" ? true : false
-            accident.istGueterKfz = csvComponents[18] == "1" ? true : false
-            accident.istSonstige = csvComponents[19] == "1" ? true : false
+//            accident.istFahrrad = csvComponents[14] == "1" ? true : false
+//            accident.istPkw = csvComponents[15] == "1" ? true : false
+//            accident.istFussgaenger = csvComponents[16] == "1" ? true : false
+//            accident.istKrad = csvComponents[17] == "1" ? true : false
+//            accident.istGueterKfz = csvComponents[18] == "1" ? true : false
+//            accident.istSonstige = csvComponents[19] == "1" ? true : false
+//            let values = [
+//                "fahrrad": csvComponents[14],
+//                "pkw": csvComponents[15],
+//                "fussgaenger": csvComponents[16],
+//                "krad": csvComponents[17],
+//                "gueterKfz": csvComponents[18],
+//                "sonstige": csvComponents[19]
+//            ]
+//            let mask = VehicleMask.from(stringFlags: values)
+//            accident.vehicleMask = mask.rawValue
+            var mask: Int16 = 0
+            if csvComponents[14] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+            if csvComponents[15] == "1" { mask |= VehicleMask.pkw.rawValue }
+            if csvComponents[16] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+            if csvComponents[17] == "1" { mask |= VehicleMask.krad.rawValue }
+            if csvComponents[18] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+            if csvComponents[19] == "1" { mask |= VehicleMask.sonstige.rawValue }
+            accident.vehicleMask = mask
+
             //            accident.lineRefX = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
             //            accident.lineRefY = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
             accident.longitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
@@ -392,12 +488,32 @@ final class InitializationViewModel: ObservableObject {
             accident.unfallTyp1 = Int16(csvComponents[12])!
             accident.lichtVerhaeltnisse = Int16(csvComponents[13])!
             accident.strassenZustand = Int16(csvComponents[14])!
-            accident.istFahrrad = csvComponents[15] == "1" ? true : false
-            accident.istPkw = csvComponents[16] == "1" ? true : false
-            accident.istFussgaenger = csvComponents[17] == "1" ? true : false
-            accident.istKrad = csvComponents[18] == "1" ? true : false
-            accident.istGueterKfz = csvComponents[19] == "1" ? true : false
-            accident.istSonstige = csvComponents[20] == "1" ? true : false
+            
+//            accident.istFahrrad = csvComponents[15] == "1" ? true : false
+//            accident.istPkw = csvComponents[16] == "1" ? true : false
+//            accident.istFussgaenger = csvComponents[17] == "1" ? true : false
+//            accident.istKrad = csvComponents[18] == "1" ? true : false
+//            accident.istGueterKfz = csvComponents[19] == "1" ? true : false
+//            accident.istSonstige = csvComponents[20] == "1" ? true : false
+//            let values = [
+//                "fahrrad": csvComponents[15],
+//                "pkw": csvComponents[16],
+//                "fussgaenger": csvComponents[17],
+//                "krad": csvComponents[18],
+//                "gueterKfz": csvComponents[19],
+//                "sonstige": csvComponents[20]
+//            ]
+//            let mask = VehicleMask.from(stringFlags: values)
+//            accident.vehicleMask = mask.rawValue
+            var mask: Int16 = 0
+            if csvComponents[15] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+            if csvComponents[16] == "1" { mask |= VehicleMask.pkw.rawValue }
+            if csvComponents[17] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+            if csvComponents[18] == "1" { mask |= VehicleMask.krad.rawValue }
+            if csvComponents[19] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+            if csvComponents[20] == "1" { mask |= VehicleMask.sonstige.rawValue }
+            accident.vehicleMask = mask
+
             //            accident.lineRefX = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
             //            accident.lineRefY = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
             accident.longitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!

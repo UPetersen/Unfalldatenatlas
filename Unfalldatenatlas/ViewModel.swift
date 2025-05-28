@@ -14,12 +14,14 @@ import MapKit
 
 struct AccidentDataFilter: Equatable {
 //    var gemeinde: NSPredicate?
+    
     var istFahrrad = IstFahrrad.keineAuswahl
     var istFussgaenger = IstFussgaenger.keineAuswahl
     var istGueterKfz = IstGueterKfz.keineAuswahl
     var istKrad = IstKrad.keineAuswahl
     var istPkw = IstPkw.keineAuswahl
     var istSonstige = IstSonstige.keineAuswahl
+    
     var jahr = UnfallJahr.keineAuswahl
 //    var kreis: NSPredicate?
 //    var land = Land.keineAuswahl
@@ -34,12 +36,30 @@ struct AccidentDataFilter: Equatable {
     var wochentag = UnfallWochentag.keineAuswahl
     
     var predicates: [NSPredicate] {
-        return [istFahrrad.predicate,
-                istFussgaenger.predicate,
-                istGueterKfz.predicate,
-                istKrad.predicate,
-                istPkw.predicate,
-                istSonstige.predicate,
+//        return [istFahrrad.predicate,
+//                istFussgaenger.predicate,
+//                istGueterKfz.predicate,
+//                istKrad.predicate,
+//                istPkw.predicate,
+//                istSonstige.predicate,
+//                unfallArt.predicate,
+//                unfallKategorie.predicate,
+//                unfallTyp1.predicate,
+//                lichtVerhaeltnisse.predicate,
+//                strassenZustand.predicate,
+//                jahr.predicate,
+//                monat.predicate,
+//                wochentag.predicate
+////                wochentag.predicate,
+////                land.predicate
+//        ].compactMap{$0}
+        return [
+            istFahrrad.predicateNeu,
+                istFussgaenger.predicateNeu,
+                istGueterKfz.predicateNeu,
+                istKrad.predicateNeu,
+                istPkw.predicateNeu,
+                istSonstige.predicateNeu,
                 unfallArt.predicate,
                 unfallKategorie.predicate,
                 unfallTyp1.predicate,
@@ -145,12 +165,13 @@ final class ViewModel: ObservableObject {
                         AccidentStruct(
                             id: accident.objectID,
                             accidentObjectID: accident.accidentObjectID,
-                            istFahrrad: accident.istFahrrad,
-                            istFussgaenger: accident.istFussgaenger,
-                            istGueterKfz: accident.istGueterKfz,
-                            istKrad: accident.istKrad,
-                            istPkw: accident.istPkw,
-                            istSonstige: accident.istSonstige,
+                            vehicleMask: accident.vehicleMask,
+//                            istFahrrad: accident.istFahrrad,
+//                            istFussgaenger: accident.istFussgaenger,
+//                            istGueterKfz: accident.istGueterKfz,
+//                            istKrad: accident.istKrad,
+//                            istPkw: accident.istPkw,
+//                            istSonstige: accident.istSonstige,
                             jahr: accident.jahr,
 //                            land: accident.land,
                             lattitude: accident.lattitude,
@@ -366,12 +387,13 @@ class FetchOperation: Operation, @unchecked Sendable {
                                 AccidentStruct(
                                     id: accident.objectID,
                                     accidentObjectID: accident.accidentObjectID,
-                                    istFahrrad: accident.istFahrrad,
-                                    istFussgaenger: accident.istFussgaenger,
-                                    istGueterKfz: accident.istGueterKfz,
-                                    istKrad: accident.istKrad,
-                                    istPkw: accident.istPkw,
-                                    istSonstige: accident.istSonstige,
+                                    vehicleMask: accident.vehicleMask,
+//                                    istFahrrad: accident.istFahrrad,
+//                                    istFussgaenger: accident.istFussgaenger,
+//                                    istGueterKfz: accident.istGueterKfz,
+//                                    istKrad: accident.istKrad,
+//                                    istPkw: accident.istPkw,
+//                                    istSonstige: accident.istSonstige,
                                     jahr: accident.jahr,
 //                                    land: accident.land,
                                     lattitude: accident.lattitude,

@@ -33,6 +33,7 @@
 		C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67874752997B7260015A20C /* MKCoordinateRegion+Extension.swift */; };
 		C67972232AA730A700F85251 /* Unfallorte2022_LinRef.csv in Resources */ = {isa = PBXBuildFile; fileRef = C67972222AA730A700F85251 /* Unfallorte2022_LinRef.csv */; };
 		C695098C29A66FF600067384 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C695098B29A66FF600067384 /* LocationManager.swift */; };
+		C6A4385D2DE76C74004DF22C /* VehicleMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A4385C2DE76C60004DF22C /* VehicleMask.swift */; };
 		C6ADE9612AC8202B0096D7C8 /* SymbolsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6ADE9602AC8202B0096D7C8 /* SymbolsTextView.swift */; };
 		C6B3C31D2CD4AD01006397B8 /* SplashscreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B3C31C2CD4AD01006397B8 /* SplashscreenView.swift */; };
 		C6CA9F64297DBCBC000D9E8B /* UnfalldatenatlasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6CA9F63297DBCBC000D9E8B /* UnfalldatenatlasApp.swift */; };
@@ -76,6 +77,7 @@
 		C604E927298FF4F600E3A078 /* Unfallorte2016_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2016_LinRef.csv; sourceTree = "<group>"; };
 		C604E934299009AF00E3A078 /* InitializationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationView.swift; sourceTree = "<group>"; };
 		C604E937299009CB00E3A078 /* InitalizationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitalizationViewModel.swift; sourceTree = "<group>"; };
+		C63146042DE4FF7200CD7E54 /* Unfalldatenatlas 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Unfalldatenatlas 6.xcdatamodel"; sourceTree = "<group>"; };
 		C640096A2AD464F000988E56 /* CountOfSelectedAccidentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountOfSelectedAccidentsView.swift; sourceTree = "<group>"; };
 		C642D9D9299ACF8300623663 /* Unfalldatenatlas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Unfalldatenatlas.entitlements; sourceTree = "<group>"; };
 		C642DA2529A20CEC00623663 /* MapConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapConfigurationView.swift; path = Unfalldatenatlas/MapConfigurationView.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 		C67972222AA730A700F85251 /* Unfallorte2022_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2022_LinRef.csv; sourceTree = "<group>"; };
 		C67F53F12CD611BD00744A7C /* Unfalldatenatlas 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Unfalldatenatlas 5.xcdatamodel"; sourceTree = "<group>"; };
 		C695098B29A66FF600067384 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LocationManager.swift; path = Unfalldatenatlas/LocationManager.swift; sourceTree = "<group>"; };
+		C6A4385C2DE76C60004DF22C /* VehicleMask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VehicleMask.swift; sourceTree = "<group>"; };
 		C6ADE9602AC8202B0096D7C8 /* SymbolsTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsTextView.swift; sourceTree = SOURCE_ROOT; };
 		C6B3C31C2CD4AD01006397B8 /* SplashscreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashscreenView.swift; sourceTree = "<group>"; };
 		C6CA9F60297DBCBC000D9E8B /* Unfalldatenatlas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Unfalldatenatlas.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -179,6 +182,7 @@
 		C6CA9F62297DBCBC000D9E8B /* Unfalldatenatlas */ = {
 			isa = PBXGroup;
 			children = (
+				C6A4385C2DE76C60004DF22C /* VehicleMask.swift */,
 				C649EB1E2CC3D71100C1DC62 /* AccidentStruct.swift */,
 				C6497C092AEEA8E6008E3D98 /* AccdientPropertiesEnums.swift */,
 				C6ADE9602AC8202B0096D7C8 /* SymbolsTextView.swift */,
@@ -375,6 +379,7 @@
 				C668DDBD29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodeld in Sources */,
 				C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */,
 				C6D0D023298B0AF0000572C3 /* FilterView.swift in Sources */,
+				C6A4385D2DE76C74004DF22C /* VehicleMask.swift in Sources */,
 				C6ADE9612AC8202B0096D7C8 /* SymbolsTextView.swift in Sources */,
 				C649EB1F2CC3D71100C1DC62 /* AccidentStruct.swift in Sources */,
 				C6CA9F6D297DBCBC000D9E8B /* Persistence.swift in Sources */,
@@ -752,13 +757,14 @@
 		C668DDBA29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C63146042DE4FF7200CD7E54 /* Unfalldatenatlas 6.xcdatamodel */,
 				C67F53F12CD611BD00744A7C /* Unfalldatenatlas 5.xcdatamodel */,
 				C64EC6982C9CFC5F00B061F7 /* Unfalldatenatlas 4.xcdatamodel */,
 				C65AE4172AB475C8009FFB26 /* Unfalldatenatlas 3.xcdatamodel */,
 				C668DDBB29A7D09D00D6F011 /* Unfalldatenatlas 2.xcdatamodel */,
 				C668DDBC29A7D09D00D6F011 /* Unfalldatenatlas.xcdatamodel */,
 			);
-			currentVersion = C67F53F12CD611BD00744A7C /* Unfalldatenatlas 5.xcdatamodel */;
+			currentVersion = C63146042DE4FF7200CD7E54 /* Unfalldatenatlas 6.xcdatamodel */;
 			path = Unfalldatenatlas.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

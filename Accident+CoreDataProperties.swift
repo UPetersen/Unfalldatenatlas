@@ -18,12 +18,13 @@ extension Accident {
 
     @NSManaged public var accidentObjectID: Int32
 //    @NSManaged public var countOfAccidentsBy100000: Int32
-    @NSManaged public var istFahrrad: Bool
-    @NSManaged public var istFussgaenger: Bool
-    @NSManaged public var istGueterKfz: Bool
-    @NSManaged public var istKrad: Bool
-    @NSManaged public var istPkw: Bool
-    @NSManaged public var istSonstige: Bool
+    @NSManaged public var vehicleMask: Int16
+//    @NSManaged public var istFahrrad: Bool
+//    @NSManaged public var istFussgaenger: Bool
+//    @NSManaged public var istGueterKfz: Bool
+//    @NSManaged public var istKrad: Bool
+//    @NSManaged public var istPkw: Bool
+//    @NSManaged public var istSonstige: Bool
     @NSManaged public var jahr: Int16
 //    @NSManaged public var land: Int16
     @NSManaged public var lattitude: Double

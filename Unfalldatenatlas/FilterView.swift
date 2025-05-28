@@ -65,7 +65,7 @@ struct FilterView: View {
                 Picker("Pkwbeteiligung", selection: $accidentDataFilters.istPkw) {
                     ForEach(IstPkw.allCases, id: \.id) { Text($0.sectionText).tag($0) }
                 }
-                
+
                 // Krad-Beteiligung
                 Picker("Kraftradbeteiligung", selection: $accidentDataFilters.istKrad) {
                     ForEach(IstKrad.allCases, id: \.id) { Text($0.sectionText).tag($0) }

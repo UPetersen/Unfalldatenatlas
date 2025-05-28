@@ -18,12 +18,13 @@ struct AccidentStruct: Sendable, Identifiable {
     let id: NSManagedObjectID
     let accidentObjectID: Int32
     //    let countOfAccidentsBy100000: Int32
-    let istFahrrad: Bool
-    let istFussgaenger: Bool
-    let istGueterKfz: Bool
-    let istKrad: Bool
-    let istPkw: Bool
-    let istSonstige: Bool
+    let vehicleMask: Int16
+//    let istFahrrad: Bool
+//    let istFussgaenger: Bool
+//    let istGueterKfz: Bool
+//    let istKrad: Bool
+//    let istPkw: Bool
+//    let istSonstige: Bool
     let jahr: Int16
 //    let land: Int16
     let lattitude: Double

@@ -377,14 +377,28 @@ enum IstSonstige: Int, Identifiable, CaseIterable, Equatable {
     case mitSonstige = 1
     
     var id: Self { self }
-    var predicate: NSPredicate? {
+//    var predicate: NSPredicate? {
+//        switch self {
+//        case .keineAuswahl:
+//            return nil
+//        default:
+//            return NSPredicate(format: "istSonstige == %i", self.rawValue)
+//        }
+//    }
+    
+    var predicateNeu: NSPredicate? {
         switch self {
         case .keineAuswahl:
             return nil
-        default:
-            return NSPredicate(format: "istSonstige == %i", self.rawValue)
+        case .mitSonstige:
+            let mask = VehicleMask.sonstige.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) != 0", mask)
+        case .ohneSonstige:
+            let mask = VehicleMask.sonstige.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) == 0", mask)
         }
     }
+
     
     var sectionText: String {
         switch self {
@@ -401,14 +415,28 @@ enum IstGueterKfz: Int, Identifiable, CaseIterable, Equatable {
     case mitGueterKfz = 1
     
     var id: Self { self }
-    var predicate: NSPredicate? {
+//    var predicate: NSPredicate? {
+//        switch self {
+//        case .keineAuswahl:
+//            return nil
+//        default:
+//            return NSPredicate(format: "istGueterKfz == %i", self.rawValue)
+//        }
+//    }
+    
+    var predicateNeu: NSPredicate? {
         switch self {
         case .keineAuswahl:
             return nil
-        default:
-            return NSPredicate(format: "istGueterKfz == %i", self.rawValue)
+        case .mitGueterKfz:
+            let mask = VehicleMask.gueterKfz.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) != 0", mask)
+        case .ohneGueterKfz:
+            let mask = VehicleMask.gueterKfz.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) == 0", mask)
         }
     }
+
     
     var sectionText: String {
         switch self {
@@ -426,14 +454,28 @@ enum IstKrad: Int, Identifiable, CaseIterable, Equatable {
     case mitKrad = 1
     
     var id: Self { self }
-    var predicate: NSPredicate? {
+//    var predicate: NSPredicate? {
+//        switch self {
+//        case .keineAuswahl:
+//            return nil
+//        default:
+//            return NSPredicate(format: "istKrad == %i", self.rawValue)
+//        }
+//    }
+    
+    var predicateNeu: NSPredicate? {
         switch self {
         case .keineAuswahl:
             return nil
-        default:
-            return NSPredicate(format: "istKrad == %i", self.rawValue)
+        case .mitKrad:
+            let mask = VehicleMask.krad.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) != 0", mask)
+        case .ohneKrad:
+            let mask = VehicleMask.krad.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) == 0", mask)
         }
     }
+
     
     var sectionText: String {
         switch self {
@@ -450,12 +492,25 @@ enum IstPkw: Int, Identifiable, CaseIterable, Equatable {
     case mitPkw = 1
     
     var id: Self { self }
-    var predicate: NSPredicate? {
+//    var predicate: NSPredicate? {
+//        switch self {
+//        case .keineAuswahl:
+//            return nil
+//        default:
+//            return NSPredicate(format: "istPkw == %i", self.rawValue)
+//        }
+//    }
+    
+    var predicateNeu: NSPredicate? {
         switch self {
         case .keineAuswahl:
             return nil
-        default:
-            return NSPredicate(format: "istPkw == %i", self.rawValue)
+        case .mitPkw:
+            let mask = VehicleMask.pkw.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) != 0", mask)
+        case .ohnePkw:
+            let mask = VehicleMask.pkw.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) == 0", mask)
         }
     }
     
@@ -474,15 +529,29 @@ enum IstFahrrad: Int, Identifiable, CaseIterable, Equatable {
     case mitFahrrad = 1
     
     var id: Self { self }
-    var predicate: NSPredicate? {
+//    var predicate: NSPredicate? {
+//        switch self {
+//        case .keineAuswahl:
+//            return nil
+//        default:
+//            return NSPredicate(format: "istFahrrad == %i", self.rawValue)
+//        }
+//    }
+    
+    var predicateNeu: NSPredicate? {
         switch self {
         case .keineAuswahl:
             return nil
-        default:
-            return NSPredicate(format: "istFahrrad == %i", self.rawValue)
+        case .mitFahrrad:
+            let mask = VehicleMask.fahrrad.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) != 0", mask)
+        case .ohneFahrrad:
+            let mask = VehicleMask.fahrrad.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) == 0", mask)
         }
     }
-    
+
+
     var sectionText: String {
         switch self {
         case .keineAuswahl: return "Keine Auswahl"
@@ -498,14 +567,28 @@ enum IstFussgaenger: Int, Identifiable, CaseIterable, Equatable{
     case mitFussgaenger = 1
     
     var id: Self { self }
-    var predicate: NSPredicate? {
+//    var predicate: NSPredicate? {
+//        switch self {
+//        case .keineAuswahl:
+//            return nil
+//        default:
+//            return NSPredicate(format: "istFussgaenger == %i", self.rawValue)
+//        }
+//    }
+    
+    var predicateNeu: NSPredicate? {
         switch self {
         case .keineAuswahl:
             return nil
-        default:
-            return NSPredicate(format: "istFussgaenger == %i", self.rawValue)
+        case .mitFussgaenger:
+            let mask = VehicleMask.fussgaenger.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) != 0", mask)
+        case .ohneFussgaenger:
+            let mask = VehicleMask.fussgaenger.rawValue
+            return NSPredicate(format: "(vehicleMask & %d) == 0", mask)
         }
     }
+
     
     var sectionText: String {
         switch self {
