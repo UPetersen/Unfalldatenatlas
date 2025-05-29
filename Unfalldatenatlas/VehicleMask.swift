@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct VehicleMask: OptionSet {
+struct VehicleMask: OptionSet, Hashable {
     let rawValue: Int16
 
     static let pkw         = VehicleMask(rawValue: 1 << 0)

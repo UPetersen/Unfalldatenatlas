@@ -27,7 +27,7 @@ struct AccidentStruct: Sendable, Identifiable {
 //    let istSonstige: Bool
     let jahr: Int16
 //    let land: Int16
-    let lattitude: Double
+    let latitude: Double
     let lichtVerhaeltnisse: Int16
     let longitude: Double
     let monat: Int16

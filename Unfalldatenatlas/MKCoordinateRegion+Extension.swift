@@ -40,18 +40,33 @@ extension MKCoordinateRegion: @retroactive Equatable
         return area
     }
     
-    var predicate: NSPredicate  {
-        let longitudeMin = self.center.longitude - 0.5 * self.span.longitudeDelta
-        let longitudeMax = self.center.longitude + 0.5 * self.span.longitudeDelta
-        let lattitudeMin = self.center.latitude - 0.5 * self.span.latitudeDelta
-        let lattitudeMax = self.center.latitude + 0.5 * self.span.latitudeDelta
+//    var predicate: NSPredicate  {
+//        let longitudeMin = self.center.longitude - 0.5 * self.span.longitudeDelta
+//        let longitudeMax = self.center.longitude + 0.5 * self.span.longitudeDelta
+//        let lattitudeMin = self.center.latitude - 0.5 * self.span.latitudeDelta
+//        let lattitudeMax = self.center.latitude + 0.5 * self.span.latitudeDelta
+//
+//        let predicateLongMin = NSPredicate(format: "%lf < longitude", longitudeMin)
+//        let predicateLongMax = NSPredicate(format: "longitude < %lf", longitudeMax)
+//        let predicateLatMin = NSPredicate(format: "%lf < lattitude", lattitudeMin)
+//        let predicateLatMax = NSPredicate(format: "lattitude < %lf", lattitudeMax)
+//        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongMin, predicateLongMax, predicateLatMin, predicateLatMax])
+//
+//        return predicate
+//    }
+    
+    /// Gibt ein NSPredicate zurück, das den sichtbaren Bereich in der Karte abdeckt (mit Int32-Indexierung)
+    func predicateForRegion(scale: Double = 10_000_000) -> NSPredicate {
+        let latMin = center.latitude - span.latitudeDelta / 2
+        let latMax = center.latitude + span.latitudeDelta / 2
+        let lonMin = center.longitude - span.longitudeDelta / 2
+        let lonMax = center.longitude + span.longitudeDelta / 2
 
-        let predicateLongMin = NSPredicate(format: "%lf < longitude", longitudeMin)
-        let predicateLongMax = NSPredicate(format: "longitude < %lf", longitudeMax)
-        let predicateLatMin = NSPredicate(format: "%lf < lattitude", lattitudeMin)
-        let predicateLatMax = NSPredicate(format: "lattitude < %lf", lattitudeMax)
-        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicateLongMin, predicateLongMax, predicateLatMin, predicateLatMax])
+        let latMinRaw = Int32(latMin * scale)
+        let latMaxRaw = Int32(latMax * scale)
+        let lonMinRaw = Int32(lonMin * scale)
+        let lonMaxRaw = Int32(lonMax * scale)
 
-        return predicate
+        return NSPredicate(format: "latitudeRaw BETWEEN {%d, %d} AND longitudeRaw BETWEEN {%d, %d}", latMinRaw, latMaxRaw, lonMinRaw, lonMaxRaw)
     }
 }

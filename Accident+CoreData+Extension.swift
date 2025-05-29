@@ -12,7 +12,7 @@ import SwiftUI
 
 extension Accident {
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: lattitude, longitude: longitude)
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
     
     var color: Color {

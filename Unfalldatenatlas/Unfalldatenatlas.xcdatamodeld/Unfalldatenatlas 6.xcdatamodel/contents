@@ -3,9 +3,9 @@
     <entity name="Accident" representedClassName=".Accident" syncable="YES">
         <attribute name="accidentObjectID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="jahr" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="lattitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="latitudeRaw" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="lichtVerhaeltnisse" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitudeRaw" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="monat" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="strassenZustand" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="stunde" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -15,8 +15,11 @@
         <attribute name="vehicleMask" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="wochentag" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <fetchIndex name="LongLatIndex">
-            <fetchIndexElement property="lattitude" type="Binary" order="ascending"/>
-            <fetchIndexElement property="longitude" type="Binary" order="ascending"/>
+            <fetchIndexElement property="latitudeRaw" type="Binary" order="ascending"/>
+            <fetchIndexElement property="longitudeRaw" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="year">
+            <fetchIndexElement property="jahr" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
 </model>

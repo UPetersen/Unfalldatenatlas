@@ -33,6 +33,17 @@
 // Unfälle in der App insgesamt mit Daten von 2016 bis einschlie0ßlich 2023: 1_823_882 (Mit Daten von 2016 einschließlich 2022: 1_554_834)
 // Unfälle pro Jahr:
 //   ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
+//
+// Mapping aller Jahre:
+//   Jahr   id  jahr monat stunde wochentag    unfallKategorie    unfallArt    unfallTyp1    lichtVerhaeltnisse    strassenZustand    vehicleFlags    latitude    longitude
+//   2016    1    6    7    8     9      10    11    12    13    14    {'fahrrad': 15, 'pkw': 16, 'fussgaenger': 17, 'krad': 18, 'gueterKfz': 19, 'sonstige': 20}    24    23
+//   2017    0    6    7    8     9      10    11    12    18    19    {'fahrrad': 13, 'pkw': 14, 'fussgaenger': 15, 'krad': 16, 'sonstige': 17}                     23    22
+//   2018    0    5    6    7     8       9    10    11    12    19    {'fahrrad': 13, 'pkw': 14, 'fussgaenger': 15, 'krad': 16, 'gueterKfz': 17, 'sonstige': 18}    23    22
+//   2019    0    5    6    7     8       9    10    11    12    23    {'fahrrad': 13, 'pkw': 14, 'fussgaenger': 15, 'krad': 16, 'gueterKfz': 17, 'sonstige': 18}    22    21
+//   2020    0    6    7    8     9      10    11    12    13    24    {'fahrrad': 14, 'pkw': 15, 'fussgaenger': 16, 'krad': 17, 'gueterKfz': 18, 'sonstige': 19}    23    22
+//   2021    0    6    7    8     9      10    11    12    13    14    {'fahrrad': 15, 'pkw': 16, 'fussgaenger': 17, 'krad': 18, 'gueterKfz': 19, 'sonstige': 20}    24    23
+//   2022    0    6    7    8     9      10    11    12    13    14    {'fahrrad': 15, 'pkw': 16, 'fussgaenger': 17, 'krad': 18, 'gueterKfz': 19, 'sonstige': 20}    24    23
+//   2023    0    6    7    8     9      10    11    12    13    14    {'fahrrad': 15, 'pkw': 16, 'fussgaenger': 17, 'krad': 18, 'gueterKfz': 19, 'sonstige': 20}    24    23
 
 import Foundation
 import CoreData
@@ -56,6 +67,106 @@ enum InitializationState: Equatable {
         }
     }
 }
+
+struct AccidentCSVMapping: Hashable {
+    let id: Int
+    let jahr: Int
+    let monat: Int
+    let stunde: Int
+    let wochentag: Int
+    let unfallKategorie: Int
+    let unfallArt: Int
+    let unfallTyp1: Int
+    let lichtVerhaeltnisse: Int
+    let strassenZustand: Int
+    let vehicleFlags: [VehicleMask: Int]
+    let latitude: Int
+    let longitude: Int
+}
+
+let mappingsByYear: [String: AccidentCSVMapping] = [
+    "2016": AccidentCSVMapping(
+        id: 1, jahr: 6, monat: 7, stunde: 8, wochentag: 9,
+        unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12,
+        lichtVerhaeltnisse: 13, strassenZustand: 14,
+        vehicleFlags: [
+            .fahrrad: 15, .pkw: 16, .fussgaenger: 17,
+            .krad: 18, .gueterKfz: 19, .sonstige: 20
+        ],
+        latitude: 24, longitude: 23
+    ),
+    "2017": AccidentCSVMapping(
+        id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9,
+        unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12,
+        lichtVerhaeltnisse: 18, strassenZustand: 19,
+        vehicleFlags: [
+            .fahrrad: 13, .pkw: 14, .fussgaenger: 15,
+            .krad: 16, .sonstige: 17
+        ],
+        latitude: 23, longitude: 22
+    ),
+    "2018": AccidentCSVMapping(
+        id: 0, jahr: 5, monat: 6, stunde: 7, wochentag: 8,
+        unfallKategorie: 9, unfallArt: 10, unfallTyp1: 11,
+        lichtVerhaeltnisse: 12, strassenZustand: 19,
+        vehicleFlags: [
+            .fahrrad: 13, .pkw: 14, .fussgaenger: 15,
+            .krad: 16, .gueterKfz: 17, .sonstige: 18
+        ],
+        latitude: 23, longitude: 22
+    ),
+    "2019": AccidentCSVMapping(
+        id: 0, jahr: 5, monat: 6, stunde: 7, wochentag: 8,
+        unfallKategorie: 9, unfallArt: 10, unfallTyp1: 11,
+        lichtVerhaeltnisse: 12, strassenZustand: 23,
+        vehicleFlags: [
+            .fahrrad: 13, .pkw: 14, .fussgaenger: 15,
+            .krad: 16, .gueterKfz: 17, .sonstige: 18
+        ],
+        latitude: 22, longitude: 21
+    ),
+    "2020": AccidentCSVMapping(
+        id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9,
+        unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12,
+        lichtVerhaeltnisse: 13, strassenZustand: 24,
+        vehicleFlags: [
+            .fahrrad: 14, .pkw: 15, .fussgaenger: 16,
+            .krad: 17, .gueterKfz: 18, .sonstige: 19
+        ],
+        latitude: 23, longitude: 22
+    ),
+    "2021": AccidentCSVMapping(
+        id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9,
+        unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12,
+        lichtVerhaeltnisse: 13, strassenZustand: 14,
+        vehicleFlags: [
+            .fahrrad: 15, .pkw: 16, .fussgaenger: 17,
+            .krad: 18, .gueterKfz: 19, .sonstige: 20
+        ],
+        latitude: 24, longitude: 23
+    ),
+    "2022": AccidentCSVMapping(
+        id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9,
+        unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12,
+        lichtVerhaeltnisse: 13, strassenZustand: 14,
+        vehicleFlags: [
+            .fahrrad: 15, .pkw: 16, .fussgaenger: 17,
+            .krad: 18, .gueterKfz: 19, .sonstige: 20
+        ],
+        latitude: 24, longitude: 23
+    ),
+    "2023": AccidentCSVMapping(
+        id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9,
+        unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12,
+        lichtVerhaeltnisse: 13, strassenZustand: 14,
+        vehicleFlags: [
+            .fahrrad: 15, .pkw: 16, .fussgaenger: 17,
+            .krad: 18, .gueterKfz: 19, .sonstige: 20
+        ],
+        latitude: 24, longitude: 23
+    )
+]
+
 
 /// Returns a dictionary with the records/lines that have to be read for each year.
 /// Remark: The returned dictionary depends on the order of the years, but the result itself  is unordered, since it is just a dictionaray.
@@ -211,317 +322,442 @@ final class InitializationViewModel: ObservableObject {
     }
     
     
+//    nonisolated private func batchInsertRequest(with lines: [String], year: String) -> NSBatchInsertRequest {
+//        var index = 0
+//        let total = lines.count
+//        
+//        // Provide one managed object at a time when the closure is called.
+//        let batchInsertRequest = NSBatchInsertRequest(entity: Accident.entity(), managedObjectHandler: { (managedObject: NSManagedObject) -> Bool in
+//            guard index < total else { return true }
+//            if let accident = managedObject as? Accident {
+//                let components = lines[index].components(separatedBy: ";") // split csv data of one line into its compontents (columns)
+//                self.fillObjectWithData(year: year, accident: accident, csvComponents: components)
+//                //                accident.countOfAccidentsBy100000 = accident.accidentObjectID % 10_000
+//            }
+//            index += 1
+//            
+//            if index % 10_000 == 0 {
+//                Task{ @MainActor [unowned self, index, total, year] in
+//                    self.initializationState = .importingData(year: year)
+//                    self.progress = Double(index) / Double(total)
+//                }
+//            }
+//            return false
+//        })
+//        return batchInsertRequest
+//    }
+    
     nonisolated private func batchInsertRequest(with lines: [String], year: String) -> NSBatchInsertRequest {
         var index = 0
         let total = lines.count
         
-        // Provide one managed object at a time when the closure is called.
-        let batchInsertRequest = NSBatchInsertRequest(entity: Accident.entity(), managedObjectHandler: { (managedObject: NSManagedObject) -> Bool in
+        // ❗️Mapping nur einmal am Anfang holen
+        guard let mapping = mappingsByYear[year] else {
+            fatalError("Kein Mapping für Jahr \(year)")
+        }
+
+        let batchInsertRequest = NSBatchInsertRequest(entity: Accident.entity()) { (managedObject: NSManagedObject) -> Bool in
             guard index < total else { return true }
-            if let accident = managedObject as? Accident {
-                let components = lines[index].components(separatedBy: ";") // split csv data of one line into its compontents (columns)
-                self.fillObjectWithData(year: year, accident: accident, csvComponents: components)
-                //                accident.countOfAccidentsBy100000 = accident.accidentObjectID % 10_000
-            }
-            index += 1
             
+            if let accident = managedObject as? Accident {
+                let components = lines[index].components(separatedBy: ";")
+                self.fillObject(accident, with: components, using: mapping)
+            }
+            
+            index += 1
+
             if index % 10_000 == 0 {
-                Task{ @MainActor [unowned self, index, total, year] in
+                Task { @MainActor [unowned self, index, total, year] in
                     self.initializationState = .importingData(year: year)
                     self.progress = Double(index) / Double(total)
                 }
             }
+            
             return false
-        })
+        }
+        
         return batchInsertRequest
     }
+
+    
+//    nonisolated private func fillObjectWithData(year: String, accident: Accident, csvComponents: [String]) {
+//        guard let mapping = mappingsByYear[year] else {
+//            fatalError("Missing mapping for year: \(year)")
+//        }
+//
+//        func csvInt(_ i: Int) -> Int16 { Int16(csvComponents[i])! }
+//        func csvDouble(_ i: Int) -> Double {
+//            Double(csvComponents[i].replacingOccurrences(of: ",", with: "."))!
+//        }
+//
+//        accident.accidentObjectID = Int32(csvComponents[mapping.id])!
+//        accident.jahr = csvInt(mapping.jahr)
+//        accident.monat = csvInt(mapping.monat)
+//        accident.stunde = csvInt(mapping.stunde)
+//        accident.wochentag = csvInt(mapping.wochentag)
+//        accident.unfallKategorie = csvInt(mapping.unfallKategorie)
+//        accident.unfallArt = csvInt(mapping.unfallArt)
+//        accident.unfallTyp1 = csvInt(mapping.unfallTyp1)
+//        accident.lichtVerhaeltnisse = csvInt(mapping.lichtVerhaeltnisse)
+//        accident.strassenZustand = csvInt(mapping.strassenZustand)
+//
+//        // Bitmaske setzen
+//        var mask: Int16 = 0
+//        for (key, index) in mapping.vehicleFlags {
+//            if csvComponents[index] == "1" {
+//                mask |= key.rawValue
+//            }
+//        }
+//        accident.vehicleMask = mask
+//
+//        // Koordinaten setzen
+//        let lat = csvDouble(mapping.latitude)
+//        let lon = csvDouble(mapping.longitude)
+//        accident.setCoordinates(lat: lat, lon: lon)
+//    }
+//    
     
     
-    nonisolated private func fillObjectWithData(year: String, accident: Accident, csvComponents: [String]) {
-        
-        switch year {
-        case "2016":
-            accident.accidentObjectID = Int32(csvComponents[1])! // Unterschied 2016
-//            accident.land = Int16(csvComponents[2])! // Unterschied 2018 und 2019
-            //            accident.regierungsBezirk = Int16(csvComponents[3])!
-            //            accident.kreis = Int16(csvComponents[4])!
-            //            accident.gemeinde = Int16(csvComponents[5])!
-            accident.jahr = Int16(csvComponents[6])!
-            accident.monat = Int16(csvComponents[7])!
-            accident.stunde = Int16(csvComponents[8])!
-            accident.wochentag = Int16(csvComponents[9])!
-            accident.unfallKategorie = Int16(csvComponents[10])!
-            accident.unfallArt = Int16(csvComponents[11])!
-            accident.unfallTyp1 = Int16(csvComponents[12])!
-            accident.lichtVerhaeltnisse = Int16(csvComponents[13])!
-            accident.strassenZustand = Int16(csvComponents[14])!
-            
-//            let values = [
-//                "fahrrad": csvComponents[15],
-//                "pkw": csvComponents[16],
-//                "fussgaenger": csvComponents[17],
-//                "krad": csvComponents[18],
-//                "gueterKfz": csvComponents[19],
-//                "sonstige": csvComponents[20]
-//            ]
-//            let mask = VehicleMask.from(stringFlags: values)
-//            accident.vehicleMask = mask.rawValue
-            
-            var mask: Int16 = 0
-            if csvComponents[15] == "1" { mask |= VehicleMask.fahrrad.rawValue }
-            if csvComponents[16] == "1" { mask |= VehicleMask.pkw.rawValue }
-            if csvComponents[17] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
-            if csvComponents[18] == "1" { mask |= VehicleMask.krad.rawValue }
-            if csvComponents[19] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
-            if csvComponents[20] == "1" { mask |= VehicleMask.sonstige.rawValue }
-            accident.vehicleMask = mask
-            
-//            accident.istFahrrad = csvComponents[15] == "1" ? true : false
-//            accident.istPkw = csvComponents[16] == "1" ? true : false
-//            accident.istFussgaenger = csvComponents[17] == "1" ? true : false
-//            accident.istKrad = csvComponents[18] == "1" ? true : false
-//            accident.istGueterKfz = csvComponents[19] == "1" ? true : false
-//            accident.istSonstige = csvComponents[20] == "1" ? true : false
-//            
-            //            accident.lineRefX = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
-            //            accident.lineRefY = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
-            accident.longitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
-            accident.lattitude = Double(csvComponents[24].replacingOccurrences(of: ",", with: "."))!
-        case "2017":
-            accident.accidentObjectID = Int32(csvComponents[0])!
-//            accident.land = Int16(csvComponents[2])!
-            //            accident.regierungsBezirk = Int16(csvComponents[3])!
-            //            accident.kreis = Int16(csvComponents[4])!
-            //            accident.gemeinde = Int16(csvComponents[5])!
-            accident.jahr = Int16(csvComponents[6])!
-            accident.monat = Int16(csvComponents[7])!
-            accident.stunde = Int16(csvComponents[8])!
-            accident.wochentag = Int16(csvComponents[9])!
-            accident.unfallKategorie = Int16(csvComponents[10])!
-            accident.unfallArt = Int16(csvComponents[11])!
-            accident.unfallTyp1 = Int16(csvComponents[12])!
-            
-//            accident.istFahrrad = csvComponents[13] == "1" ? true : false
-//            accident.istPkw = csvComponents[14] == "1" ? true : false
-//            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
-//            accident.istKrad = csvComponents[16] == "1" ? true : false
-//            // TODO: how to handle this property, when information is not present? Make optional?
-//            accident.istGueterKfz = false // Column not present in 2017 data -> denote as false
-//            accident.istSonstige = csvComponents[17] == "1" ? true : false
+    
+    
+    
+    
+    nonisolated private func fillObject(_ accident: Accident, with csv: [String], using m: AccidentCSVMapping) {
+        accident.accidentObjectID = Int32(csv[m.id])!
+        accident.jahr = Int16(csv[m.jahr])!
+        accident.monat = Int16(csv[m.monat])!
+        accident.stunde = Int16(csv[m.stunde])!
+        accident.wochentag = Int16(csv[m.wochentag])!
+        accident.unfallKategorie = Int16(csv[m.unfallKategorie])!
+        accident.unfallArt = Int16(csv[m.unfallArt])!
+        accident.unfallTyp1 = Int16(csv[m.unfallTyp1])!
+        accident.lichtVerhaeltnisse = Int16(csv[m.lichtVerhaeltnisse])!
+        accident.strassenZustand = Int16(csv[m.strassenZustand])!
 
-//            let values = [
-//                "fahrrad": csvComponents[13],
-//                "pkw": csvComponents[14],
-//                "fussgaenger": csvComponents[15],
-//                "krad": csvComponents[16],
-//                "gueterKfz": "0",
-//                "sonstige": csvComponents[17]
-//            ]
-//            let mask = VehicleMask.from(stringFlags: values)
-//            accident.vehicleMask = mask.rawValue
-            var mask: Int16 = 0
-            if csvComponents[13] == "1" { mask |= VehicleMask.fahrrad.rawValue }
-            if csvComponents[14] == "1" { mask |= VehicleMask.pkw.rawValue }
-            if csvComponents[15] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
-            if csvComponents[16] == "1" { mask |= VehicleMask.krad.rawValue }
-//            if csvComponents[17] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
-            if csvComponents[17] == "1" { mask |= VehicleMask.sonstige.rawValue }
-            accident.vehicleMask = mask
-            
-            accident.lichtVerhaeltnisse = Int16(csvComponents[18])!
-            accident.strassenZustand = Int16(csvComponents[19])!
-            
-            //            accident.lineRefX = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
-            //            accident.lineRefY = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
-            accident.longitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
-            accident.lattitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
-        case "2018":
-            accident.accidentObjectID = Int32(csvComponents[0])!
-//            accident.land = Int16(csvComponents[1])!
-            //            accident.regierungsBezirk = Int16(csvComponents[2])!
-            //            accident.kreis = Int16(csvComponents[3])!
-            //            accident.gemeinde = Int16(csvComponents[4])!
-            accident.jahr = Int16(csvComponents[5])!
-            accident.monat = Int16(csvComponents[6])!
-            accident.stunde = Int16(csvComponents[7])!
-            accident.wochentag = Int16(csvComponents[8])!
-            accident.unfallKategorie = Int16(csvComponents[9])!
-            accident.unfallArt = Int16(csvComponents[10])!
-            accident.unfallTyp1 = Int16(csvComponents[11])!
-            accident.lichtVerhaeltnisse = Int16(csvComponents[12])!
-            
-//            accident.istFahrrad = csvComponents[13] == "1" ? true : false
-//            accident.istPkw = csvComponents[14] == "1" ? true : false
-//            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
-//            accident.istKrad = csvComponents[16] == "1" ? true : false
-//            accident.istGueterKfz = csvComponents[17] == "1" ? true : false
-//            accident.istSonstige = csvComponents[18] == "1" ? true : false
-
-//            let values = [
-//                "fahrrad": csvComponents[13],
-//                "pkw": csvComponents[14],
-//                "fussgaenger": csvComponents[15],
-//                "krad": csvComponents[16],
-//                "gueterKfz": csvComponents[17],
-//                "sonstige": csvComponents[18]
-//            ]
-//            let mask = VehicleMask.from(stringFlags: values)
-//            accident.vehicleMask = mask.rawValue
-            var mask: Int16 = 0
-            if csvComponents[13] == "1" { mask |= VehicleMask.fahrrad.rawValue }
-            if csvComponents[14] == "1" { mask |= VehicleMask.pkw.rawValue }
-            if csvComponents[15] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
-            if csvComponents[16] == "1" { mask |= VehicleMask.krad.rawValue }
-            if csvComponents[17] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
-            if csvComponents[18] == "1" { mask |= VehicleMask.sonstige.rawValue }
-            accident.vehicleMask = mask
-
-            accident.strassenZustand = Int16(csvComponents[19])!
-            //            accident.lineRefX = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
-            //            accident.lineRefY = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
-            accident.longitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
-            accident.lattitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
-        case "2019":
-            accident.accidentObjectID = Int32(csvComponents[0])!
-//            accident.land = Int16(csvComponents[1])!
-            //            accident.regierungsBezirk = Int16(csvComponents[2])!
-            //            accident.kreis = Int16(csvComponents[3])!
-            //            accident.gemeinde = Int16(csvComponents[4])!
-            accident.jahr = Int16(csvComponents[5])!
-            accident.monat = Int16(csvComponents[6])!
-            accident.stunde = Int16(csvComponents[7])!
-            accident.wochentag = Int16(csvComponents[8])!
-            accident.unfallKategorie = Int16(csvComponents[9])!
-            accident.unfallArt = Int16(csvComponents[10])!
-            accident.unfallTyp1 = Int16(csvComponents[11])!
-            accident.lichtVerhaeltnisse = Int16(csvComponents[12])!
-            
-//            accident.istFahrrad = csvComponents[13] == "1" ? true : false
-//            accident.istPkw = csvComponents[14] == "1" ? true : false
-//            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
-//            accident.istKrad = csvComponents[16] == "1" ? true : false
-//            accident.istGueterKfz = csvComponents[17] == "1" ? true : false
-//            accident.istSonstige = csvComponents[18] == "1" ? true : false
-//            let values = [
-//                "fahrrad": csvComponents[13],
-//                "pkw": csvComponents[14],
-//                "fussgaenger": csvComponents[15],
-//                "krad": csvComponents[16],
-//                "gueterKfz": csvComponents[17],
-//                "sonstige": csvComponents[18]
-//            ]
-//            let mask = VehicleMask.from(stringFlags: values)
-//            accident.vehicleMask = mask.rawValue
-            var mask: Int16 = 0
-            if csvComponents[13] == "1" { mask |= VehicleMask.fahrrad.rawValue }
-            if csvComponents[14] == "1" { mask |= VehicleMask.pkw.rawValue }
-            if csvComponents[15] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
-            if csvComponents[16] == "1" { mask |= VehicleMask.krad.rawValue }
-            if csvComponents[17] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
-            if csvComponents[18] == "1" { mask |= VehicleMask.sonstige.rawValue }
-            accident.vehicleMask = mask
-
-            //            accident.lineRefX = Double(csvComponents[19].replacingOccurrences(of: ",", with: "."))!
-            //            accident.lineRefY = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
-            accident.longitude = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
-            accident.lattitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
-            accident.strassenZustand = Int16(csvComponents[23])!
-        case "2020":
-            accident.accidentObjectID = Int32(csvComponents[0])!
-//            accident.land = Int16(csvComponents[2])!
-            //            accident.regierungsBezirk = Int16(csvComponents[3])!
-            //            accident.kreis = Int16(csvComponents[4])!
-            //            accident.gemeinde = Int16(csvComponents[5])!
-            accident.jahr = Int16(csvComponents[6])!
-            accident.monat = Int16(csvComponents[7])!
-            accident.stunde = Int16(csvComponents[8])!
-            accident.wochentag = Int16(csvComponents[9])!
-            accident.unfallKategorie = Int16(csvComponents[10])!
-            accident.unfallArt = Int16(csvComponents[11])!
-            accident.unfallTyp1 = Int16(csvComponents[12])!
-            accident.lichtVerhaeltnisse = Int16(csvComponents[13])!
-            
-//            accident.istFahrrad = csvComponents[14] == "1" ? true : false
-//            accident.istPkw = csvComponents[15] == "1" ? true : false
-//            accident.istFussgaenger = csvComponents[16] == "1" ? true : false
-//            accident.istKrad = csvComponents[17] == "1" ? true : false
-//            accident.istGueterKfz = csvComponents[18] == "1" ? true : false
-//            accident.istSonstige = csvComponents[19] == "1" ? true : false
-//            let values = [
-//                "fahrrad": csvComponents[14],
-//                "pkw": csvComponents[15],
-//                "fussgaenger": csvComponents[16],
-//                "krad": csvComponents[17],
-//                "gueterKfz": csvComponents[18],
-//                "sonstige": csvComponents[19]
-//            ]
-//            let mask = VehicleMask.from(stringFlags: values)
-//            accident.vehicleMask = mask.rawValue
-            var mask: Int16 = 0
-            if csvComponents[14] == "1" { mask |= VehicleMask.fahrrad.rawValue }
-            if csvComponents[15] == "1" { mask |= VehicleMask.pkw.rawValue }
-            if csvComponents[16] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
-            if csvComponents[17] == "1" { mask |= VehicleMask.krad.rawValue }
-            if csvComponents[18] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
-            if csvComponents[19] == "1" { mask |= VehicleMask.sonstige.rawValue }
-            accident.vehicleMask = mask
-
-            //            accident.lineRefX = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
-            //            accident.lineRefY = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
-            accident.longitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
-            accident.lattitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
-            accident.strassenZustand = Int16(csvComponents[24])!
-        case "2021", "2022", "2023":
-            // 2022 is of equal order as 2021 (although one name in the csv file is different).
-            // Same for 2023 (although it has one additional column at the end)accident.accidentObjectID = Int32(csvComponents[0])!
-            accident.accidentObjectID = Int32(csvComponents[0])!
-//            accident.land = Int16(csvComponents[2])!
-            //            accident.regierungsBezirk = Int16(csvComponents[3])!
-            //            accident.kreis = Int16(csvComponents[4])!
-            //            accident.gemeinde = Int16(csvComponents[5])!
-            accident.jahr = Int16(csvComponents[6])!
-            accident.monat = Int16(csvComponents[7])!
-            accident.stunde = Int16(csvComponents[8])!
-            accident.wochentag = Int16(csvComponents[9])!
-            accident.unfallKategorie = Int16(csvComponents[10])!
-            accident.unfallArt = Int16(csvComponents[11])!
-            accident.unfallTyp1 = Int16(csvComponents[12])!
-            accident.lichtVerhaeltnisse = Int16(csvComponents[13])!
-            accident.strassenZustand = Int16(csvComponents[14])!
-            
-//            accident.istFahrrad = csvComponents[15] == "1" ? true : false
-//            accident.istPkw = csvComponents[16] == "1" ? true : false
-//            accident.istFussgaenger = csvComponents[17] == "1" ? true : false
-//            accident.istKrad = csvComponents[18] == "1" ? true : false
-//            accident.istGueterKfz = csvComponents[19] == "1" ? true : false
-//            accident.istSonstige = csvComponents[20] == "1" ? true : false
-//            let values = [
-//                "fahrrad": csvComponents[15],
-//                "pkw": csvComponents[16],
-//                "fussgaenger": csvComponents[17],
-//                "krad": csvComponents[18],
-//                "gueterKfz": csvComponents[19],
-//                "sonstige": csvComponents[20]
-//            ]
-//            let mask = VehicleMask.from(stringFlags: values)
-//            accident.vehicleMask = mask.rawValue
-            var mask: Int16 = 0
-            if csvComponents[15] == "1" { mask |= VehicleMask.fahrrad.rawValue }
-            if csvComponents[16] == "1" { mask |= VehicleMask.pkw.rawValue }
-            if csvComponents[17] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
-            if csvComponents[18] == "1" { mask |= VehicleMask.krad.rawValue }
-            if csvComponents[19] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
-            if csvComponents[20] == "1" { mask |= VehicleMask.sonstige.rawValue }
-            accident.vehicleMask = mask
-
-            //            accident.lineRefX = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
-            //            accident.lineRefY = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
-            accident.longitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
-            accident.lattitude = Double(csvComponents[24].replacingOccurrences(of: ",", with: "."))!
-        default:
-            fatalError("Fatal error when storing csv data for accident to core data. Case does not exist.")
+        var mask: Int16 = 0
+        for (vehicleType, index) in m.vehicleFlags {
+            if csv[index] == "1" {
+                mask |= vehicleType.rawValue
+            }
         }
+        accident.vehicleMask = mask
+
+        let lat = Double(csv[m.latitude].replacingOccurrences(of: ",", with: "."))!
+        let lon = Double(csv[m.longitude].replacingOccurrences(of: ",", with: "."))!
+        accident.setCoordinates(lat: lat, lon: lon)
     }
+    
+//    nonisolated private func fillObjectWithData(year: String, accident: Accident, csvComponents: [String]) {
+//        
+//        switch year {
+//        case "2016":
+//            accident.accidentObjectID = Int32(csvComponents[1])! // Unterschied 2016
+////            accident.land = Int16(csvComponents[2])! // Unterschied 2018 und 2019
+//            //            accident.regierungsBezirk = Int16(csvComponents[3])!
+//            //            accident.kreis = Int16(csvComponents[4])!
+//            //            accident.gemeinde = Int16(csvComponents[5])!
+//            accident.jahr = Int16(csvComponents[6])!
+//            accident.monat = Int16(csvComponents[7])!
+//            accident.stunde = Int16(csvComponents[8])!
+//            accident.wochentag = Int16(csvComponents[9])!
+//            accident.unfallKategorie = Int16(csvComponents[10])!
+//            accident.unfallArt = Int16(csvComponents[11])!
+//            accident.unfallTyp1 = Int16(csvComponents[12])!
+//            accident.lichtVerhaeltnisse = Int16(csvComponents[13])!
+//            accident.strassenZustand = Int16(csvComponents[14])!
+//            
+////            let values = [
+////                "fahrrad": csvComponents[15],
+////                "pkw": csvComponents[16],
+////                "fussgaenger": csvComponents[17],
+////                "krad": csvComponents[18],
+////                "gueterKfz": csvComponents[19],
+////                "sonstige": csvComponents[20]
+////            ]
+////            let mask = VehicleMask.from(stringFlags: values)
+////            accident.vehicleMask = mask.rawValue
+//            
+//            var mask: Int16 = 0
+//            if csvComponents[15] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+//            if csvComponents[16] == "1" { mask |= VehicleMask.pkw.rawValue }
+//            if csvComponents[17] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+//            if csvComponents[18] == "1" { mask |= VehicleMask.krad.rawValue }
+//            if csvComponents[19] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+//            if csvComponents[20] == "1" { mask |= VehicleMask.sonstige.rawValue }
+//            accident.vehicleMask = mask
+//            
+////            accident.istFahrrad = csvComponents[15] == "1" ? true : false
+////            accident.istPkw = csvComponents[16] == "1" ? true : false
+////            accident.istFussgaenger = csvComponents[17] == "1" ? true : false
+////            accident.istKrad = csvComponents[18] == "1" ? true : false
+////            accident.istGueterKfz = csvComponents[19] == "1" ? true : false
+////            accident.istSonstige = csvComponents[20] == "1" ? true : false
+////            
+//            //            accident.lineRefX = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
+//            //            accident.lineRefY = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+////            accident.longitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+////            accident.lattitude = Double(csvComponents[24].replacingOccurrences(of: ",", with: "."))!
+//            let lon = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+//            let lat = Double(csvComponents[24].replacingOccurrences(of: ",", with: "."))!
+//            accident.setCoordinates(lat: lat, lon: lon)
+//
+//            
+//        case "2017":
+//            accident.accidentObjectID = Int32(csvComponents[0])!
+////            accident.land = Int16(csvComponents[2])!
+//            //            accident.regierungsBezirk = Int16(csvComponents[3])!
+//            //            accident.kreis = Int16(csvComponents[4])!
+//            //            accident.gemeinde = Int16(csvComponents[5])!
+//            accident.jahr = Int16(csvComponents[6])!
+//            accident.monat = Int16(csvComponents[7])!
+//            accident.stunde = Int16(csvComponents[8])!
+//            accident.wochentag = Int16(csvComponents[9])!
+//            accident.unfallKategorie = Int16(csvComponents[10])!
+//            accident.unfallArt = Int16(csvComponents[11])!
+//            accident.unfallTyp1 = Int16(csvComponents[12])!
+//            
+////            accident.istFahrrad = csvComponents[13] == "1" ? true : false
+////            accident.istPkw = csvComponents[14] == "1" ? true : false
+////            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
+////            accident.istKrad = csvComponents[16] == "1" ? true : false
+////            // TODO: how to handle this property, when information is not present? Make optional?
+////            accident.istGueterKfz = false // Column not present in 2017 data -> denote as false
+////            accident.istSonstige = csvComponents[17] == "1" ? true : false
+//
+////            let values = [
+////                "fahrrad": csvComponents[13],
+////                "pkw": csvComponents[14],
+////                "fussgaenger": csvComponents[15],
+////                "krad": csvComponents[16],
+////                "gueterKfz": "0",
+////                "sonstige": csvComponents[17]
+////            ]
+////            let mask = VehicleMask.from(stringFlags: values)
+////            accident.vehicleMask = mask.rawValue
+//            var mask: Int16 = 0
+//            if csvComponents[13] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+//            if csvComponents[14] == "1" { mask |= VehicleMask.pkw.rawValue }
+//            if csvComponents[15] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+//            if csvComponents[16] == "1" { mask |= VehicleMask.krad.rawValue }
+////            if csvComponents[17] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+//            if csvComponents[17] == "1" { mask |= VehicleMask.sonstige.rawValue }
+//            accident.vehicleMask = mask
+//            
+//            accident.lichtVerhaeltnisse = Int16(csvComponents[18])!
+//            accident.strassenZustand = Int16(csvComponents[19])!
+//            
+//            //            accident.lineRefX = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
+//            //            accident.lineRefY = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
+////            accident.longitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+////            accident.lattitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+//            let lon = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+//            let lat = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+//            accident.setCoordinates(lat: lat, lon: lon)
+//
+//            
+//        case "2018":
+//            accident.accidentObjectID = Int32(csvComponents[0])!
+////            accident.land = Int16(csvComponents[1])!
+//            //            accident.regierungsBezirk = Int16(csvComponents[2])!
+//            //            accident.kreis = Int16(csvComponents[3])!
+//            //            accident.gemeinde = Int16(csvComponents[4])!
+//            accident.jahr = Int16(csvComponents[5])!
+//            accident.monat = Int16(csvComponents[6])!
+//            accident.stunde = Int16(csvComponents[7])!
+//            accident.wochentag = Int16(csvComponents[8])!
+//            accident.unfallKategorie = Int16(csvComponents[9])!
+//            accident.unfallArt = Int16(csvComponents[10])!
+//            accident.unfallTyp1 = Int16(csvComponents[11])!
+//            accident.lichtVerhaeltnisse = Int16(csvComponents[12])!
+//            
+////            accident.istFahrrad = csvComponents[13] == "1" ? true : false
+////            accident.istPkw = csvComponents[14] == "1" ? true : false
+////            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
+////            accident.istKrad = csvComponents[16] == "1" ? true : false
+////            accident.istGueterKfz = csvComponents[17] == "1" ? true : false
+////            accident.istSonstige = csvComponents[18] == "1" ? true : false
+//
+////            let values = [
+////                "fahrrad": csvComponents[13],
+////                "pkw": csvComponents[14],
+////                "fussgaenger": csvComponents[15],
+////                "krad": csvComponents[16],
+////                "gueterKfz": csvComponents[17],
+////                "sonstige": csvComponents[18]
+////            ]
+////            let mask = VehicleMask.from(stringFlags: values)
+////            accident.vehicleMask = mask.rawValue
+//            var mask: Int16 = 0
+//            if csvComponents[13] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+//            if csvComponents[14] == "1" { mask |= VehicleMask.pkw.rawValue }
+//            if csvComponents[15] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+//            if csvComponents[16] == "1" { mask |= VehicleMask.krad.rawValue }
+//            if csvComponents[17] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+//            if csvComponents[18] == "1" { mask |= VehicleMask.sonstige.rawValue }
+//            accident.vehicleMask = mask
+//
+//            accident.strassenZustand = Int16(csvComponents[19])!
+//            //            accident.lineRefX = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
+//            //            accident.lineRefY = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
+////            accident.longitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+////            accident.lattitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+//            let lon = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+//            let lat = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+//            accident.setCoordinates(lat: lat, lon: lon)
+//
+//        case "2019":
+//            accident.accidentObjectID = Int32(csvComponents[0])!
+////            accident.land = Int16(csvComponents[1])!
+//            //            accident.regierungsBezirk = Int16(csvComponents[2])!
+//            //            accident.kreis = Int16(csvComponents[3])!
+//            //            accident.gemeinde = Int16(csvComponents[4])!
+//            accident.jahr = Int16(csvComponents[5])!
+//            accident.monat = Int16(csvComponents[6])!
+//            accident.stunde = Int16(csvComponents[7])!
+//            accident.wochentag = Int16(csvComponents[8])!
+//            accident.unfallKategorie = Int16(csvComponents[9])!
+//            accident.unfallArt = Int16(csvComponents[10])!
+//            accident.unfallTyp1 = Int16(csvComponents[11])!
+//            accident.lichtVerhaeltnisse = Int16(csvComponents[12])!
+//            
+////            accident.istFahrrad = csvComponents[13] == "1" ? true : false
+////            accident.istPkw = csvComponents[14] == "1" ? true : false
+////            accident.istFussgaenger = csvComponents[15] == "1" ? true : false
+////            accident.istKrad = csvComponents[16] == "1" ? true : false
+////            accident.istGueterKfz = csvComponents[17] == "1" ? true : false
+////            accident.istSonstige = csvComponents[18] == "1" ? true : false
+////            let values = [
+////                "fahrrad": csvComponents[13],
+////                "pkw": csvComponents[14],
+////                "fussgaenger": csvComponents[15],
+////                "krad": csvComponents[16],
+////                "gueterKfz": csvComponents[17],
+////                "sonstige": csvComponents[18]
+////            ]
+////            let mask = VehicleMask.from(stringFlags: values)
+////            accident.vehicleMask = mask.rawValue
+//            var mask: Int16 = 0
+//            if csvComponents[13] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+//            if csvComponents[14] == "1" { mask |= VehicleMask.pkw.rawValue }
+//            if csvComponents[15] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+//            if csvComponents[16] == "1" { mask |= VehicleMask.krad.rawValue }
+//            if csvComponents[17] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+//            if csvComponents[18] == "1" { mask |= VehicleMask.sonstige.rawValue }
+//            accident.vehicleMask = mask
+//
+//            //            accident.lineRefX = Double(csvComponents[19].replacingOccurrences(of: ",", with: "."))!
+//            //            accident.lineRefY = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
+////            accident.longitude = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
+////            accident.lattitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+//            let lon = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
+//            let lat = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+//            accident.setCoordinates(lat: lat, lon: lon)
+//
+//            accident.strassenZustand = Int16(csvComponents[23])!
+//
+//        case "2020":
+//            accident.accidentObjectID = Int32(csvComponents[0])!
+////            accident.land = Int16(csvComponents[2])!
+//            //            accident.regierungsBezirk = Int16(csvComponents[3])!
+//            //            accident.kreis = Int16(csvComponents[4])!
+//            //            accident.gemeinde = Int16(csvComponents[5])!
+//            accident.jahr = Int16(csvComponents[6])!
+//            accident.monat = Int16(csvComponents[7])!
+//            accident.stunde = Int16(csvComponents[8])!
+//            accident.wochentag = Int16(csvComponents[9])!
+//            accident.unfallKategorie = Int16(csvComponents[10])!
+//            accident.unfallArt = Int16(csvComponents[11])!
+//            accident.unfallTyp1 = Int16(csvComponents[12])!
+//            accident.lichtVerhaeltnisse = Int16(csvComponents[13])!
+//            
+////            accident.istFahrrad = csvComponents[14] == "1" ? true : false
+////            accident.istPkw = csvComponents[15] == "1" ? true : false
+////            accident.istFussgaenger = csvComponents[16] == "1" ? true : false
+////            accident.istKrad = csvComponents[17] == "1" ? true : false
+////            accident.istGueterKfz = csvComponents[18] == "1" ? true : false
+////            accident.istSonstige = csvComponents[19] == "1" ? true : false
+////            let values = [
+////                "fahrrad": csvComponents[14],
+////                "pkw": csvComponents[15],
+////                "fussgaenger": csvComponents[16],
+////                "krad": csvComponents[17],
+////                "gueterKfz": csvComponents[18],
+////                "sonstige": csvComponents[19]
+////            ]
+////            let mask = VehicleMask.from(stringFlags: values)
+////            accident.vehicleMask = mask.rawValue
+//            var mask: Int16 = 0
+//            if csvComponents[14] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+//            if csvComponents[15] == "1" { mask |= VehicleMask.pkw.rawValue }
+//            if csvComponents[16] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+//            if csvComponents[17] == "1" { mask |= VehicleMask.krad.rawValue }
+//            if csvComponents[18] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+//            if csvComponents[19] == "1" { mask |= VehicleMask.sonstige.rawValue }
+//            accident.vehicleMask = mask
+//
+//            //            accident.lineRefX = Double(csvComponents[20].replacingOccurrences(of: ",", with: "."))!
+//            //            accident.lineRefY = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
+////            accident.longitude = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+////            accident.lattitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+//            let lon = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+//            let lat = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+//            accident.setCoordinates(lat: lat, lon: lon)
+//    accident.strassenZustand = Int16(csvComponents[24])!
+// 
+//        case "2021", "2022", "2023":
+//            // 2022 is of equal order as 2021 (although one name in the csv file is different).
+//            // Same for 2023 (although it has one additional column at the end)accident.accidentObjectID = Int32(csvComponents[0])!
+//            accident.accidentObjectID = Int32(csvComponents[0])!
+////            accident.land = Int16(csvComponents[2])!
+//            //            accident.regierungsBezirk = Int16(csvComponents[3])!
+//            //            accident.kreis = Int16(csvComponents[4])!
+//            //            accident.gemeinde = Int16(csvComponents[5])!
+//            accident.jahr = Int16(csvComponents[6])!
+//            accident.monat = Int16(csvComponents[7])!
+//            accident.stunde = Int16(csvComponents[8])!
+//            accident.wochentag = Int16(csvComponents[9])!
+//            accident.unfallKategorie = Int16(csvComponents[10])!
+//            accident.unfallArt = Int16(csvComponents[11])!
+//            accident.unfallTyp1 = Int16(csvComponents[12])!
+//            accident.lichtVerhaeltnisse = Int16(csvComponents[13])!
+//            accident.strassenZustand = Int16(csvComponents[14])!
+//            
+////            accident.istFahrrad = csvComponents[15] == "1" ? true : false
+////            accident.istPkw = csvComponents[16] == "1" ? true : false
+////            accident.istFussgaenger = csvComponents[17] == "1" ? true : false
+////            accident.istKrad = csvComponents[18] == "1" ? true : false
+////            accident.istGueterKfz = csvComponents[19] == "1" ? true : false
+////            accident.istSonstige = csvComponents[20] == "1" ? true : false
+////            let values = [
+////                "fahrrad": csvComponents[15],
+////                "pkw": csvComponents[16],
+////                "fussgaenger": csvComponents[17],
+////                "krad": csvComponents[18],
+////                "gueterKfz": csvComponents[19],
+////                "sonstige": csvComponents[20]
+////            ]
+////            let mask = VehicleMask.from(stringFlags: values)
+////            accident.vehicleMask = mask.rawValue
+//            var mask: Int16 = 0
+//            if csvComponents[15] == "1" { mask |= VehicleMask.fahrrad.rawValue }
+//            if csvComponents[16] == "1" { mask |= VehicleMask.pkw.rawValue }
+//            if csvComponents[17] == "1" { mask |= VehicleMask.fussgaenger.rawValue }
+//            if csvComponents[18] == "1" { mask |= VehicleMask.krad.rawValue }
+//            if csvComponents[19] == "1" { mask |= VehicleMask.gueterKfz.rawValue }
+//            if csvComponents[20] == "1" { mask |= VehicleMask.sonstige.rawValue }
+//            accident.vehicleMask = mask
+//
+//            //            accident.lineRefX = Double(csvComponents[21].replacingOccurrences(of: ",", with: "."))!
+//            //            accident.lineRefY = Double(csvComponents[22].replacingOccurrences(of: ",", with: "."))!
+////            accident.longitude = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+////            accident.lattitude = Double(csvComponents[24].replacingOccurrences(of: ",", with: "."))!
+//            let lon = Double(csvComponents[23].replacingOccurrences(of: ",", with: "."))!
+//            let lat = Double(csvComponents[24].replacingOccurrences(of: ",", with: "."))!
+//            accident.setCoordinates(lat: lat, lon: lon)
+//        default:
+//            fatalError("Fatal error when storing csv data for accident to core data. Case does not exist.")
+//        }
+//    }
     
 }
 

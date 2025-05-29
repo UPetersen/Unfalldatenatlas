@@ -27,9 +27,9 @@ extension Accident {
 //    @NSManaged public var istSonstige: Bool
     @NSManaged public var jahr: Int16
 //    @NSManaged public var land: Int16
-    @NSManaged public var lattitude: Double
+//    @NSManaged public var lattitude: Double
     @NSManaged public var lichtVerhaeltnisse: Int16
-    @NSManaged public var longitude: Double
+//    @NSManaged public var longitude: Double
     @NSManaged public var monat: Int16
     @NSManaged public var strassenZustand: Int16
     @NSManaged public var stunde: Int16
@@ -38,6 +38,25 @@ extension Accident {
     @NSManaged public var unfallTyp1: Int16
     @NSManaged public var wochentag: Int16
 
+    @NSManaged public var latitudeRaw: Int32
+    @NSManaged public var longitudeRaw: Int32
+}
+
+extension Accident {
+    private static let scale: Double = 10_000_000
+
+    var latitude: Double {
+        Double(latitudeRaw) / Accident.scale
+    }
+
+    var longitude: Double {
+        Double(longitudeRaw) / Accident.scale
+    }
+
+    func setCoordinates(lat: Double, lon: Double) {
+        latitudeRaw = Int32(lat * Accident.scale)
+        longitudeRaw = Int32(lon * Accident.scale)
+    }
 }
 
 extension Accident : Identifiable {

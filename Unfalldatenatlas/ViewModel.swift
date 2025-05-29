@@ -137,9 +137,12 @@ final class ViewModel: ObservableObject {
             let predicates = await self.accidentDataFilters.predicates
             if region.areaInSquareKilometers >= 15000 && predicates.isEmpty {
                 let newCountPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [UnfallJahr.jahr2022.predicate!] + [UnfallJahr.jahr2021.predicate!])
-                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [newCountPredicate] + [region.predicate])
+//                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [newCountPredicate] + [region.predicate])
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [newCountPredicate] + [region.predicateForRegion()])
+//                request.predicate = region.predicateForRegion()
             } else {
-                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [region.predicate] + predicates)
+//                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [region.predicate] + predicates)
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [region.predicateForRegion()] + predicates)
             }
             
             // Sortdescriptors
@@ -166,15 +169,10 @@ final class ViewModel: ObservableObject {
                             id: accident.objectID,
                             accidentObjectID: accident.accidentObjectID,
                             vehicleMask: accident.vehicleMask,
-//                            istFahrrad: accident.istFahrrad,
-//                            istFussgaenger: accident.istFussgaenger,
-//                            istGueterKfz: accident.istGueterKfz,
-//                            istKrad: accident.istKrad,
-//                            istPkw: accident.istPkw,
-//                            istSonstige: accident.istSonstige,
+
                             jahr: accident.jahr,
 //                            land: accident.land,
-                            lattitude: accident.lattitude,
+                            latitude: accident.latitude,
                             lichtVerhaeltnisse: accident.lichtVerhaeltnisse,
                             longitude: accident.longitude,
                             monat: accident.monat,
@@ -209,64 +207,66 @@ final class ViewModel: ObservableObject {
     }
 
    
-    /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
-    func fetchAccidents2(region: MKCoordinateRegion)  {
-        
-        isFetchingAccidents = true
-        
-        // Fetchrequest. Must use NSFetchedRequestResult as type, this enables general handling in class FetchOperation. (Then works with fetching managed objects as well as just the count.)
-//        let request = Accident.fetchRequest()
-        let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Accident")
-        request.fetchLimit = fetchLimit
-        request.fetchBatchSize = 50
-        request.resultType = .managedObjectResultType
-        
-        //Predicates
-        let predicates = accidentDataFilters.predicates
-        if region.areaInSquareKilometers >= 15000 && predicates.isEmpty {
-            let newCountPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [UnfallJahr.jahr2022.predicate!] + [UnfallJahr.jahr2021.predicate!])
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [newCountPredicate] + [region.predicate])
-        } else {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [region.predicate] + predicates)
-        }
-        
-        // Sortdescriptors
-        // brings in some distribution of the results in the region, otherwhise only accidents at the lower edge of the region are fetched
-        //                request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.objectID, ascending: true)]
-        
-        fetchOperation3?.cancel()
-        fetchOperation3 = performFetchRequest(fetchRequest: request)
-
-        // Task needed for polling the results from the fetch operation
-        taskForFetchingSelectedAccidents?.cancel()
-        taskForFetchingSelectedAccidents = Task {
-            // Do something
-
-            while true {
-                guard !Task.isCancelled else {
-//                    print("I task was cancelled")
-                    break
-                }
-                if let fetchOperation3, fetchOperation3.isCancelled {
-//                    print("fetchOperation cancelled")
-                    break
-                }
-                if let fetchOperation3, fetchOperation3.isFinished {
-//                    print("fetchOperation3 finished")
-                    isFetchingAccidents = false
-                    accidentStructs = fetchOperation3.accidentStructs
-//                    print("Erster: \(accidentStructs.first?.accidentObjectID ?? -99)")
-                    break
-                }
-//                print("I will wail a little bit...")
-
-                try await Task.sleep(nanoseconds: 100_000_000) // Polling every 100 ms
-            }
-//            print("I will return...")
-            return
-        }
-    }
+//    /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
+//    func fetchAccidents2(region: MKCoordinateRegion)  {
+//        
+//        isFetchingAccidents = true
+//        
+//        // Fetchrequest. Must use NSFetchedRequestResult as type, this enables general handling in class FetchOperation. (Then works with fetching managed objects as well as just the count.)
+////        let request = Accident.fetchRequest()
+//        let request: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Accident")
+//        request.fetchLimit = fetchLimit
+//        request.fetchBatchSize = 50
+//        request.resultType = .managedObjectResultType
+//        
+//        //Predicates
+//        let predicates = accidentDataFilters.predicates
+//        if region.areaInSquareKilometers >= 15000 && predicates.isEmpty {
+//            let newCountPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [UnfallJahr.jahr2022.predicate!] + [UnfallJahr.jahr2021.predicate!])
+////            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [newCountPredicate] + [region.predicate])
+//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [newCountPredicate] + [region.predicateForRegion()])
+//        } else {
+////            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [region.predicate] + predicates)
+//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [region.predicateForRegion()] + predicates)
+//        }
+//        
+//        // Sortdescriptors
+//        // brings in some distribution of the results in the region, otherwhise only accidents at the lower edge of the region are fetched
+//        //                request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.accidentObjectID, ascending: true)]
+//        request.sortDescriptors = [NSSortDescriptor(keyPath: \Accident.objectID, ascending: true)]
+//        
+//        fetchOperation3?.cancel()
+//        fetchOperation3 = performFetchRequest(fetchRequest: request)
+//
+//        // Task needed for polling the results from the fetch operation
+//        taskForFetchingSelectedAccidents?.cancel()
+//        taskForFetchingSelectedAccidents = Task {
+//            // Do something
+//
+//            while true {
+//                guard !Task.isCancelled else {
+////                    print("I task was cancelled")
+//                    break
+//                }
+//                if let fetchOperation3, fetchOperation3.isCancelled {
+////                    print("fetchOperation cancelled")
+//                    break
+//                }
+//                if let fetchOperation3, fetchOperation3.isFinished {
+////                    print("fetchOperation3 finished")
+//                    isFetchingAccidents = false
+//                    accidentStructs = fetchOperation3.accidentStructs
+////                    print("Erster: \(accidentStructs.first?.accidentObjectID ?? -99)")
+//                    break
+//                }
+////                print("I will wail a little bit...")
+//
+//                try await Task.sleep(nanoseconds: 100_000_000) // Polling every 100 ms
+//            }
+////            print("I will return...")
+//            return
+//        }
+//    }
 
     
     func getCountOfSelectedAccidents() {
@@ -396,7 +396,7 @@ class FetchOperation: Operation, @unchecked Sendable {
 //                                    istSonstige: accident.istSonstige,
                                     jahr: accident.jahr,
 //                                    land: accident.land,
-                                    lattitude: accident.lattitude,
+                                    latitude: accident.latitude,
                                     lichtVerhaeltnisse: accident.lichtVerhaeltnisse,
                                     longitude: accident.longitude,
                                     monat: accident.monat,
