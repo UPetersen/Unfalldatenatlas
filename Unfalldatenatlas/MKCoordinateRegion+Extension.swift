@@ -57,10 +57,10 @@ extension MKCoordinateRegion: @retroactive Equatable
     
     /// Gibt ein NSPredicate zurück, das den sichtbaren Bereich in der Karte abdeckt (mit Int32-Indexierung)
     func predicateForRegion(scale: Double = 10_000_000) -> NSPredicate {
-        let latMin = center.latitude - span.latitudeDelta / 2
-        let latMax = center.latitude + span.latitudeDelta / 2
-        let lonMin = center.longitude - span.longitudeDelta / 2
-        let lonMax = center.longitude + span.longitudeDelta / 2
+        let latMin = center.latitude - span.latitudeDelta * 0.5
+        let latMax = center.latitude + span.latitudeDelta * 0.5
+        let lonMin = center.longitude - span.longitudeDelta * 0.5
+        let lonMax = center.longitude + span.longitudeDelta * 0.5
 
         let latMinRaw = Int32(latMin * scale)
         let latMaxRaw = Int32(latMax * scale)

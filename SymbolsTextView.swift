@@ -27,30 +27,17 @@ struct SymbolsTextView: View {
     }
     
     func symbolsForAccident(accident: AccidentStruct) -> String {
-        var symbol = ""
-//        symbol.append(["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"][Int(accident.monat) - 1])
-//        symbol.append(["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"][Int(accident.wochentag) - 1])
+
         // Type of vehicles/persones involved. https://www.destatis.de/DE/ Themen/Gesellschaft- Umwelt/Verkehrsunfaelle/M ethoden/_inhalt.html#sprg37 1798
-        
-//        if accident.istPkw { symbol.append("🚗") }
-//        if accident.istKrad { symbol.append("🏍️") }
-//        if accident.istFahrrad { symbol.append("🚴") }
-//        if accident.istFussgaenger { symbol.append("🚶‍♂️") }
-//        // Güterkraffahrzeuge: Unfall mit Güterkraftfahrzeug (GKFZ): Unfall, an dem mindestens ein Lastkraftwagen mit
-//        // Normalaufbau und einem Gesamtgewicht über 3,5 t, ein Lastkraftwagen mit Tankauflage bzw. Spezialaufbau,
-//        // eine Sattelzugmaschine oder eine andere Zugmaschine beteiligt war (diese Kategorie ist in
-//        // den Jahren 2016 und 2017 in "Unfall mit Sonstigen" enthalten)
-//        if accident.istGueterKfz { symbol.append("🚚") }
-//        // Unfall mit Sonstigen: Unfall, an dem mindestens ein oben nicht genanntes Verkehrsmittel beteiligt war, wie
-//        // z. B. ein Bus oder eine Straßenbahn (2016 und 2017 einschließlich Unfall mit Güterkraftfahrzeug (GKFZ),
-//        // ab 2018 ohne Unfall mit GKFZ)
-//        if accident.istSonstige {
-//            if accident.jahr >= 2018 {
-//                symbol.append("🚌/🚃")
-//            } else {
-//                symbol.append("🚚/🚌/🚃")
-//            }
-//        }
+        // Güterkraffahrzeuge: Unfall mit Güterkraftfahrzeug (GKFZ): Unfall, an dem mindestens ein Lastkraftwagen mit
+        // Normalaufbau und einem Gesamtgewicht über 3,5 t, ein Lastkraftwagen mit Tankauflage bzw. Spezialaufbau,
+        // eine Sattelzugmaschine oder eine andere Zugmaschine beteiligt war (diese Kategorie ist in
+        // den Jahren 2016 und 2017 in "Unfall mit Sonstigen" enthalten)
+        // Unfall mit Sonstigen: Unfall, an dem mindestens ein oben nicht genanntes Verkehrsmittel beteiligt war, wie
+        // z. B. ein Bus oder eine Straßenbahn (2016 und 2017 einschließlich Unfall mit Güterkraftfahrzeug (GKFZ),
+        // ab 2018 ohne Unfall mit GKFZ)
+
+        var symbol = ""
         
         let mask = VehicleMask(rawValue: accident.vehicleMask)
         if mask.contains(.pkw)         { symbol.append("🚗") }

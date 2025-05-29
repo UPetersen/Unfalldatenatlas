@@ -19,12 +19,6 @@ struct AccidentStruct: Sendable, Identifiable {
     let accidentObjectID: Int32
     //    let countOfAccidentsBy100000: Int32
     let vehicleMask: Int16
-//    let istFahrrad: Bool
-//    let istFussgaenger: Bool
-//    let istGueterKfz: Bool
-//    let istKrad: Bool
-//    let istPkw: Bool
-//    let istSonstige: Bool
     let jahr: Int16
 //    let land: Int16
     let latitude: Double
