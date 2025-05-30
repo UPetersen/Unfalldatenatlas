@@ -1,74 +1,147 @@
-////
-////  DatabaseService.swift
-////  Unfalldatenatlas
-////
-////  Created by Uwe Petersen on 29.05.25.
-////
-//import Foundation
-//import GRDB
 //
-//struct DatabaseManager: Sendable {
-//    private let dbQueue: DatabaseQueue
+//  DatabaseService.swift
+//  Unfalldatenatlas
 //
-//    init(databaseURL: URL) throws {
-//        dbQueue = try DatabaseQueue(path: databaseURL.path)
+//  Created by Uwe Petersen on 29.05.25.
+//
+
+import Foundation
+import GRDB
+
+final class DatabaseService: @unchecked Sendable {
+    static let shared = DatabaseService()
+    let dbQueue: DatabaseQueue
+
+    private init() {
+        // Datenbankpfad im Application Support Verzeichnis
+        let pfad = FileManager.default
+            .urls(for: .applicationSupportDirectory, in: .userDomainMask)
+            .first!
+            .appendingPathComponent("Unfalldaten.sqlite")
+
+        do {
+            dbQueue = try DatabaseQueue(path: pfad.path)
+            try migrator.migrate(dbQueue)
+        } catch {
+            fatalError("Fehler bei Initialisierung der DB: \(error)")
+        }
+    }
+
+    /// Datenbankmigrationen: initiales Setup + spätere Änderungen
+    private var migrator: DatabaseMigrator {
+        var migrator = DatabaseMigrator()
+
+        // Migration: Erste Version mit Tabelle "unfall"
+        migrator.registerMigration("v1_initial") { db in
+            let tableName = "accidents"
+            try db.create(table: tableName, ifNotExists: true) { t in
+                t.column("id", .integer).primaryKey()
+                t.column("jahr", .integer).notNull()
+                t.column("monat", .integer).notNull()
+                t.column("stunde", .integer).notNull()
+                t.column("wochentag", .integer).notNull()
+                t.column("unfallKategorie", .integer).notNull()
+                t.column("unfallArt", .integer).notNull()
+                t.column("unfallTyp1", .integer).notNull()
+                t.column("lichtVerhaeltnisse", .integer).notNull()
+                t.column("strassenZustand", .integer).notNull()
+                t.column("vehicleMask", .integer).notNull()
+                t.column("latitude100", .integer).notNull()
+                t.column("longitude100", .integer).notNull()
+            }
+
+            // Indexe – optimiert für deine Abfragen
+            try db.create(index: "idx_lon_lat", on: tableName, columns: ["longitude100", "latitude100"])
+            try db.create(index: "idx_jahr", on: tableName, columns: ["jahr"])
+        }
+
+        // Weitere Migrationen (Beispiel)
+        /*
+        migrator.registerMigration("v2_add_column_xyz") { db in
+            try db.alter(table: "unfall") { t in
+                t.add(column: "neueSpalte", .integer).notNull().defaults(to: 0)
+            }
+        }
+        */
+
+        return migrator
+    }
+}
+
+
+// Merken:
+//func schreibeUnfall(_ unfall: AccidentNeu) async throws {
+//    try await DatabaseService.shared.dbQueue.write { db in
+//        try unfall.insert(db)
 //    }
-//
-//    func createTablesIfNeeded() throws {
-//        try dbQueue.write { db in
-//            try db.create(table: AccidentNeu.databaseTableName, ifNotExists: true) { t in
-//                t.column("id", .integer).primaryKey()
-//                t.column("year", .integer)
-//                t.column("month", .integer)
-//                t.column("hour", .integer)
-//                t.column("weekday", .integer)
-//                t.column("category", .integer)
-//                t.column("type", .integer)
-//                t.column("subtype", .integer)
-//                t.column("lighting", .integer)
-//                t.column("roadCondition", .integer)
-//                t.column("vehicleMask", .integer)
-//                t.column("latitude100", .integer)
-//                t.column("longitude100", .integer)
-//            }
+//}
+//func schreibeUnfaelle(_ unfaelle: [AccidentNeu]) async throws {
+//    try await DatabaseService.shared.dbQueue.write { db in
+//        for unfall in unfaelle {
+//            try unfall.insert(db)
 //        }
 //    }
+//}
+
+
+//func ladeAlleUnfaelle() async throws -> [AccidentNeu] {
+//    try await DatabaseService.shared.dbQueue.read { db in
+//        try AccidentNeu.fetchAll(db)
+//    }
+//}
+//func ladeUnfaelle(jahr: Int, vehicleMask: Int) async throws -> [AccidentNeu] {
+//    try await DatabaseService.shared.dbQueue.read { db in
+//        try AccidentNeu
+//            .filter(Column("jahr") == jahr && Column("vehicleMask").bitwiseAnd(vehicleMask) != 0)
+//            .fetchAll(db)
+//    }
+//}
+
+
+
+
+
+
+//final class DatabaseService: @unchecked Sendable {
+//    static let shared = DatabaseService()
+//    let dbQueue: DatabaseQueue
 //
-//    func importAccidentsNeuAsync(from lines: [String]) async throws {
-//        try await dbQueue.write { db in
-//            for line in lines {
-//                let columns = line.components(separatedBy: ";")
-//                guard columns.count >= 25 else { continue }
+//    private init() {
+//        let pfad = FileManager.default
+//            .urls(for: .applicationSupportDirectory, in: .userDomainMask)
+//            .first!
+//            .appendingPathComponent("Unfalldaten.sqlite")
 //
-//                let lat = Int32(Double(columns[24].replacingOccurrences(of: ",", with: "."))! * 10_000_000)
-//                let lon = Int32(Double(columns[23].replacingOccurrences(of: ",", with: "."))! * 10_000_000)
+//        do {
+//            dbQueue = try DatabaseQueue(path: pfad.path)
 //
-//                var vehicleMask: Int16 = 0
-//                if columns[15] == "1" { vehicleMask |= 1 << 0 }
-//                if columns[16] == "1" { vehicleMask |= 1 << 1 }
-//                if columns[17] == "1" { vehicleMask |= 1 << 2 }
-//                if columns[18] == "1" { vehicleMask |= 1 << 3 }
-//                if columns[19] == "1" { vehicleMask |= 1 << 4 }
-//                if columns[20] == "1" { vehicleMask |= 1 << 5 }
+//            try dbQueue.write { db in
+//                try db.create(table: AccidentNeu.databaseTableName, ifNotExists: true) { t in
+//                    t.column("id", .integer).primaryKey()
+//                    t.column("jahr", .integer).notNull()
+//                    t.column("monat", .integer).notNull()
+//                    t.column("stunde", .integer).notNull()
+//                    t.column("wochentag", .integer).notNull()
+//                    t.column("unfallKategorie", .integer).notNull()
+//                    t.column("unfallArt", .integer).notNull()
+//                    t.column("unfallTyp1", .integer).notNull()
+//                    t.column("lichtVerhaeltnisse", .integer).notNull()
+//                    t.column("strassenZustand", .integer).notNull()
+//                    t.column("vehicleMask", .integer).notNull()
+//                    t.column("latitude100", .integer).notNull()     // zentimetergenau
+//                    t.column("longitude100", .integer).notNull()     // zentimetergenau
+////                    t.column("accidentObjectID", .integer).notNull()
+////                    t.index(["longitude100", "latitude100"])
+////                    t.index(["id"])
+//                }
 //
-//                let accident = AccidentNeu(
-//                    id: Int32(columns[0])!,
-//                    year: Int16(columns[6])!,
-//                    month: Int16(columns[7])!,
-//                    hour: Int16(columns[8])!,
-//                    weekday: Int16(columns[9])!,
-//                    category: Int16(columns[10])!,
-//                    type: Int16(columns[11])!,
-//                    subtype: Int16(columns[12])!,
-//                    lighting: Int16(columns[13])!,
-//                    roadCondition: Int16(columns[14])!,
-//                    vehicleMask: vehicleMask,
-//                    latitude100: lat,
-//                    longitude100: lon
-//                )
-//
-//                try accident.insert(db)
+//                try db.create(index: "idx_lon_lat", on: AccidentNeu.databaseTableName, columns: ["longitude100", "latitude100"])
+//                try db.create(index: "idx_jahr", on: AccidentNeu.databaseTableName, columns: ["jahr"])
+////                try db.createIndex("idx_lon_lat", on: "unfall", columns: ["longitude100", "latitude100"])
+////                try db.createIndex("idx_objectid", on: "unfall", columns: ["accidentObjectID"])
 //            }
+//        } catch {
+//            fatalError("Fehler bei Initialisierung der DB: \(error)")
 //        }
 //    }
 //}
