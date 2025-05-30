@@ -27,6 +27,8 @@ struct ContentView: View {
 
     @State private var lookAroundScene: MKLookAroundScene?
     @State private var selectedAccident: AccidentStruct?
+    @State private var selectedAccidentGRDB: AccidentStructGRDB?
+
     @State private var showLookAroundPreview = false
     
     @State private var isShowingFilterView = false
@@ -39,48 +41,96 @@ struct ContentView: View {
             
             ZStack(alignment: .topTrailing) {
                 
+//                // Use initializer with $position, otherwhise position waggles several times, when coming back from filter view
+//                // I do not understand why. $position should actually not be needed.
+//                Map(position: $mapCameraPosition, scope: mapScope) {
+//
+//                    UserAnnotation() // Displays the blue circle for user's position
+//                    
+//                    // Draw Circle on map for each Accident and conditionally show symbols text
+//                    // Big sppeed up to separate
+//                    if !viewModel.accidentStructs.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
+//                        // Some sppeed up to distinguish the two cases of displaying symbols or not in the following way
+//                        if showSymbols {
+//                            // Circles with text symbols (the emojis) for each accident
+//                            ForEach(viewModel.accidentStructs) { accident in
+//                                // MARK: BEWARE: Annotation text could also be used for symbols information text
+//                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
+//                                    Button(action: {
+//                                        print("==================== Button pressed ===================")
+//                                        if accident == selectedAccident {
+//                                            selectedAccident = nil
+//                                        } else {
+//                                            selectedAccident = accident
+//                                        }
+//                                        getLookAroundScene(forAccident: selectedAccident)
+//                                    }) {
+//                                        Circle()
+//                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
+//                                            .padding()
+//                                            .overlay() {
+//                                                SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
+//                                            }
+//                                    }
+//                                    .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
+//                                }
+//                            }
+//                        } else {
+//                            // Plain circles (no emojis here)
+//                            ForEach(viewModel.accidentStructs) { accident in
+//                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
+//                                    Button(action: {
+//                                        print("==================== Button pressed ===================")
+//                                        if accident == selectedAccident {
+//                                            selectedAccident = nil
+//                                        } else {
+//                                            selectedAccident = accident
+//                                        }
+//                                        getLookAroundScene(forAccident: selectedAccident)
+//                                    }) {
+//                                        Circle()
+//                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
+//                                            .padding()
+//                                    }
+//                                    .overlay() {
+//                                        SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
+//                                            .opacity(accident == selectedAccident ? 1 : 0)
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                
                 // Use initializer with $position, otherwhise position waggles several times, when coming back from filter view
                 // I do not understand why. $position should actually not be needed.
                 Map(position: $mapCameraPosition, scope: mapScope) {
 
                     UserAnnotation() // Displays the blue circle for user's position
                     
-                    // Example for using marker instead of Annotation, keep if once needed.
-                    // Works, but bottowm of the shape is the accident point (not the middle)
-                    // Keep, untill markers are displayed in Germany Look Around view (which is
-                    // unfortunately not the case as of 2023-10-03)
-//                    if !viewModel.accidents.isEmpty {
-//                        ForEach(viewModel.accidents) { accident in
-//                            Marker("UNFALL",
-//                                   systemImage: "circle", coordinate: accident.coordinate)
-//                            .annotationTitles(.visible)
-//                            .tint(colorForAccidentType1(accident: accident))
-//                        }
-//                    }
-                    
                     // Draw Circle on map for each Accident and conditionally show symbols text
                     // Big sppeed up to separate
-                    if !viewModel.accidentStructs.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
+                    if !viewModel.accidentStructsGRDB.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
                         // Some sppeed up to distinguish the two cases of displaying symbols or not in the following way
                         if showSymbols {
                             // Circles with text symbols (the emojis) for each accident
-                            ForEach(viewModel.accidentStructs) { accident in
+                            ForEach(viewModel.accidentStructsGRDB) { accident in
                                 // MARK: BEWARE: Annotation text could also be used for symbols information text
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-                                        if accident == selectedAccident {
-                                            selectedAccident = nil
+                                        if accident == selectedAccidentGRDB {
+                                            selectedAccidentGRDB = nil
                                         } else {
-                                            selectedAccident = accident
+                                            selectedAccidentGRDB = accident
                                         }
                                         getLookAroundScene(forAccident: selectedAccident)
                                     }) {
                                         Circle()
-                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
+                                            .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
                                             .padding()
                                             .overlay() {
-                                                SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
+                                                SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
                                             }
                                     }
                                     .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
@@ -88,33 +138,36 @@ struct ContentView: View {
                             }
                         } else {
                             // Plain circles (no emojis here)
-                            ForEach(viewModel.accidentStructs) { accident in
+                            ForEach(viewModel.accidentStructsGRDB, id: \.id) { accident in
                                 Annotation("", coordinate: accident.coordinate, anchor: .center) {
                                     Button(action: {
                                         print("==================== Button pressed ===================")
-                                        if accident == selectedAccident {
-                                            selectedAccident = nil
+                                        if accident == selectedAccidentGRDB {
+                                            selectedAccidentGRDB = nil
                                         } else {
-                                            selectedAccident = accident
+                                            selectedAccidentGRDB = accident
                                         }
                                         getLookAroundScene(forAccident: selectedAccident)
                                     }) {
                                         Circle()
-                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
+                                            .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
                                             .padding()
                                     }
                                     .overlay() {
-                                        SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
-                                            .opacity(accident == selectedAccident ? 1 : 0)
+                                        SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
+                                            .opacity(accident == selectedAccidentGRDB ? 1 : 0)
                                     }
                                 }
                             }
                         }
                     }
                 }
+                
+
                 // Click on anywhere in the map (which is not the circle of an accident) deselects the previously selected accident.
                 .simultaneousGesture(TapGesture(count: 1).onEnded { // Simultaneous gesture needed for retaining zoom on double click.
                     selectedAccident = nil
+                    selectedAccidentGRDB = nil
                 })
 
                 .mapControls {
@@ -230,6 +283,10 @@ struct ContentView: View {
                         viewModel.accidentStructs = []
                     }
 
+                    if viewModel.accidentStructsGRDB.count > 100 {
+                        viewModel.accidentStructsGRDB = []
+                    }
+
                     self.mapCamera = context.camera
                     self.visibleRegion = context.region
                     
@@ -244,6 +301,7 @@ struct ContentView: View {
                             // async seems to result in more responsive UI
 //                            viewModel.fetchAccidents2(region: context.region)
                             viewModel.fetchAccidents(region: context.region)
+                            viewModel.fetchAccidentsGRDB(region: context.region)
 //                            print("In Task, not cancelled, ended")
                         }
                     }
@@ -323,6 +381,7 @@ struct ContentView: View {
             .onChange(of: showSymbols) {
                 print("============================== in .onChange(of: showSymbols) ===============================")
                 viewModel.fetchAccidents(region: visibleRegion)
+                viewModel.fetchAccidentsGRDB(region: visibleRegion)
             }
 
 
@@ -357,6 +416,8 @@ struct ContentView: View {
                     }
                 }
                 viewModel.fetchAccidents(region: visibleRegion)
+                viewModel.fetchAccidentsGRDB(region: visibleRegion)
+
             }
         }
     }
@@ -365,6 +426,8 @@ struct ContentView: View {
     func dismissFilterViewAction() {
         print("============================== in func dismissAction ======================")
         viewModel.fetchAccidents(region: visibleRegion)
+        viewModel.fetchAccidentsGRDB(region: visibleRegion)
+
     }
     
     func getLookAroundScene (forAccident accident: AccidentStruct?) {

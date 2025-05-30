@@ -69,4 +69,23 @@ extension MKCoordinateRegion: @retroactive Equatable
 
         return NSPredicate(format: "latitudeRaw BETWEEN {%d, %d} AND longitudeRaw BETWEEN {%d, %d}", latMinRaw, latMaxRaw, lonMinRaw, lonMaxRaw)
     }
+    
+}
+extension MKCoordinateRegion {
+    var boundingBox100: (minLat: Int32, maxLat: Int32, minLon: Int32, maxLon: Int32) {
+        let latDelta = self.span.latitudeDelta * 0.5
+        let lonDelta = self.span.longitudeDelta * 0.5
+
+        let minLat = self.center.latitude - latDelta
+        let maxLat = self.center.latitude + latDelta
+        let minLon = self.center.longitude - lonDelta
+        let maxLon = self.center.longitude + lonDelta
+
+        return (
+            minLat: Int32(minLat * 10_000_000),
+            maxLat: Int32(maxLat * 10_000_000),
+            minLon: Int32(minLon * 10_000_000),
+            maxLon: Int32(maxLon * 10_000_000)
+        )
+    }
 }

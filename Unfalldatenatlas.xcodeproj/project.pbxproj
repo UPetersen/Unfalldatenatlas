@@ -23,6 +23,7 @@
 		C604E936299009AF00E3A078 /* InitializationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C604E934299009AF00E3A078 /* InitializationView.swift */; };
 		C604E938299009CB00E3A078 /* InitalizationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C604E937299009CB00E3A078 /* InitalizationViewModel.swift */; };
 		C604E939299009CB00E3A078 /* InitalizationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C604E937299009CB00E3A078 /* InitalizationViewModel.swift */; };
+		C62942692DEA1C03005E20D5 /* SymbolsTextViewGRDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62942682DEA1BF2005E20D5 /* SymbolsTextViewGRDB.swift */; };
 		C640096B2AD464F000988E56 /* CountOfSelectedAccidentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C640096A2AD464F000988E56 /* CountOfSelectedAccidentsView.swift */; };
 		C642DA2629A20CEC00623663 /* MapConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2529A20CEC00623663 /* MapConfigurationView.swift */; };
 		C642DA2829A5441B00623663 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2729A5441B00623663 /* InfoView.swift */; };
@@ -81,6 +82,7 @@
 		C604E927298FF4F600E3A078 /* Unfallorte2016_LinRef.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Unfallorte2016_LinRef.csv; sourceTree = "<group>"; };
 		C604E934299009AF00E3A078 /* InitializationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializationView.swift; sourceTree = "<group>"; };
 		C604E937299009CB00E3A078 /* InitalizationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitalizationViewModel.swift; sourceTree = "<group>"; };
+		C62942682DEA1BF2005E20D5 /* SymbolsTextViewGRDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolsTextViewGRDB.swift; sourceTree = "<group>"; };
 		C63146042DE4FF7200CD7E54 /* Unfalldatenatlas 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Unfalldatenatlas 6.xcdatamodel"; sourceTree = "<group>"; };
 		C640096A2AD464F000988E56 /* CountOfSelectedAccidentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountOfSelectedAccidentsView.swift; sourceTree = "<group>"; };
 		C642D9D9299ACF8300623663 /* Unfalldatenatlas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Unfalldatenatlas.entitlements; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				C649EB1E2CC3D71100C1DC62 /* AccidentStruct.swift */,
 				C6497C092AEEA8E6008E3D98 /* AccdientPropertiesEnums.swift */,
 				C6ADE9602AC8202B0096D7C8 /* SymbolsTextView.swift */,
+				C62942682DEA1BF2005E20D5 /* SymbolsTextViewGRDB.swift */,
 				C642D9D9299ACF8300623663 /* Unfalldatenatlas.entitlements */,
 				C650866829AA310200C5DE76 /* Info.plist */,
 				C6CA9F94297DBD4D000D9E8B /* ContentView.swift */,
@@ -394,6 +397,7 @@
 				C6745E992DE88FD300C82B37 /* DatabaseService.swift in Sources */,
 				C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */,
 				C6D0D023298B0AF0000572C3 /* FilterView.swift in Sources */,
+				C62942692DEA1C03005E20D5 /* SymbolsTextViewGRDB.swift in Sources */,
 				C6745E972DE88D1300C82B37 /* DatabaseManager.swift in Sources */,
 				C6A4385D2DE76C74004DF22C /* VehicleMask.swift in Sources */,
 				C6ADE9612AC8202B0096D7C8 /* SymbolsTextView.swift in Sources */,

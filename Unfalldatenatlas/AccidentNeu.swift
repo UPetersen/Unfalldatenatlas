@@ -5,6 +5,7 @@
 //  Created by Uwe Petersen on 29.05.25.
 //
 import Foundation
+import SwiftUI
 import GRDB
 
 struct AccidentNeu: Codable, FetchableRecord, MutablePersistableRecord, Identifiable {
@@ -30,4 +31,13 @@ struct AccidentNeu: Codable, FetchableRecord, MutablePersistableRecord, Identifi
     }
 
     static let databaseTableName = "accidents"
+}
+
+extension AccidentNeu {
+    var color: Color {
+        guard let unfallTyp1 = UnfallTyp1(rawValue: Int(self.unfallTyp1)) else {
+            return Color.gray
+        }
+        return unfallTyp1.color
+    }
 }

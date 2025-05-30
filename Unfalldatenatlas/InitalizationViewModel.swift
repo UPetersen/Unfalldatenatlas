@@ -175,7 +175,7 @@ final class InitializationViewModel: ObservableObject {
         let countOfAccidentsStored = await self.countOfAccidentsInDatabase
         let linesToRead = linesToRead(countOfAccidentsStored: countOfAccidentsStored, years: years)
         
-        for year in [ "2018"] {
+        for year in years {
 
             guard linesToRead[year]! > 0 else { continue }
             

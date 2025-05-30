@@ -10,6 +10,7 @@ import Combine
 import CoreLocation
 import CoreData
 import MapKit
+import GRDB
 
 
 struct AccidentDataFilter: Equatable {
@@ -70,7 +71,8 @@ final class ViewModel: ObservableObject {
     @Published var countOfAccidentsInRegion: Int = 0
     // Accidents to be displayed, i.e. the accidents in the respective region (0 up to fetchLimit accidents)
     @Published var accidentStructs: [AccidentStruct] = []
-    
+    @Published var accidentStructsGRDB: [AccidentStructGRDB] = []
+
     @Published var isFetchingAccidents = false
     @Published var accidentDataFilters = AccidentDataFilter()
     private var fetchOperation3: FetchOperation? = nil
@@ -101,7 +103,71 @@ final class ViewModel: ObservableObject {
         getCountOfSelectedAccidents()
     }
   
-    
+    /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
+    func fetchAccidentsGRDB(region: MKCoordinateRegion) {
+        taskForFetchingAccidents?.cancel()
+        taskForFetchingAccidents = Task.detached(priority: .high) {
+            await MainActor.run { self.isFetchingAccidents = true }
+
+            let minLat = Int32((region.center.latitude - 0.5 * region.span.latitudeDelta) * 10_000_000)
+            let maxLat = Int32((region.center.latitude + 0.5 * region.span.latitudeDelta) * 10_000_000)
+            let minLon = Int32((region.center.longitude - 0.5 * region.span.longitudeDelta) * 10_000_000)
+            let maxLon = Int32((region.center.longitude + 0.5 * region.span.longitudeDelta) * 10_000_000)
+
+            let limit = await self.fetchLimit
+            
+            // Filter-Predicate aus Deinen Auswahloptionen
+//            let filterPredicate = filter.grdbPredicate // ein SQLPredicate oder Expression<Boolean> für GRDB
+
+            
+            do {
+                let rows = try await DatabaseService.shared.dbQueue.read { db in
+                    try AccidentNeu
+//                        .filter(Column("latitude100") >= latMin && Column("latitude100") <= latMax &&
+//                                Column("longitude100") >= lonMin && Column("longitude100") <= lonMax)
+//                        .filter(Column("longitude100") >= lonMin && Column("longitude100") <= lonMax &&
+//                                Column("latitude100") >= latMin && Column("latitude100") <= latMax)
+                        .filter(Column("latitude100") >= minLat && Column("latitude100") <= maxLat)
+                        .filter(Column("longitude100") >= minLon && Column("longitude100") <= maxLon)
+//                        .filter(regionPredicate && filterPredicate)
+                        .order(Column("id").asc) // brings in some distribution of the results in the region, otherwhise only accidents at the lower edge of the region are fetched
+                        .limit(limit)
+                        .fetchAll(db)
+                }
+
+                let result = rows.map {
+                    AccidentStructGRDB(
+                        id: Int32($0.id),
+                        accidentObjectID: $0.id,
+                        vehicleMask: $0.vehicleMask,
+                        jahr: $0.jahr,
+                        //                            land: accident.land,
+                        latitude: Double($0.latitude100) / 10_000_000,
+                        lichtVerhaeltnisse: $0.lichtVerhaeltnisse,
+                        longitude: Double($0.longitude100) / 10_000_000,
+                        monat: $0.monat,
+                        strassenZustand: $0.strassenZustand,
+                        stunde: $0.stunde,
+                        unfallArt: $0.unfallArt,
+                        unfallKategorie: $0.unfallKategorie,
+                        unfallTyp1: $0.unfallTyp1,
+                        wochentag: $0.wochentag,
+                        coordinate:  CLLocationCoordinate2D(latitude: Double($0.latitude100) / 10_000_000,
+                                                            longitude: Double($0.longitude100) / 10_000_000),
+                        color: $0.color
+                    )
+                }
+
+                await MainActor.run {
+                    self.accidentStructsGRDB = result
+                    self.isFetchingAccidents = false
+                }
+            } catch {
+                await MainActor.run { self.isFetchingAccidents = false }
+                print("❌ Fehler beim GRDB-Fetch: \(error)")
+            }
+        }
+    }
     /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
     func fetchAccidents(region: MKCoordinateRegion)  {
         
@@ -248,24 +314,24 @@ final class ViewModel: ObservableObject {
     }
     
     
-    /// Loads the count of selected accidents for the current selection (i.e. filters set)from the database.
-    /// This is for whole Germany, dependent on e.g. day/night, type of accident et Cetera. It is independent of the region, but always for whole Germany.
-    /// Uses Operation. Operations can be cancelled and thus a running fetch request on that operation will be cancelled together with this operation.
-    /// Changed to this version due to Swift 6.
-    func performCountFetchRequest2(predicate: NSPredicate) -> FetchOperation {
-
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Accident")
-        fetchRequest.predicate = predicate
-        fetchRequest.resultType = .countResultType
-
-        let context = PersistenceController.shared.container.newBackgroundContext()
-        let fetchOperation = FetchOperation(context: context, fetchRequest: fetchRequest)
-
-        let operationQueue = OperationQueue()
-        operationQueue.addOperation(fetchOperation)
-
-        return fetchOperation
-    }
+//    /// Loads the count of selected accidents for the current selection (i.e. filters set)from the database.
+//    /// This is for whole Germany, dependent on e.g. day/night, type of accident et Cetera. It is independent of the region, but always for whole Germany.
+//    /// Uses Operation. Operations can be cancelled and thus a running fetch request on that operation will be cancelled together with this operation.
+//    /// Changed to this version due to Swift 6.
+//    func performCountFetchRequest2(predicate: NSPredicate) -> FetchOperation {
+//
+//        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Accident")
+//        fetchRequest.predicate = predicate
+//        fetchRequest.resultType = .countResultType
+//
+//        let context = PersistenceController.shared.container.newBackgroundContext()
+//        let fetchOperation = FetchOperation(context: context, fetchRequest: fetchRequest)
+//
+//        let operationQueue = OperationQueue()
+//        operationQueue.addOperation(fetchOperation)
+//
+//        return fetchOperation
+//    }
 }
 
 
