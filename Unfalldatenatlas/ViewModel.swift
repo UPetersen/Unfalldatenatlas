@@ -77,7 +77,7 @@ struct AccidentDataFilter: Equatable {
         default: vehicleMaskFilter = expressions.dropFirst().reduce(expressions.first!) { $0 && $1 }
         }
     
-        return [
+        return [ // Order with respect to highest number of different values.
             monat.grdbFilter,              // [0 ... 12]
             unfallArt.grdbFilter,          // [0 ... 10]
             jahr.grdbFilter,               // [0, 2016, ... 2023], 9 states
@@ -100,27 +100,29 @@ final class ViewModel: ObservableObject {
     
     // static let countOfAllAccidents = 1_554_834 // with 2022 date. Value to be filled in by hand, whenever new data files for new years are added.
     // count of all accidents in the database when all the years are imported into the database
-    static let countOfAllAccidents = 1_823_882 // With 2023 data. Value to filled in by hand, whenever new data files for new years are added.
+    static let totalCountinGermany = 1_823_882 // With 2023 data. Value to filled in by hand, whenever new data files for new years are added.
+    
     // count of all accidents in the database if no filter/seletion is applied, otherwhise the count of the accidents in the database after filtering/selection
-    @Published var countOfSelectedAccidents: Int = 0
+    @Published var selectedCountInGermany: Int = 0
+    @Published var isFetchingSelectedCountInGermany = false
+    private var taskForFetchCountInGermany: Task<Void, Error>? = nil
+
     // count of the subset of the accidents in the database that lies in the respective region (geographic rectangular), filter/selection applied.
     // Number is limited by fetchlimit, thus it can be a number from 0 up to fetchLimit.
-    @Published var countOfAccidentsInRegion: Int = 0
+//    @Published var totalCountInRegion: Int = 0
+    @Published var selectedCountInRegion: Int = 0
+    @Published var isFetchingSelectedCountInRegion = false
+    private var taskForFetchCountInRegion: Task<Void, Error>? = nil
+
     // Accidents to be displayed, i.e. the accidents in the respective region (0 up to fetchLimit accidents)
     @Published var accidentStructs: [AccidentStruct] = []
     @Published var accidentStructsGRDB: [AccidentStructGRDB] = []
-
     @Published var isFetchingAccidents = false
     @Published var accidentDataFilters = AccidentDataFilter()
-    private var fetchOperation3: FetchOperation? = nil
-    private var taskForFetchingSelectedAccidents: Task<Void, Error>? = nil
-
+    private var taskForFetchAccidents: Task<Void, Never>? = nil
     private(set) var fetchLimit = 400 //300 // Maximum number of accidents to fetched -> fetchLimit for fetch request.
-    private var taskForFetchingAccidents: Task<Void, Never>? = nil
     
-    @Published var isFetchingCountOfSelectedAccidents = false
     private var fetchOperation: FetchOperation? = nil
-    private var taskForCountingSelectedAccidents: Task<Void, Error>? = nil
     
     init(initFromFile: Bool = false) {
 //        asyncContext.automaticallyMergesChangesFromParent = true
@@ -137,65 +139,39 @@ final class ViewModel: ObservableObject {
     /// Called when context was saved. Updates the count of selected accidents in the respective view.
     /// - Parameter notification: This parameter is not used
     @objc func didSave(_ notification: Notification) {
-        getCountOfSelectedAccidents()
+//        getCountOfSelectedAccidents()
+        fetchCountInGermany()
     }
   
     /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
     func fetchAccidentsGRDB(region: MKCoordinateRegion) {
-        taskForFetchingAccidents?.cancel()
-        taskForFetchingAccidents = Task.detached(priority: .high) {
+   
+        taskForFetchAccidents?.cancel()
+        taskForFetchAccidents = Task.detached(priority: .high) {
+            
             await MainActor.run { self.isFetchingAccidents = true }
-
-            let minLat = Int32((region.center.latitude - 0.5 * region.span.latitudeDelta) * 10_000_000)
-            let maxLat = Int32((region.center.latitude + 0.5 * region.span.latitudeDelta) * 10_000_000)
-            let minLon = Int32((region.center.longitude - 0.5 * region.span.longitudeDelta) * 10_000_000)
-            let maxLon = Int32((region.center.longitude + 0.5 * region.span.longitudeDelta) * 10_000_000)
-
             let limit = await self.fetchLimit
             
             do {
-                
+                let box = region.boundingBox100
                 let filters = await self.accidentDataFilters.grdbFilters
                 let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
                 
-//                let rows = try await DatabaseService.shared.dbQueue.read { db in
                 let rows = try await DatabaseService.shared.dbPool.read { db in
 
                     try AccidentNeu
-                        .filter(Column("longitude100") >= minLon && Column("longitude100") <= maxLon)
-                        .filter(Column("latitude100") >= minLat && Column("latitude100") <= maxLat)
+                        .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
+                        .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
                         .filter(combinedFilter)
                         .order(Column("id").asc)
                         .limit(limit)
                         .fetchAll(db)
-
                 }
 
-                let result = rows.map {
-                    AccidentStructGRDB(
-                        id: Int32($0.id),
-                        accidentObjectID: $0.id,
-                        vehicleMask: $0.vehicleMask,
-                        jahr: $0.jahr,
-                        //                            land: accident.land,
-                        latitude: Double($0.latitude100) / 10_000_000,
-                        lichtVerhaeltnisse: $0.lichtVerhaeltnisse,
-                        longitude: Double($0.longitude100) / 10_000_000,
-                        monat: $0.monat,
-                        strassenZustand: $0.strassenZustand,
-                        stunde: $0.stunde,
-                        unfallArt: $0.unfallArt,
-                        unfallKategorie: $0.unfallKategorie,
-                        unfallTyp1: $0.unfallTyp1,
-                        wochentag: $0.wochentag,
-                        coordinate:  CLLocationCoordinate2D(latitude: Double($0.latitude100) / 10_000_000,
-                                                            longitude: Double($0.longitude100) / 10_000_000),
-                        color: $0.color
-                    )
-                }
+                let accidentStructsGDRB = rows.map(AccidentStructGRDB.init) // Creates AccidentStrucGRDB for every record from the record and puts into result array
 
                 await MainActor.run {
-                    self.accidentStructsGRDB = result
+                    self.accidentStructsGRDB = accidentStructsGDRB
                     self.isFetchingAccidents = false
                 }
             } catch {
@@ -204,12 +180,75 @@ final class ViewModel: ObservableObject {
             }
         }
     }
+    func fetchCountInRegion(region: MKCoordinateRegion) {
+   
+        taskForFetchCountInRegion?.cancel()
+        taskForFetchCountInRegion = Task.detached(priority: .high) {
+            
+            await MainActor.run { self.isFetchingSelectedCountInRegion = true }
+            
+            do {
+                let box = region.boundingBox100
+                let filters = await self.accidentDataFilters.grdbFilters
+                let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
+                
+                let count = try await DatabaseService.shared.dbPool.read { db in
+
+                    try AccidentNeu
+                        .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
+                        .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
+                        .filter(combinedFilter)
+                        .fetchCount(db)
+                }
+
+                await MainActor.run {
+                    self.selectedCountInRegion = count
+                    self.isFetchingSelectedCountInRegion = false
+                }
+            } catch {
+                await MainActor.run { self.isFetchingAccidents = false }
+                print("❌ Fehler beim GRDB-Fetch: \(error)")
+            }
+        }
+    }
+    
+    
+    func fetchCountInGermany() {
+        
+        isFetchingSelectedCountInGermany = true
+        selectedCountInGermany = 0
+        
+        taskForFetchCountInGermany?.cancel()
+        taskForFetchCountInGermany = Task {
+            
+            do {
+                let filters = self.accidentDataFilters.grdbFilters
+                let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
+                
+                let count = try await DatabaseService.shared.dbPool.read { db in
+                    try AccidentNeu
+                        .filter(combinedFilter)
+                        .order(Column("id").asc)
+                        .fetchCount(db)
+                }
+
+                await MainActor.run {
+                    self.selectedCountInGermany = count
+                    self.isFetchingSelectedCountInGermany = false
+                }
+            } catch {
+                await MainActor.run { self.isFetchingAccidents = false }
+                print("❌ Fehler beim GRDB-Fetch: \(error)")
+            }
+        }
+    }
+ 
     /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
     func fetchAccidents(region: MKCoordinateRegion)  {
         
         // Detached task does NOT run on the main thread and needs to be called with await.
-        taskForFetchingAccidents?.cancel()
-        taskForFetchingAccidents = Task.detached(priority: .high) {
+        taskForFetchAccidents?.cancel()
+        taskForFetchAccidents = Task.detached(priority: .high) {
             
             await MainActor.run { self.isFetchingAccidents = true }
             
@@ -293,9 +332,9 @@ final class ViewModel: ObservableObject {
     
     func getCountOfSelectedAccidents() {
         
-        isFetchingCountOfSelectedAccidents = true
+        isFetchingSelectedCountInGermany = true
 
-        taskForCountingSelectedAccidents?.cancel()
+        taskForFetchCountInGermany?.cancel()
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Accident")
         fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: accidentDataFilters.predicates)
         fetchRequest.resultType = .countResultType
@@ -304,7 +343,7 @@ final class ViewModel: ObservableObject {
         fetchOperation = performFetchRequest(fetchRequest: fetchRequest)
 
         // Task needed for polling the results from the fetch operation
-        taskForCountingSelectedAccidents = Task {
+        taskForFetchCountInGermany = Task {
             // Do something
 
             while true {
@@ -318,8 +357,8 @@ final class ViewModel: ObservableObject {
                 }
                 if let fetchOperation, fetchOperation.isFinished {
 //                    print("fetchOperation finished")
-                    isFetchingCountOfSelectedAccidents = false
-                    countOfSelectedAccidents = fetchOperation.count ?? 0
+                    isFetchingSelectedCountInGermany = false
+                    selectedCountInGermany = fetchOperation.count ?? 0
 //                    print("# of accidents: \(countOfSelectedAccidents)")
                     break
                 }

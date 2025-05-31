@@ -50,6 +50,6 @@ struct CountOfSelectedAccidentsView: View {
 }
 
 #Preview {
-    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: Int(1), isFetchingCountOfSelectedAccidents: false, displayPercentage: true)
+    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.totalCountinGermany, countOfSelectedAccidents: Int(1), isFetchingCountOfSelectedAccidents: false, displayPercentage: true)
     
 }

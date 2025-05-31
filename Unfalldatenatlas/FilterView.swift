@@ -27,7 +27,7 @@ struct FilterView: View {
                 HStack {
                     Text("Anzahl Unfälle:")
                     Spacer()
-                    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: viewModel.isFetchingCountOfSelectedAccidents, displayPercentage: displayPercentage)
+                    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.totalCountinGermany, countOfSelectedAccidents: viewModel.selectedCountInGermany, isFetchingCountOfSelectedAccidents: viewModel.isFetchingSelectedCountInGermany, displayPercentage: displayPercentage)
                 }
             }
             
@@ -144,7 +144,8 @@ struct FilterView: View {
         .onChange(of: viewModel.accidentDataFilters) {
             print("----------------- in .onChange (FilterView) due to init or accidentDataFilters change -------------------")
             
-            viewModel.getCountOfSelectedAccidents()
+//            viewModel.getCountOfSelectedAccidents()
+            viewModel.fetchCountInGermany()
         }
     }
 }

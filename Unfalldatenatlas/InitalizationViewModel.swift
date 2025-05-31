@@ -146,7 +146,7 @@ final class InitializationViewModel: ObservableObject {
         print("Initalisierung. Total Count ist: \(String(describing: totalCount))")
         
         //
-        if let totalCount = totalCount, totalCount == ViewModel.countOfAllAccidents { // 1_823_882 (formerly 1_554_834)
+        if let totalCount = totalCount, totalCount == ViewModel.totalCountinGermany { // 1_823_882 (formerly 1_554_834)
             self.initializationState = .initalized
         } else {
             self.initializationState = .initializationRequired

@@ -60,6 +60,28 @@ struct AccidentStructGRDB: Sendable, Identifiable {
     let wochentag: Int16
     let coordinate: CLLocationCoordinate2D
     let color: Color
+    
+    init(_ record: AccidentNeu) {
+        self.id = record.id
+        self.accidentObjectID = record.id
+        self.vehicleMask = record.vehicleMask
+        self.jahr = record.jahr
+        self.monat = record.monat
+        self.stunde = record.stunde
+        self.wochentag = record.wochentag
+        self.unfallKategorie = record.unfallKategorie
+        self.unfallArt = record.unfallArt
+        self.unfallTyp1 = record.unfallTyp1
+        self.lichtVerhaeltnisse = record.lichtVerhaeltnisse
+        self.strassenZustand = record.strassenZustand
+        self.latitude = Double(record.latitude100) / 10_000_000
+        self.longitude = Double(record.longitude100) / 10_000_000
+        self.coordinate = CLLocationCoordinate2D(
+            latitude: self.latitude,
+            longitude: self.longitude
+        )
+        self.color = record.color // Wenn `color` eine Property von `AccidentNeu` ist
+    }
 }
 
 extension AccidentStructGRDB: Equatable {

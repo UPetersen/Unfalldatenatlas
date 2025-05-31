@@ -80,7 +80,7 @@ extension MKCoordinateRegion {
         let maxLat = self.center.latitude + latDelta
         let minLon = self.center.longitude - lonDelta
         let maxLon = self.center.longitude + lonDelta
-
+        
         return (
             minLat: Int32(minLat * 10_000_000),
             maxLat: Int32(maxLat * 10_000_000),

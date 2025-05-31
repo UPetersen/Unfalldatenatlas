@@ -279,9 +279,9 @@ struct ContentView: View {
 
                     viewModel.isFetchingAccidents = true
                     // General decision: raises responsiveness dramatically, but instantly no accidents shown any more while moving the map
-                    if viewModel.accidentStructs.count > 100 {
-                        viewModel.accidentStructs = []
-                    }
+//                    if viewModel.accidentStructs.count > 100 {
+//                        viewModel.accidentStructs = []
+//                    }
 
                     if viewModel.accidentStructsGRDB.count > 100 {
                         viewModel.accidentStructsGRDB = []
@@ -300,8 +300,9 @@ struct ContentView: View {
 //                            print("Task, not cancelled, starting")
                             // async seems to result in more responsive UI
 //                            viewModel.fetchAccidents2(region: context.region)
-                            viewModel.fetchAccidents(region: context.region)
+//                            viewModel.fetchAccidents(region: context.region)
                             viewModel.fetchAccidentsGRDB(region: context.region)
+                            viewModel.fetchCountInRegion(region: context.region)
 //                            print("In Task, not cancelled, ended")
                         }
                     }
@@ -344,14 +345,15 @@ struct ContentView: View {
                 // Text with count of selected accidents
                 ToolbarItem(placement: .navigationBarLeading) {
                     VStack(alignment: .leading) {
-                        CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.countOfAllAccidents, countOfSelectedAccidents: viewModel.countOfSelectedAccidents, isFetchingCountOfSelectedAccidents: viewModel.isFetchingCountOfSelectedAccidents, displayPercentage: initializationViewModel.isInitialized)
+                        CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.totalCountinGermany, countOfSelectedAccidents: viewModel.selectedCountInGermany, isFetchingCountOfSelectedAccidents: viewModel.isFetchingSelectedCountInGermany, displayPercentage: initializationViewModel.isInitialized)
                     }
                 }
                 // The (i) button
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         isShowingInfoView.toggle()
-                        viewModel.accidentStructs = [] // neded for speedup and responsiveness
+//                        viewModel.accidentStructs = [] // neded for speedup and responsiveness
+                        viewModel.accidentStructsGRDB = [] // neded for speedup and responsiveness
                     }) {
                         Label("Info", systemImage: "info.circle")
                     }
@@ -361,7 +363,8 @@ struct ContentView: View {
                     // Use sheet, because there is some significant lag if using NavigationLink.
                     Button(action: {
                         isShowingFilterView.toggle()
-                        viewModel.accidentStructs = [] // neded for speedup and responsiveness
+//                        viewModel.accidentStructs = [] // neded for speedup and responsiveness
+                        viewModel.accidentStructsGRDB = [] // neded for speedup and responsiveness
                     }) {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
                     }
@@ -380,8 +383,9 @@ struct ContentView: View {
             // User pressed button to show symbols or not
             .onChange(of: showSymbols) {
                 print("============================== in .onChange(of: showSymbols) ===============================")
-                viewModel.fetchAccidents(region: visibleRegion)
+//                viewModel.fetchAccidents(region: visibleRegion)
                 viewModel.fetchAccidentsGRDB(region: visibleRegion)
+                viewModel.fetchCountInRegion(region: visibleRegion)
             }
 
 
@@ -389,7 +393,9 @@ struct ContentView: View {
             // Will be called when view appears and each time the initialization state changes. Exactly what we want.
             .task(id: initializationViewModel.initializationState) {
                 print("============================== in .task(of: initializationState) at \(Date.now.formatted(date: .complete, time: .complete)) ======================")
-                viewModel.getCountOfSelectedAccidents()
+//                viewModel.getCountOfSelectedAccidents()
+                viewModel.fetchCountInGermany()
+                viewModel.fetchCountInRegion(region: visibleRegion)
             }
             
             // User toggled the type of the map (between standard and hybrid map type)
@@ -415,9 +421,9 @@ struct ContentView: View {
                         locationManager.requestAuthorization()
                     }
                 }
-                viewModel.fetchAccidents(region: visibleRegion)
+//                viewModel.fetchAccidents(region: visibleRegion)
                 viewModel.fetchAccidentsGRDB(region: visibleRegion)
-
+                viewModel.fetchCountInRegion(region: visibleRegion)
             }
         }
     }
@@ -425,9 +431,9 @@ struct ContentView: View {
     // Action when dismissing InfoView or FilterView
     func dismissFilterViewAction() {
         print("============================== in func dismissAction ======================")
-        viewModel.fetchAccidents(region: visibleRegion)
+//        viewModel.fetchAccidents(region: visibleRegion)
         viewModel.fetchAccidentsGRDB(region: visibleRegion)
-
+        viewModel.fetchCountInRegion(region: visibleRegion)
     }
     
     func getLookAroundScene (forAccident accident: AccidentStruct?) {
@@ -443,15 +449,20 @@ struct ContentView: View {
     
     var infoTextForRegion: String {
         var text: String = "Error or no value."
-        
+                
         if let mapCamera, !mapStyleIsStandard  || (0.5 < mapCamera.heading && mapCamera.heading < 355.5) || 0.5 < mapCamera.pitch {
             // Camera is not standard map, not in north or pitch is no zero (not in 2D) -> no count information in visible region since not accurate
             text = "Unfallzahl für Kartenausschnitt nur bei Standardkarte in Nordausrichtung"
         } else {
-            if viewModel.accidentStructs.count >= viewModel.fetchLimit {
-                text = "\(viewModel.fetchLimit) oder mehr Unfälle im Kartenausschnitt (\(viewModel.fetchLimit) angezeigt)"
+//            if viewModel.accidentStructs.count >= viewModel.fetchLimit {
+//                text = "\(viewModel.fetchLimit) oder mehr Unfälle im Kartenausschnitt (\(viewModel.fetchLimit) angezeigt)"
+//            } else {
+//                text = "\(viewModel.accidentStructs.count) Unfälle im Kartenausschnitt"
+//            }
+            if viewModel.selectedCountInRegion > viewModel.accidentStructsGRDB.count {
+                text = "\(viewModel.selectedCountInRegion) Unfälle im Kartenausschnitt (\(viewModel.accidentStructsGRDB.count) angezeigt)"
             } else {
-                text = "\(viewModel.accidentStructs.count) Unfälle im Kartenausschnitt"
+                text = "\(viewModel.accidentStructsGRDB.count) Unfälle im Kartenausschnitt"
             }
         }
         return text
