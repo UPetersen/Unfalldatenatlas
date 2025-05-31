@@ -123,7 +123,7 @@ final class InitializationViewModel: ObservableObject {
     @Published var initializationState: InitializationState
     
     private var files: [String] = ["Unfallorte2016_LinRef.csv", "Unfallorte2017_LinRef.csv", "Unfallorte2018_LinRef.csv", "Unfallorte2019_LinRef.csv", "Unfallorte2020_LinRef.csv", "Unfallorte2021_LinRef.csv"]
-    private var viewContext = PersistenceController.shared.container.viewContext
+//    private var viewContext = PersistenceController.shared.container.viewContext
 //    private var backgroundContext = PersistenceController.shared.container.newBackgroundContext()
     private var countOfAccidentsBy100000: Int = 0
     private var countOFAccidents: Int = 0
@@ -137,88 +137,88 @@ final class InitializationViewModel: ObservableObject {
         
         print(" In Gesamtinitialisierung.")
         initializationState = .initializationRequired
-        // Check lines in database, if 1_823_882 (formerly 1_554_834), then all data for 2016 to 2023 (formerly 2022) is loaded.
-        // Fetch count of accidents from database (overall and for the respective years) and print to console
-        let countRequest = Accident.fetchRequest()
-        let totalCount =  try? viewContext.count(for: countRequest)
-        
-        countOfAccidentsInDatabase = totalCount!
-        print("Initalisierung. Total Count ist: \(String(describing: totalCount))")
-        
-        //
-        if let totalCount = totalCount, totalCount == ViewModel.totalCountinGermany { // 1_823_882 (formerly 1_554_834)
-            self.initializationState = .initalized
-        } else {
-            self.initializationState = .initializationRequired
-            Task.detached(priority: .high) {
-                do {
-                    try await self.loadDataIntoDatabase()
+
+        // Check number of records in database, if 1_823_882, then all data for 2016 to 2023 is contained in the database and all okay.
+        do {
+            let totalCountInDatabase = try  DatabaseService.shared.dbPool.read { db in
+                try AccidentNeu.fetchCount(db)
+            }
+            print("ℹ️ Total number of accidents in database: \(totalCountInDatabase)")
+            
+            if totalCountInDatabase == ViewModel.totalCountinGermany { // 1_823_882
+                // All good, database contains all datasets for all the years
+                self.initializationState = .initalized
+
+            } else {
+
+                self.initializationState = .initializationRequired
+                Task.detached(priority: .high) {
                     try await self.loadDataIntoDatabaseGRDB()
-                    
-                } catch {
-                    print("An errror occured during initialization.")
                 }
             }
+        } catch {
+            print("❌ Error initializing database: \(error)")
         }
     }
-    
+
     
     /// Reads al files and stores the content in cord data. Uncomment relevant lines for respective files.
-    nonisolated private func loadDataIntoDatabase() async throws {
+//    nonisolated private func loadDataIntoDatabase() async throws {
+//        
+//        let beginDate = Date.now
+//        
+//        let years = ["2022", "2021", "2020", "2019", "2018", "2017", "2016", "2023"]
+////        let years = [ "2018", "2017"]
+////        let years = [ "2018"]
+//        let countOFRecordsForYears: [String: Int] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
+//        
+//        let countOfAccidentsStored = await self.countOfAccidentsInDatabase
+//        let linesToRead = linesToRead(countOfAccidentsStored: countOfAccidentsStored, years: years)
+//        
+//        for year in years {
+//
+//            guard linesToRead[year]! > 0 else { continue }
+//            
+//            var lines = [String()]
+//            lines.reserveCapacity(270_000)
+//            lines.removeFirst()
+//            let countOfRecordsForYear = countOFRecordsForYears[year]!
+//            let url = Bundle.main.url(forResource: "Unfallorte\(year)_LinRef", withExtension: "csv")!
+//            
+//            print("Reading File: \(url.description) ...")
+//            
+//            DispatchQueue.main.async { [weak self] in
+//                self?.initializationState = .loadingData(year: year)
+//                self?.progress = 0
+//            }
+//            
+//            // Async loop over the csv file for the respective year, reading only the lines necessary.
+//            // First line also has to be skipped, because it contains header data (i.e. names of the columens)
+//            for try await line in url.lines.dropFirst(1 + countOfRecordsForYear - linesToRead[year]!) {
+//                await MainActor.run{
+//                    self.countOFAccidents += 1
+//                }
+//                lines.append(line)
+//                if lines.count % 20_000 == 0 {
+//                    DispatchQueue.main.async { [unowned self, lines, countOfRecordsForYear] in
+//                        self.initializationState = .loadingData(year: year)
+//                        self.progress = Double(lines.count) / Double(countOfRecordsForYear)
+//                    }
+//                }
+//            }
+//            
+//            // Final import is needed for the remaining accidents (beyond the 20.000 units)
+//            try? await self.importAccidents(from: Array(lines), year: year)
+//            print("year: \(year), duration: \(DateInterval(start: beginDate, end: Date.now).duration) s, \(countOfRecordsForYear) Records, \(lines.count) lines")
+//        }
+//        
+//        DispatchQueue.main.async {
+//            self.initializationState = .initalized
+//        }
+//        print("Overall: \(years), duration: \(DateInterval(start: beginDate, end: Date.now).duration) s")
+//    }
         
-        let beginDate = Date.now
-        
-        let years = ["2022", "2021", "2020", "2019", "2018", "2017", "2016", "2023"]
-//        let years = [ "2018", "2017"]
-//        let years = [ "2018"]
-        let countOFRecordsForYears: [String: Int] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
-        
-        let countOfAccidentsStored = await self.countOfAccidentsInDatabase
-        let linesToRead = linesToRead(countOfAccidentsStored: countOfAccidentsStored, years: years)
-        
-        for year in years {
-
-            guard linesToRead[year]! > 0 else { continue }
-            
-            var lines = [String()]
-            lines.reserveCapacity(270_000)
-            lines.removeFirst()
-            let countOfRecordsForYear = countOFRecordsForYears[year]!
-            let url = Bundle.main.url(forResource: "Unfallorte\(year)_LinRef", withExtension: "csv")!
-            
-            print("Reading File: \(url.description) ...")
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.initializationState = .loadingData(year: year)
-                self?.progress = 0
-            }
-            
-            // Async loop over the csv file for the respective year, reading only the lines necessary.
-            // First line also has to be skipped, because it contains header data (i.e. names of the columens)
-            for try await line in url.lines.dropFirst(1 + countOfRecordsForYear - linesToRead[year]!) {
-                await MainActor.run{
-                    self.countOFAccidents += 1
-                }
-                lines.append(line)
-                if lines.count % 20_000 == 0 {
-                    DispatchQueue.main.async { [unowned self, lines, countOfRecordsForYear] in
-                        self.initializationState = .loadingData(year: year)
-                        self.progress = Double(lines.count) / Double(countOfRecordsForYear)
-                    }
-                }
-            }
-            
-            // Final import is needed for the remaining accidents (beyond the 20.000 units)
-            try? await self.importAccidents(from: Array(lines), year: year)
-            print("year: \(year), duration: \(DateInterval(start: beginDate, end: Date.now).duration) s, \(countOfRecordsForYear) Records, \(lines.count) lines")
-        }
-        
-        DispatchQueue.main.async {
-            self.initializationState = .initalized
-        }
-        print("Overall: \(years), duration: \(DateInterval(start: beginDate, end: Date.now).duration) s")
-    }
-        
+    /// Reads al files and stores the content in the database.
     nonisolated private func loadDataIntoDatabaseGRDB() async throws {
         
         let beginDateGRDB = Date.now
@@ -234,7 +234,6 @@ final class InitializationViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.initializationState = .importingData(year: year)
                     self.progress = progress
-                    print("Progress ist \(progress)")
                 }
             }
             
@@ -245,7 +244,6 @@ final class InitializationViewModel: ObservableObject {
              
             if let fileURL = Bundle.main.url(forResource: "Unfallorte\(year)_LinRef", withExtension: "csv") {
                 do {
-//                    let importer = AccidentImporter(dbQueue: DatabaseService.shared.dbQueue, mappings: mappingsByYear)
                     let importer = AccidentImporter(dbPool: DatabaseService.shared.dbPool, mappings: mappingsByYear)
                     try await importer.importCSV2(for: year, from: fileURL, progressCallback: progressCallback)
                     print("✅ \(year) erfolgreich importiert")
@@ -283,94 +281,94 @@ final class InitializationViewModel: ObservableObject {
         
  
     
-    /// Uses `NSBatchInsertRequest` (BIR) to import accidents from a CSV file  into the Core Data store on a private queue.
-    nonisolated private func importAccidents(from lines: [String], year: String) async throws {
-        guard !lines.isEmpty else { return }
-        
-        let taskContext = PersistenceController.shared.container.newBackgroundContext()
-        taskContext.automaticallyMergesChangesFromParent = false
-        // Add name and author to identify source of persistent history changes.
-        taskContext.name = "importContext"
-        taskContext.transactionAuthor = "importAccidents"
-        
-        /// - Tag: performAndWait
-        taskContext.performAndWait {
-            
-            // Execute the batch insert.
-            /// - Tag: batchInsertRequest
-            let batchInsertRequest = self.batchInsertRequest(with: lines, year: year)
-            if let fetchResult = try? taskContext.execute(batchInsertRequest),
-               let batchInsertResult = fetchResult as? NSBatchInsertResult,
-               let success = batchInsertResult.result as? Bool, success {
-                return
-            }
-            print("Failed to execute batch insert request.")
-        }
-        
-        print("Successfully inserted data.")
-        // Update UI State whenever a year is fully imported to initialized. If another year still needs to be imported, that year will then update the state as importing again
-        DispatchQueue.main.async {
-            self.initializationState = .initalized
-        }
-    }
+//    /// Uses `NSBatchInsertRequest` (BIR) to import accidents from a CSV file  into the Core Data store on a private queue.
+//    nonisolated private func importAccidents(from lines: [String], year: String) async throws {
+//        guard !lines.isEmpty else { return }
+//        
+//        let taskContext = PersistenceController.shared.container.newBackgroundContext()
+//        taskContext.automaticallyMergesChangesFromParent = false
+//        // Add name and author to identify source of persistent history changes.
+//        taskContext.name = "importContext"
+//        taskContext.transactionAuthor = "importAccidents"
+//        
+//        /// - Tag: performAndWait
+//        taskContext.performAndWait {
+//            
+//            // Execute the batch insert.
+//            /// - Tag: batchInsertRequest
+//            let batchInsertRequest = self.batchInsertRequest(with: lines, year: year)
+//            if let fetchResult = try? taskContext.execute(batchInsertRequest),
+//               let batchInsertResult = fetchResult as? NSBatchInsertResult,
+//               let success = batchInsertResult.result as? Bool, success {
+//                return
+//            }
+//            print("Failed to execute batch insert request.")
+//        }
+//        
+//        print("Successfully inserted data.")
+//        // Update UI State whenever a year is fully imported to initialized. If another year still needs to be imported, that year will then update the state as importing again
+//        DispatchQueue.main.async {
+//            self.initializationState = .initalized
+//        }
+//    }
     
     
-    nonisolated private func batchInsertRequest(with lines: [String], year: String) -> NSBatchInsertRequest {
-        var index = 0
-        let total = lines.count
-        
-        // ❗️Mapping nur einmal am Anfang holen
-        guard let mapping = mappingsByYear[year] else {
-            fatalError("Kein Mapping für Jahr \(year)")
-        }
-
-        let batchInsertRequest = NSBatchInsertRequest(entity: Accident.entity()) { (managedObject: NSManagedObject) -> Bool in
-            guard index < total else { return true }
-            
-            if let accident = managedObject as? Accident {
-                let components = lines[index].components(separatedBy: ";")
-                self.fillObject(accident, with: components, using: mapping)
-            }
-            
-            index += 1
-
-            if index % 10_000 == 0 {
-                Task { @MainActor [unowned self, index, total, year] in
-                    self.initializationState = .importingData(year: year)
-                    self.progress = Double(index) / Double(total)
-                }
-            }
-            
-            return false
-        }
-        
-        return batchInsertRequest
-    }
-    
-    nonisolated private func fillObject(_ accident: Accident, with csv: [String], using m: AccidentCSVMapping) {
-        accident.accidentObjectID = Int32(csv[m.id])!
-        accident.jahr = Int16(csv[m.jahr])!
-        accident.monat = Int16(csv[m.monat])!
-        accident.stunde = Int16(csv[m.stunde])!
-        accident.wochentag = Int16(csv[m.wochentag])!
-        accident.unfallKategorie = Int16(csv[m.unfallKategorie])!
-        accident.unfallArt = Int16(csv[m.unfallArt])!
-        accident.unfallTyp1 = Int16(csv[m.unfallTyp1])!
-        accident.lichtVerhaeltnisse = Int16(csv[m.lichtVerhaeltnisse])!
-        accident.strassenZustand = Int16(csv[m.strassenZustand])!
-
-        var mask: Int16 = 0
-        for (vehicleType, index) in m.vehicleFlags {
-            if csv[index] == "1" {
-                mask |= vehicleType.rawValue
-            }
-        }
-        accident.vehicleMask = mask
-
-        let lat = Double(csv[m.latitude].replacingOccurrences(of: ",", with: "."))!
-        let lon = Double(csv[m.longitude].replacingOccurrences(of: ",", with: "."))!
-        accident.setCoordinates(lat: lat, lon: lon)
-    }
+//    nonisolated private func batchInsertRequest(with lines: [String], year: String) -> NSBatchInsertRequest {
+//        var index = 0
+//        let total = lines.count
+//        
+//        // ❗️Mapping nur einmal am Anfang holen
+//        guard let mapping = mappingsByYear[year] else {
+//            fatalError("Kein Mapping für Jahr \(year)")
+//        }
+//
+//        let batchInsertRequest = NSBatchInsertRequest(entity: Accident.entity()) { (managedObject: NSManagedObject) -> Bool in
+//            guard index < total else { return true }
+//            
+//            if let accident = managedObject as? Accident {
+//                let components = lines[index].components(separatedBy: ";")
+//                self.fillObject(accident, with: components, using: mapping)
+//            }
+//            
+//            index += 1
+//
+//            if index % 10_000 == 0 {
+//                Task { @MainActor [unowned self, index, total, year] in
+//                    self.initializationState = .importingData(year: year)
+//                    self.progress = Double(index) / Double(total)
+//                }
+//            }
+//            
+//            return false
+//        }
+//        
+//        return batchInsertRequest
+//    }
+//    
+//    nonisolated private func fillObject(_ accident: Accident, with csv: [String], using m: AccidentCSVMapping) {
+//        accident.accidentObjectID = Int32(csv[m.id])!
+//        accident.jahr = Int16(csv[m.jahr])!
+//        accident.monat = Int16(csv[m.monat])!
+//        accident.stunde = Int16(csv[m.stunde])!
+//        accident.wochentag = Int16(csv[m.wochentag])!
+//        accident.unfallKategorie = Int16(csv[m.unfallKategorie])!
+//        accident.unfallArt = Int16(csv[m.unfallArt])!
+//        accident.unfallTyp1 = Int16(csv[m.unfallTyp1])!
+//        accident.lichtVerhaeltnisse = Int16(csv[m.lichtVerhaeltnisse])!
+//        accident.strassenZustand = Int16(csv[m.strassenZustand])!
+//
+//        var mask: Int16 = 0
+//        for (vehicleType, index) in m.vehicleFlags {
+//            if csv[index] == "1" {
+//                mask |= vehicleType.rawValue
+//            }
+//        }
+//        accident.vehicleMask = mask
+//
+//        let lat = Double(csv[m.latitude].replacingOccurrences(of: ",", with: "."))!
+//        let lon = Double(csv[m.longitude].replacingOccurrences(of: ",", with: "."))!
+//        accident.setCoordinates(lat: lat, lon: lon)
+//    }
     
 }
 
@@ -390,24 +388,24 @@ struct AccidentImporter {
         self.mappings = mappings
     }
 
-    func importCSV(for year: String, from fileURL: URL) async throws {
-//    func importCSV(for year: String, from fileURL: URL, progressCallback: @escaping (Double) -> Void) async throws {
-        guard let mapping = mappings[year] else {
-            throw NSError(domain: "Import", code: 1, userInfo: [NSLocalizedDescriptionKey: "Kein Mapping für Jahr \(year)"])
-        }
-
-        let lines = try await readLines(from: fileURL)
-        let records = try lines.compactMap { try parseLine($0, with: mapping) }
-        
-        // Speichern in Batches (synchron im GRDB-Thread)
-        try await dbPool.write { db in
-            for chunk in records.chunked(into: 20_000) {
-                for var record in chunk {
-                    try record.insert(db)
-                }
-            }
-        }
-    }
+//    func importCSV(for year: String, from fileURL: URL) async throws {
+////    func importCSV(for year: String, from fileURL: URL, progressCallback: @escaping (Double) -> Void) async throws {
+//        guard let mapping = mappings[year] else {
+//            throw NSError(domain: "Import", code: 1, userInfo: [NSLocalizedDescriptionKey: "Kein Mapping für Jahr \(year)"])
+//        }
+//
+//        let lines = try await readLines(from: fileURL)
+//        let records = try lines.compactMap { try parseLine($0, with: mapping) }
+//        
+//        // Speichern in Batches (synchron im GRDB-Thread)
+//        try await dbPool.write { db in
+//            for chunk in records.chunked(into: 20_000) {
+//                for var record in chunk {
+//                    try record.insert(db)
+//                }
+//            }
+//        }
+//    }
     
     func importCSV2(for year: String, from fileURL: URL, progressCallback: @escaping @Sendable (Double) -> Void) async throws {
         guard let mapping = mappings[year] else {

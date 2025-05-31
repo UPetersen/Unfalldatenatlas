@@ -14,15 +14,52 @@ final class DatabaseService: @unchecked Sendable {
     let dbPool: DatabasePool
 
     private init() {
-        // Datenbankpfad im Application Support Verzeichnis
-        let pfad = FileManager.default
-            .urls(for: .applicationSupportDirectory, in: .userDomainMask)
-            .first!
-            .appendingPathComponent("Unfalldaten.sqlite")
 
         do {
-//            dbQueue = try DatabaseQueue(path: pfad.path)
-            dbPool = try DatabasePool(path: pfad.path)
+            let fileManager = FileManager.default
+            
+            let appSupportURL = try fileManager.url(
+                for: .applicationSupportDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: true)
+            let dbURL = appSupportURL.appendingPathComponent("Unfalldaten.sqlite")
+            
+//            // Wenn Datei nicht existiert → aus Bundle kopieren
+//            if !fileManager.fileExists(atPath: dbURL.path) {
+//                guard let bundledDB = Bundle.main.url(forResource: "Unfalldaten", withExtension: "sqlite") else {
+//                    fatalError("Vorgefüllte Datenbank im Bundle nicht gefunden.")
+//                }
+//                try fileManager.copyItem(at: bundledDB, to: dbURL)
+//                print("📦 Vorgefüllte Datenbank aus Bundle kopiert.")
+//            }
+            
+            var config = Configuration()
+            config.prepareDatabase { db in
+                try db.execute(sql: """
+                    PRAGMA temp_store = MEMORY;
+                    PRAGMA cache_size = -50000;
+                """)
+            }
+            
+            dbPool = try DatabasePool(path: dbURL.path, configuration: config)
+            
+            try dbPool.read { db in
+                let journalMode: String = try String.fetchOne(db, sql: "PRAGMA journal_mode;") ?? "?"
+                let synchronous: Int = try Int.fetchOne(db, sql: "PRAGMA synchronous;") ?? -1
+                let tempStore: Int = try Int.fetchOne(db, sql: "PRAGMA temp_store;") ?? -1
+                let cacheSize: Int = try Int.fetchOne(db, sql: "PRAGMA cache_size;") ?? -1
+                let pageSize: Int = try Int.fetchOne(db, sql: "PRAGMA page_size;") ?? -1
+                let lockingMode: String = try String.fetchOne(db, sql: "PRAGMA locking_mode;") ?? "?"
+
+                print("journal_mode: \(journalMode)")
+                print("synchronous: \(synchronous)")
+                print("temp_store: \(tempStore)")
+                print("cache_size: \(cacheSize)")
+                print("page_size: \(pageSize)")
+                print("locking_mode: \(lockingMode)")
+            }
+
             try migrator.migrate(dbPool)
         } catch {
             fatalError("Fehler bei Initialisierung der DB: \(error)")

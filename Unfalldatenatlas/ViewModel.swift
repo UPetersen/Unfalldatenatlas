@@ -140,7 +140,7 @@ final class ViewModel: ObservableObject {
     /// - Parameter notification: This parameter is not used
     @objc func didSave(_ notification: Notification) {
 //        getCountOfSelectedAccidents()
-        fetchCountInGermany()
+//        fetchCountInGermany()
     }
   
     /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
@@ -176,7 +176,7 @@ final class ViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run { self.isFetchingAccidents = false }
-                print("❌ Fehler beim GRDB-Fetch: \(error)")
+                print("❌ Fehler beim GRDB-Fetch fetchAccidentsGRDB: \(error)")
             }
         }
     }
@@ -207,7 +207,7 @@ final class ViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run { self.isFetchingAccidents = false }
-                print("❌ Fehler beim GRDB-Fetch: \(error)")
+                print("❌ Fehler beim GRDB-Fetch fetchCountInRegion: \(error)")
             }
         }
     }
@@ -219,10 +219,10 @@ final class ViewModel: ObservableObject {
         selectedCountInGermany = 0
         
         taskForFetchCountInGermany?.cancel()
-        taskForFetchCountInGermany = Task {
+        taskForFetchCountInGermany = Task.detached(priority: .high) {
             
             do {
-                let filters = self.accidentDataFilters.grdbFilters
+                let filters = await self.accidentDataFilters.grdbFilters
                 let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
                 
                 let count = try await DatabaseService.shared.dbPool.read { db in
@@ -238,7 +238,7 @@ final class ViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run { self.isFetchingAccidents = false }
-                print("❌ Fehler beim GRDB-Fetch: \(error)")
+                print("❌ Fehler beim GRDB-Fetch fetchCountInGermany: \(error)")
             }
         }
     }
