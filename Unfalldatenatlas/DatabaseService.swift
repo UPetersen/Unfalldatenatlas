@@ -10,7 +10,8 @@ import GRDB
 
 final class DatabaseService: @unchecked Sendable {
     static let shared = DatabaseService()
-    let dbQueue: DatabaseQueue
+//    let dbQueue: DatabaseQueue
+    let dbPool: DatabasePool
 
     private init() {
         // Datenbankpfad im Application Support Verzeichnis
@@ -20,8 +21,9 @@ final class DatabaseService: @unchecked Sendable {
             .appendingPathComponent("Unfalldaten.sqlite")
 
         do {
-            dbQueue = try DatabaseQueue(path: pfad.path)
-            try migrator.migrate(dbQueue)
+//            dbQueue = try DatabaseQueue(path: pfad.path)
+            dbPool = try DatabasePool(path: pfad.path)
+            try migrator.migrate(dbPool)
         } catch {
             fatalError("Fehler bei Initialisierung der DB: \(error)")
         }
@@ -50,9 +52,9 @@ final class DatabaseService: @unchecked Sendable {
                 t.column("longitude100", .integer).notNull()
             }
 
-            // Indexe – optimiert für deine Abfragen
-            try db.create(index: "idx_lon_lat", on: tableName, columns: ["longitude100", "latitude100"])
-            try db.create(index: "idx_jahr", on: tableName, columns: ["jahr"])
+            // Indexes
+//            try db.create(index: "idx_lon_lat", on: tableName, columns: ["longitude100", "latitude100"])
+//            try db.create(index: "idx_jahr", on: tableName, columns: ["jahr"])
         }
 
         // Weitere Migrationen (Beispiel)

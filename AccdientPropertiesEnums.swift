@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import GRDB
 
 
 enum Land: Int, Identifiable, CaseIterable, Equatable {
@@ -41,6 +42,13 @@ enum Land: Int, Identifiable, CaseIterable, Equatable {
             return nil
         default:
             return NSPredicate(format: "land == %i", self.rawValue)
+        }
+    }
+    
+    var grdbFilter: SQLExpression? {
+        switch self {
+        case .keineAuswahl: return nil
+        default: return Column("land") == self.rawValue
         }
     }
     
@@ -84,6 +92,13 @@ enum StrassenZustand: Int, Identifiable, CaseIterable, Equatable {
         }
     }
     
+    var grdbFilter: SQLExpression? {
+        switch self {
+        case .keineAuswahl: return nil
+        default: return Column("strassenZustand") == self.rawValue
+        }
+    }
+    
     var sectionText: String {
         switch self {
         case .keineAuswahl: return "Keine Auswahl"
@@ -107,6 +122,13 @@ enum LichtVerhaeltnisse: Int, Identifiable, CaseIterable, Equatable {
             return nil
         default:
             return NSPredicate(format: "lichtVerhaeltnisse == %i", self.rawValue)
+        }
+    }
+    
+    var grdbFilter: SQLExpression? {
+        switch self {
+        case .keineAuswahl: return nil
+        default: return Column("lichtVerhaeltnisse") == self.rawValue
         }
     }
     
@@ -137,6 +159,13 @@ enum UnfallWochentag: Int, Identifiable, CaseIterable, Equatable {
             return nil
         default:
             return NSPredicate(format: "wochentag == %i", self.rawValue)
+        }
+    }
+    
+    var grdbFilter: SQLExpression? {
+        switch self {
+        case .keineAuswahl: return nil
+        default: return Column("wochentag") == self.rawValue
         }
     }
     
@@ -176,6 +205,13 @@ enum UnfallMonat: Int, Identifiable, CaseIterable, Equatable {
             return nil
         default:
             return NSPredicate(format: "monat == %i", self.rawValue)
+        }
+    }
+    
+    var grdbFilter: SQLExpression? {
+        switch self {
+        case .keineAuswahl: return nil
+        default: return Column("monat") == self.rawValue
         }
     }
     
@@ -221,6 +257,13 @@ enum UnfallJahr: Int, Identifiable, CaseIterable, Equatable {
         }
     }
     
+    var grdbFilter: SQLExpression? {
+        switch self {
+        case .keineAuswahl: return nil
+        default: return Column("jahr") == self.rawValue
+        }
+    }
+    
     var sectionText: String {
         switch self {
         case .keineAuswahl: return "keine Auswahl"
@@ -255,6 +298,13 @@ enum UnfallTyp1: Int, Identifiable, CaseIterable, Equatable {
             return nil
         default:
             return NSPredicate(format: "unfallTyp1 == %i", self.rawValue)
+        }
+    }
+    
+    var grdbFilter: SQLExpression? {
+        switch self {
+        case .keineAuswahl: return nil
+        default: return Column("unfallTyp1") == self.rawValue
         }
     }
     
@@ -321,6 +371,13 @@ enum UnfallKategorie: Int, Identifiable, CaseIterable, Equatable {
         }
     }
     
+    var grdbFilter: SQLExpression? {
+        switch self {
+        case .keineAuswahl: return nil
+        default: return Column("unfallKategorie") == self.rawValue
+        }
+    }
+    
     var sectionText: String {
         switch self {
         case .keineAuswahl: return "Keine Auswahl"
@@ -351,6 +408,13 @@ enum UnfallArt: Int, Identifiable, CaseIterable, Equatable {
             return nil
         default:
             return NSPredicate(format: "unfallArt == %i", self.rawValue)
+        }
+    }
+    
+    var grdbFilter: SQLExpression? {
+        switch self {
+        case .keineAuswahl: return nil
+        default: return Column("unfallArt") == self.rawValue
         }
     }
     

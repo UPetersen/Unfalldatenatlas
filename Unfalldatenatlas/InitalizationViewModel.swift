@@ -153,6 +153,7 @@ final class InitializationViewModel: ObservableObject {
             Task.detached(priority: .high) {
                 do {
                     try await self.loadDataIntoDatabase()
+                    try await self.loadDataIntoDatabaseGRDB()
                     
                 } catch {
                     print("An errror occured during initialization.")
@@ -216,13 +217,17 @@ final class InitializationViewModel: ObservableObject {
             self.initializationState = .initalized
         }
         print("Overall: \(years), duration: \(DateInterval(start: beginDate, end: Date.now).duration) s")
+    }
         
+    nonisolated private func loadDataIntoDatabaseGRDB() async throws {
         
-        
-//        let years = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"]
-
         let beginDateGRDB = Date.now
         
+        let years = ["2022", "2021", "2020", "2019", "2018", "2017", "2016", "2023"]
+//        let years = [ "2018", "2017"]
+//        let years = [ "2018"]
+//        let countOFRecordsForYears: [String: Int] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
+
         for year in years {
             
             let progressCallback: @Sendable (Double) -> Void = { progress in
@@ -240,7 +245,8 @@ final class InitializationViewModel: ObservableObject {
              
             if let fileURL = Bundle.main.url(forResource: "Unfallorte\(year)_LinRef", withExtension: "csv") {
                 do {
-                    let importer = AccidentImporter(dbQueue: DatabaseService.shared.dbQueue, mappings: mappingsByYear)
+//                    let importer = AccidentImporter(dbQueue: DatabaseService.shared.dbQueue, mappings: mappingsByYear)
+                    let importer = AccidentImporter(dbPool: DatabaseService.shared.dbPool, mappings: mappingsByYear)
                     try await importer.importCSV2(for: year, from: fileURL, progressCallback: progressCallback)
                     print("✅ \(year) erfolgreich importiert")
                 } catch {
@@ -254,6 +260,19 @@ final class InitializationViewModel: ObservableObject {
 
         }
         
+        // Index creation afterwards
+            do {
+                let dbPool: DatabasePool = DatabaseService.shared.dbPool
+                try await dbPool.write { db in
+                    // Indexe anlegen.
+                    try db.execute(sql: "CREATE INDEX idx_lon_lat ON accidents(longitude100, latitude100)")
+                    try db.execute(sql: "CREATE INDEX idx_jahr ON accidents(jahr)")
+                }
+                print("✅ Index erfolgreich erzeugt")
+            } catch {
+                print("❌ Fehler beim erzeugen von Index")
+            }
+        
         DispatchQueue.main.async {
             self.initializationState = .initalized
         }
@@ -262,7 +281,7 @@ final class InitializationViewModel: ObservableObject {
 
     }
         
-    
+ 
     
     /// Uses `NSBatchInsertRequest` (BIR) to import accidents from a CSV file  into the Core Data store on a private queue.
     nonisolated private func importAccidents(from lines: [String], year: String) async throws {
@@ -362,12 +381,12 @@ final class InitializationViewModel: ObservableObject {
 //try await importer.importCSV(for: "2023", from: fileURL)
 
 struct AccidentImporter {
-    let dbQueue: DatabaseQueue
+    let dbPool: DatabasePool
     let mappings: [String: AccidentCSVMapping]
     let fileManager = FileManager.default
 
-    init(dbQueue: DatabaseQueue, mappings: [String: AccidentCSVMapping]) {
-        self.dbQueue = dbQueue
+    init(dbPool: DatabasePool, mappings: [String: AccidentCSVMapping]) {
+        self.dbPool = dbPool
         self.mappings = mappings
     }
 
@@ -381,7 +400,7 @@ struct AccidentImporter {
         let records = try lines.compactMap { try parseLine($0, with: mapping) }
         
         // Speichern in Batches (synchron im GRDB-Thread)
-        try await dbQueue.write { db in
+        try await dbPool.write { db in
             for chunk in records.chunked(into: 20_000) {
                 for var record in chunk {
                     try record.insert(db)
@@ -400,7 +419,7 @@ struct AccidentImporter {
         let total = records.count
         let chunkSize = 20_000
        
-        try await dbQueue.write { db in
+        try await dbPool.write { db in
             var processed = 0
             
             for chunk in records.chunked(into: chunkSize) {
@@ -465,6 +484,111 @@ struct AccidentImporter {
         )
     }
 }
+
+//struct AccidentImporter {
+//    let dbQueue: DatabaseQueue
+//    let mappings: [String: AccidentCSVMapping]
+//    let fileManager = FileManager.default
+//
+//    init(dbQueue: DatabaseQueue, mappings: [String: AccidentCSVMapping]) {
+//        self.dbQueue = dbQueue
+//        self.mappings = mappings
+//    }
+//
+//    func importCSV(for year: String, from fileURL: URL) async throws {
+////    func importCSV(for year: String, from fileURL: URL, progressCallback: @escaping (Double) -> Void) async throws {
+//        guard let mapping = mappings[year] else {
+//            throw NSError(domain: "Import", code: 1, userInfo: [NSLocalizedDescriptionKey: "Kein Mapping für Jahr \(year)"])
+//        }
+//
+//        let lines = try await readLines(from: fileURL)
+//        let records = try lines.compactMap { try parseLine($0, with: mapping) }
+//        
+//        // Speichern in Batches (synchron im GRDB-Thread)
+//        try await dbQueue.write { db in
+//            for chunk in records.chunked(into: 20_000) {
+//                for var record in chunk {
+//                    try record.insert(db)
+//                }
+//            }
+//        }
+//    }
+//    
+//    func importCSV2(for year: String, from fileURL: URL, progressCallback: @escaping @Sendable (Double) -> Void) async throws {
+//        guard let mapping = mappings[year] else {
+//            throw NSError(domain: "Import", code: 1, userInfo: [NSLocalizedDescriptionKey: "Kein Mapping für Jahr \(year)"])
+//        }
+//
+//        let lines = try await readLines(from: fileURL)
+//        let records = try lines.compactMap { try parseLine($0, with: mapping) }
+//        let total = records.count
+//        let chunkSize = 20_000
+//       
+//        try await dbQueue.write { db in
+//            var processed = 0
+//            
+//            for chunk in records.chunked(into: chunkSize) {
+//                for var record in chunk {
+//                    try record.insert(db)
+//                }
+//                
+//                // Report progress via callback
+//                processed += chunk.count
+//                let progress = Double(processed) / Double(total)
+//                    progressCallback(progress)
+//            }
+//        }
+//    }
+//    
+//
+//    private func readLines(from fileURL: URL) async throws -> [String] {
+//        let fileContent = try String(contentsOf: fileURL, encoding: .utf8)
+//        var lines = fileContent.components(separatedBy: .newlines)
+//        lines.removeAll { $0.isEmpty || $0.hasPrefix("#") }
+//        lines.removeFirst() // Skip header
+//        return lines
+//    }
+//
+//    private func parseLine(_ line: String, with mapping: AccidentCSVMapping) throws -> AccidentNeu? {
+////        print(line)
+//        let components = line.components(separatedBy: ";")
+//        guard components.count > max(mapping.latitude, mapping.longitude) else { return nil }
+//
+//        var mask: Int16 = 0
+//        for (type, index) in mapping.vehicleFlags {
+//            if components[index] == "1" {
+//                mask |= type.rawValue
+//            }
+//        }
+//
+//        let lat = Double(components[mapping.latitude].replacingOccurrences(of: ",", with: "."))!
+//        let lon = Double(components[mapping.longitude].replacingOccurrences(of: ",", with: "."))!
+//        
+//        // The objectIds in the files count from 0 upwards line per line. The following creates a unique id for all files, using the year
+//        // e.g. for ojbectID = 1 in year 20216 it creates 2016_000_001. This is sufficient and still allows Int32 as data type.
+//        let year = Int32(components[mapping.jahr])!
+//        let yearOffset = year % 2000                            // e.g. 2016 → 16
+//        let objectID = Int32(components[mapping.id])!           // 1 ... number of lines in file
+//        let uniqueID = Int32(yearOffset * 1_000_000 + objectID) // e.g. 16_000_001, counting up.
+//
+//        return AccidentNeu(
+//
+//            id: uniqueID,
+//            jahr: Int16(year),
+//            monat: Int16(components[mapping.monat])!,
+//            stunde: Int16(components[mapping.stunde])!,
+//            wochentag: Int16(components[mapping.wochentag])!,
+//            unfallKategorie: Int16(components[mapping.unfallKategorie])!,
+//            unfallArt: Int16(components[mapping.unfallArt])!,
+//            unfallTyp1: Int16(components[mapping.unfallTyp1])!,
+//            lichtVerhaeltnisse: Int16(components[mapping.lichtVerhaeltnisse])!,
+//            strassenZustand: Int16(components[mapping.strassenZustand])!,
+//            vehicleMask: mask,
+//            latitude100: Int32(lat * 10_000_000),
+//            longitude100: Int32(lon * 10_000_000)
+//        )
+//    }
+//}
 
 //final class AccidentImporter {
 //    let dbQueue: DatabaseQueue

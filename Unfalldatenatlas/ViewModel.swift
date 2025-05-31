@@ -39,24 +39,61 @@ struct AccidentDataFilter: Equatable {
     var predicates: [NSPredicate] {
         return [
             istFahrrad.predicateNeu,
-                istFussgaenger.predicateNeu,
-                istGueterKfz.predicateNeu,
-                istKrad.predicateNeu,
-                istPkw.predicateNeu,
-                istSonstige.predicateNeu,
-                unfallArt.predicate,
-                unfallKategorie.predicate,
-                unfallTyp1.predicate,
-                lichtVerhaeltnisse.predicate,
-                strassenZustand.predicate,
-                jahr.predicate,
-                monat.predicate,
-                wochentag.predicate
-//                wochentag.predicate,
-//                land.predicate
+            istFussgaenger.predicateNeu,
+            istGueterKfz.predicateNeu,
+            istKrad.predicateNeu,
+            istPkw.predicateNeu,
+            istSonstige.predicateNeu,
+            
+            unfallArt.predicate,
+            unfallKategorie.predicate,
+            unfallTyp1.predicate,
+            lichtVerhaeltnisse.predicate,
+            strassenZustand.predicate,
+            jahr.predicate,
+            monat.predicate,
+            wochentag.predicate
+            //                wochentag.predicate,
+            //                land.predicate
         ].compactMap{$0}
     }
+
+    var grdbFilters: [SQLExpression] {
+        
+        var expressions: [SQLExpression] = []
+
+        if istPkw         != .keineAuswahl { expressions.append(istPkw         == .mitPkw         ? Column("vehicleMask") & VehicleMask.pkw.rawValue         != 0 : Column("vehicleMask") & VehicleMask.pkw.rawValue == 0) }
+        if istFahrrad     != .keineAuswahl { expressions.append(istFahrrad     == .mitFahrrad     ? Column("vehicleMask") & VehicleMask.fahrrad.rawValue     != 0 : Column("vehicleMask") & VehicleMask.fahrrad.rawValue == 0)  }
+        if istFussgaenger != .keineAuswahl { expressions.append(istFussgaenger == .mitFussgaenger ? Column("vehicleMask") & VehicleMask.fussgaenger.rawValue != 0 : Column("vehicleMask") & VehicleMask.fussgaenger.rawValue == 0)  }
+        if istKrad        != .keineAuswahl { expressions.append(istKrad        == .mitKrad        ? Column("vehicleMask") & VehicleMask.krad.rawValue        != 0 : Column("vehicleMask") & VehicleMask.krad.rawValue == 0)  }
+        if istGueterKfz   != .keineAuswahl { expressions.append(istGueterKfz   == .mitGueterKfz   ? Column("vehicleMask") & VehicleMask.gueterKfz.rawValue   != 0 : Column("vehicleMask") & VehicleMask.gueterKfz.rawValue == 0)  }
+        if istSonstige    != .keineAuswahl { expressions.append(istSonstige    == .mitSonstige    ? Column("vehicleMask") & VehicleMask.sonstige.rawValue    != 0 : Column("vehicleMask") & VehicleMask.sonstige.rawValue == 0)  }
+
+        // UND-Verknüpfung aller gesetzten Filter (AND-Kombination)
+        let vehicleMaskFilter: SQLExpression?
+        switch expressions.count {
+        case 0: vehicleMaskFilter = nil
+        case 1: vehicleMaskFilter = expressions.first
+        default: vehicleMaskFilter = expressions.dropFirst().reduce(expressions.first!) { $0 && $1 }
+        }
+    
+        return [
+            monat.grdbFilter,              // [0 ... 12]
+            unfallArt.grdbFilter,          // [0 ... 10]
+            jahr.grdbFilter,               // [0, 2016, ... 2023], 9 states
+            unfallTyp1.grdbFilter,         // [0 ... 7]
+            wochentag.grdbFilter,          // [0 ... 7]
+            lichtVerhaeltnisse.grdbFilter, // [0, 1, 2, 4]
+            strassenZustand.grdbFilter,    // [0, 1, 2, 4]
+            unfallKategorie.grdbFilter,    // [0 ... 3]
+            vehicleMaskFilter
+        ].compactMap { $0 }
+    }
+
 }
+
+
+
 
 @MainActor
 final class ViewModel: ObservableObject {
@@ -116,23 +153,22 @@ final class ViewModel: ObservableObject {
 
             let limit = await self.fetchLimit
             
-            // Filter-Predicate aus Deinen Auswahloptionen
-//            let filterPredicate = filter.grdbPredicate // ein SQLPredicate oder Expression<Boolean> für GRDB
-
-            
             do {
-                let rows = try await DatabaseService.shared.dbQueue.read { db in
+                
+                let filters = await self.accidentDataFilters.grdbFilters
+                let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
+                
+//                let rows = try await DatabaseService.shared.dbQueue.read { db in
+                let rows = try await DatabaseService.shared.dbPool.read { db in
+
                     try AccidentNeu
-//                        .filter(Column("latitude100") >= latMin && Column("latitude100") <= latMax &&
-//                                Column("longitude100") >= lonMin && Column("longitude100") <= lonMax)
-//                        .filter(Column("longitude100") >= lonMin && Column("longitude100") <= lonMax &&
-//                                Column("latitude100") >= latMin && Column("latitude100") <= latMax)
-                        .filter(Column("latitude100") >= minLat && Column("latitude100") <= maxLat)
                         .filter(Column("longitude100") >= minLon && Column("longitude100") <= maxLon)
-//                        .filter(regionPredicate && filterPredicate)
-                        .order(Column("id").asc) // brings in some distribution of the results in the region, otherwhise only accidents at the lower edge of the region are fetched
+                        .filter(Column("latitude100") >= minLat && Column("latitude100") <= maxLat)
+                        .filter(combinedFilter)
+                        .order(Column("id").asc)
                         .limit(limit)
                         .fetchAll(db)
+
                 }
 
                 let result = rows.map {
@@ -242,7 +278,6 @@ final class ViewModel: ObservableObject {
 //                print("------Task is cancelled in new fetchAccidents 1 ----------")
                 return
             }
-            
             
             Task { @MainActor [unowned self, accidentStructs ] in
                 self.accidentStructs = accidentStructs
