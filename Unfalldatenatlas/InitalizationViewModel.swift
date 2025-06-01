@@ -122,7 +122,7 @@ final class InitializationViewModel: ObservableObject {
     @Published var progress: Double? = 0.0
     @Published var initializationState: InitializationState
     
-    private var files: [String] = ["Unfallorte2016_LinRef.csv", "Unfallorte2017_LinRef.csv", "Unfallorte2018_LinRef.csv", "Unfallorte2019_LinRef.csv", "Unfallorte2020_LinRef.csv", "Unfallorte2021_LinRef.csv"]
+//    private var files: [String] = ["Unfallorte2016_LinRef.csv", "Unfallorte2017_LinRef.csv", "Unfallorte2018_LinRef.csv", "Unfallorte2019_LinRef.csv", "Unfallorte2020_LinRef.csv", "Unfallorte2021_LinRef.csv"]
 //    private var viewContext = PersistenceController.shared.container.viewContext
 //    private var backgroundContext = PersistenceController.shared.container.newBackgroundContext()
     private var countOfAccidentsBy100000: Int = 0
@@ -148,13 +148,16 @@ final class InitializationViewModel: ObservableObject {
             if totalCountInDatabase == ViewModel.totalCountinGermany { // 1_823_882
                 // All good, database contains all datasets for all the years
                 self.initializationState = .initalized
+                print("No initialization required. Database is complete.")
 
             } else {
 
                 self.initializationState = .initializationRequired
+                print("Initialization required. Database is not complete.")
                 Task.detached(priority: .high) {
                     try await self.loadDataIntoDatabaseGRDB()
                 }
+                print("Initialization ended.")
             }
         } catch {
             print("❌ Error initializing database: \(error)")

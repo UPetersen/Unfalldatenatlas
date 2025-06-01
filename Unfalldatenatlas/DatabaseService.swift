@@ -8,6 +8,20 @@
 import Foundation
 import GRDB
 
+
+
+extension Bundle {
+    static func logMissingResource(name: String, ext: String) -> URL? {
+        let url = Bundle.main.url(forResource: name, withExtension: ext)
+        if url == nil {
+            print("📛 Fehlende Datei: \(name).\(ext)")
+            Thread.callStackSymbols.forEach { print("🔍 \($0)") }
+        }
+        return url
+    }
+}
+
+
 final class DatabaseService: @unchecked Sendable {
     static let shared = DatabaseService()
 //    let dbQueue: DatabaseQueue

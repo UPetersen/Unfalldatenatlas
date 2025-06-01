@@ -167,8 +167,8 @@ struct InfoView: View {
     }
 }
 
-struct InfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        InfoView(accidentsFetchLimit: 500)
-    }
-}
+//struct InfoView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        InfoView(accidentsFetchLimit: 500)
+//    }
+//}

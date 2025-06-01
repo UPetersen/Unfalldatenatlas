@@ -49,7 +49,7 @@ struct CountOfSelectedAccidentsView: View {
     }
 }
 
-#Preview {
-    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.totalCountinGermany, countOfSelectedAccidents: Int(1), isFetchingCountOfSelectedAccidents: false, displayPercentage: true)
-    
-}
+//#Preview {
+//    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.totalCountinGermany, countOfSelectedAccidents: Int(1), isFetchingCountOfSelectedAccidents: false, displayPercentage: true)
+//    
+//}

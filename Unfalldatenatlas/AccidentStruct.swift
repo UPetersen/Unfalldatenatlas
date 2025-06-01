@@ -84,6 +84,20 @@ struct AccidentStructGRDB: Sendable, Identifiable {
     }
 }
 
+//extension AccidentStructGRDB {
+//    var coordinate: CLLocationCoordinate2D {
+//        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+//    }
+//    
+//    var color: Color {
+//        guard let unfallTyp1 = UnfallTyp1(rawValue: Int(self.unfallTyp1)) else {
+//            return Color.gray
+//        }
+//        return unfallTyp1.color
+//    }
+//}
+
+
 extension AccidentStructGRDB: Equatable {
     static func == (lhs: AccidentStructGRDB, rhs: AccidentStructGRDB) -> Bool {
         lhs.id == rhs.id

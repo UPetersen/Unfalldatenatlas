@@ -9,9 +9,10 @@ import SwiftUI
 import CoreData
 @preconcurrency import MapKit
 
-struct ContentView: View {
+struct ContentView: View  {
 
-    @StateObject var viewModel = ViewModel()
+    @ObservedObject var viewModel: ViewModel
+//    @StateObject var viewModel = ViewModel()
     @StateObject var initializationViewModel = InitializationViewModel()
     @StateObject var locationManager = LocationManager()
 
@@ -40,68 +41,7 @@ struct ContentView: View {
         NavigationStack {
             
             ZStack(alignment: .topTrailing) {
-                
-//                // Use initializer with $position, otherwhise position waggles several times, when coming back from filter view
-//                // I do not understand why. $position should actually not be needed.
-//                Map(position: $mapCameraPosition, scope: mapScope) {
-//
-//                    UserAnnotation() // Displays the blue circle for user's position
-//                    
-//                    // Draw Circle on map for each Accident and conditionally show symbols text
-//                    // Big sppeed up to separate
-//                    if !viewModel.accidentStructs.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
-//                        // Some sppeed up to distinguish the two cases of displaying symbols or not in the following way
-//                        if showSymbols {
-//                            // Circles with text symbols (the emojis) for each accident
-//                            ForEach(viewModel.accidentStructs) { accident in
-//                                // MARK: BEWARE: Annotation text could also be used for symbols information text
-//                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
-//                                    Button(action: {
-//                                        print("==================== Button pressed ===================")
-//                                        if accident == selectedAccident {
-//                                            selectedAccident = nil
-//                                        } else {
-//                                            selectedAccident = accident
-//                                        }
-//                                        getLookAroundScene(forAccident: selectedAccident)
-//                                    }) {
-//                                        Circle()
-//                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
-//                                            .padding()
-//                                            .overlay() {
-//                                                SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
-//                                            }
-//                                    }
-//                                    .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
-//                                }
-//                            }
-//                        } else {
-//                            // Plain circles (no emojis here)
-//                            ForEach(viewModel.accidentStructs) { accident in
-//                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
-//                                    Button(action: {
-//                                        print("==================== Button pressed ===================")
-//                                        if accident == selectedAccident {
-//                                            selectedAccident = nil
-//                                        } else {
-//                                            selectedAccident = accident
-//                                        }
-//                                        getLookAroundScene(forAccident: selectedAccident)
-//                                    }) {
-//                                        Circle()
-//                                            .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
-//                                            .padding()
-//                                    }
-//                                    .overlay() {
-//                                        SymbolsTextView(accident: accident).allowsHitTesting(false) // The emojis
-//                                            .opacity(accident == selectedAccident ? 1 : 0)
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                
+                                
                 // Use initializer with $position, otherwhise position waggles several times, when coming back from filter view
                 // I do not understand why. $position should actually not be needed.
                 Map(position: $mapCameraPosition, scope: mapScope) {
@@ -124,7 +64,7 @@ struct ContentView: View {
                                         } else {
                                             selectedAccidentGRDB = accident
                                         }
-                                        getLookAroundScene(forAccident: selectedAccident)
+                                        getLookAroundScene(forAccident: selectedAccidentGRDB)
                                     }) {
                                         Circle()
                                             .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
@@ -147,7 +87,7 @@ struct ContentView: View {
                                         } else {
                                             selectedAccidentGRDB = accident
                                         }
-                                        getLookAroundScene(forAccident: selectedAccident)
+                                        getLookAroundScene(forAccident: selectedAccidentGRDB)
                                     }) {
                                         Circle()
                                             .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
@@ -166,7 +106,7 @@ struct ContentView: View {
 
                 // Click on anywhere in the map (which is not the circle of an accident) deselects the previously selected accident.
                 .simultaneousGesture(TapGesture(count: 1).onEnded { // Simultaneous gesture needed for retaining zoom on double click.
-                    selectedAccident = nil
+//                    selectedAccident = nil
                     selectedAccidentGRDB = nil
                 })
 
@@ -202,7 +142,7 @@ struct ContentView: View {
                                         .clipShape(RoundedRectangle(cornerRadius: 10))
                                         .padding(.horizontal, 10) // apply same padding as LookAroundPreview
                                         .padding(.vertical, 5)    // apply same padding as LookAroundPreview
-                                        .opacity((lookAroundScene == nil || selectedAccident == nil) ? 1 : 0)
+                                        .opacity((lookAroundScene == nil || selectedAccidentGRDB == nil) ? 1 : 0)
                                 }
                                 .overlay() { // xmark in top right to discard the preview.
                                     HStack(alignment: .top) {
@@ -277,14 +217,12 @@ struct ContentView: View {
                     // BEWARE: contex has always a camera, a rect and a region as properties.
                     // We need camera (for its heading property) and region
 
-                    viewModel.isFetchingAccidents = true
+//                    viewModel.isFetchingAccidents = true
+                    
                     // General decision: raises responsiveness dramatically, but instantly no accidents shown any more while moving the map
-//                    if viewModel.accidentStructs.count > 100 {
-//                        viewModel.accidentStructs = []
-//                    }
-
                     if viewModel.accidentStructsGRDB.count > 100 {
-                        viewModel.accidentStructsGRDB = []
+//                        viewModel.accidentStructsGRDB = []
+                        viewModel.clearAccidentsGRDB()
                     }
 
                     self.mapCamera = context.camera
@@ -293,18 +231,19 @@ struct ContentView: View {
                     // This task runs on the main thread
                     task?.cancel()
                     task = Task {
+                        
+//                        viewModel.isFetchingAccidents = true
+                        
                         try? await Task.sleep(nanoseconds: 400_000_000) // Delay (debounce) for some time
-                        if Task.isCancelled {
-//                            print("Task cancelled")
-                        } else {
+                        guard !Task.isCancelled else { return }
+
 //                            print("Task, not cancelled, starting")
                             // async seems to result in more responsive UI
 //                            viewModel.fetchAccidents2(region: context.region)
 //                            viewModel.fetchAccidents(region: context.region)
-                            viewModel.fetchAccidentsGRDB(region: context.region)
-                            viewModel.fetchCountInRegion(region: context.region)
+                        viewModel.fetchAccidentsGRDB(region: context.region)
+                        viewModel.fetchCountInRegion(region: context.region)
 //                            print("In Task, not cancelled, ended")
-                        }
                     }
                 }
                 
@@ -353,7 +292,8 @@ struct ContentView: View {
                     Button(action: {
                         isShowingInfoView.toggle()
 //                        viewModel.accidentStructs = [] // neded for speedup and responsiveness
-                        viewModel.accidentStructsGRDB = [] // neded for speedup and responsiveness
+//                        viewModel.accidentStructsGRDB = [] // neded for speedup and responsiveness
+                        viewModel.clearAccidentsGRDB() // neded for speedup and responsiveness
                     }) {
                         Label("Info", systemImage: "info.circle")
                     }
@@ -436,7 +376,7 @@ struct ContentView: View {
         viewModel.fetchCountInRegion(region: visibleRegion)
     }
     
-    func getLookAroundScene (forAccident accident: AccidentStruct?) {
+    func getLookAroundScene (forAccident accident: AccidentStructGRDB?) {
         lookAroundScene = nil
         Task {
             if let accident {
