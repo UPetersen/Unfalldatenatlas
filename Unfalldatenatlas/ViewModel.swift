@@ -155,7 +155,8 @@ final class ViewModel: ObservableObject {
         taskForFetchAccidents?.cancel()
         taskForFetchAccidents = Task.detached(priority: .high) {
             
-            await MainActor.run { self.isFetchingAccidents = true }
+            // Nachfolgende Zeile verursacht Flackern im UI. Das UI wird trotzdem dies auskodierr ist immer wieder gerendert und die Accidents neu gefetched.
+//            await MainActor.run { self.isFetchingAccidents = true }
             let limit = await self.fetchLimit
             
             do {

@@ -44,65 +44,76 @@ struct ContentView: View  {
                                 
                 // Use initializer with $position, otherwhise position waggles several times, when coming back from filter view
                 // I do not understand why. $position should actually not be needed.
-                Map(position: $mapCameraPosition, scope: mapScope) {
-
-                    UserAnnotation() // Displays the blue circle for user's position
-                    
-                    // Draw Circle on map for each Accident and conditionally show symbols text
-                    // Big sppeed up to separate
-                    if !viewModel.accidentStructsGRDB.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
-                        // Some sppeed up to distinguish the two cases of displaying symbols or not in the following way
-                        if showSymbols {
-                            // Circles with text symbols (the emojis) for each accident
-                            ForEach(viewModel.accidentStructsGRDB) { accident in
-                                // MARK: BEWARE: Annotation text could also be used for symbols information text
-                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
-                                    Button(action: {
-                                        print("==================== Button pressed ===================")
-                                        if accident == selectedAccidentGRDB {
-                                            selectedAccidentGRDB = nil
-                                        } else {
-                                            selectedAccidentGRDB = accident
-                                        }
-                                        getLookAroundScene(forAccident: selectedAccidentGRDB)
-                                    }) {
-                                        Circle()
-                                            .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
-                                            .padding()
-                                            .overlay() {
-                                                SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
-                                            }
-                                    }
-                                    .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
-                                }
-                            }
-                        } else {
-                            // Plain circles (no emojis here)
-                            ForEach(viewModel.accidentStructsGRDB, id: \.id) { accident in
-                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
-                                    Button(action: {
-                                        print("==================== Button pressed ===================")
-                                        if accident == selectedAccidentGRDB {
-                                            selectedAccidentGRDB = nil
-                                        } else {
-                                            selectedAccidentGRDB = accident
-                                        }
-                                        getLookAroundScene(forAccident: selectedAccidentGRDB)
-                                    }) {
-                                        Circle()
-                                            .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
-                                            .padding()
-                                    }
-                                    .overlay() {
-                                        SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
-                                            .opacity(accident == selectedAccidentGRDB ? 1 : 0)
-                                    }
-                                }
-                            }
-                        }
+                AccidentMapContentView(
+                    mapCameraPosition: $mapCameraPosition,
+                    mapScope: mapScope,
+                    showSymbols: showSymbols,
+                    accidents: viewModel.accidentStructsGRDB,
+                    selectedAccident: selectedAccidentGRDB,
+                    onSelectAccident: { newSelection in
+                        selectedAccidentGRDB = newSelection
+                        getLookAroundScene(forAccident: newSelection)
                     }
-                }
-                
+                )
+//                Map(position: $mapCameraPosition, scope: mapScope) {
+//
+//                    UserAnnotation() // Displays the blue circle for user's position
+//                    
+//                    // Draw Circle on map for each Accident and conditionally show symbols text
+//                    // Big sppeed up to separate
+//                    if !viewModel.accidentStructsGRDB.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
+//                        // Some sppeed up to distinguish the two cases of displaying symbols or not in the following way
+//                        if showSymbols {
+//                            // Circles with text symbols (the emojis) for each accident
+//                            ForEach(viewModel.accidentStructsGRDB) { accident in
+//                                // MARK: BEWARE: Annotation text could also be used for symbols information text
+//                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
+//                                    Button(action: {
+//                                        print("==================== Button pressed ===================")
+//                                        if accident == selectedAccidentGRDB {
+//                                            selectedAccidentGRDB = nil
+//                                        } else {
+//                                            selectedAccidentGRDB = accident
+//                                        }
+//                                        getLookAroundScene(forAccident: selectedAccidentGRDB)
+//                                    }) {
+//                                        Circle()
+//                                            .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
+//                                            .padding()
+//                                            .overlay() {
+//                                                SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
+//                                            }
+//                                    }
+//                                    .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
+//                                }
+//                            }
+//                        } else {
+//                            // Plain circles (no emojis here)
+//                            ForEach(viewModel.accidentStructsGRDB, id: \.id) { accident in
+//                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
+//                                    Button(action: {
+//                                        print("==================== Button pressed ===================")
+//                                        if accident == selectedAccidentGRDB {
+//                                            selectedAccidentGRDB = nil
+//                                        } else {
+//                                            selectedAccidentGRDB = accident
+//                                        }
+//                                        getLookAroundScene(forAccident: selectedAccidentGRDB)
+//                                    }) {
+//                                        Circle()
+//                                            .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
+//                                            .padding()
+//                                    }
+//                                    .overlay() {
+//                                        SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
+//                                            .opacity(accident == selectedAccidentGRDB ? 1 : 0)
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                
 
                 // Click on anywhere in the map (which is not the circle of an accident) deselects the previously selected accident.
                 .simultaneousGesture(TapGesture(count: 1).onEnded { // Simultaneous gesture needed for retaining zoom on double click.
@@ -125,47 +136,54 @@ struct ContentView: View  {
                         }
                         
                         // Look around preview
-                        if showLookAroundPreview { // selectedAccident != nil {
-                            LookAroundPreview(initialScene: lookAroundScene)
-                                .frame (height: 128)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .overlay() {
-                                    Text("Keine Lookaround-Ansicht vorhanden, kein Unfall ausgewählt oder Internetverbindung eingeschränkt.")
-                                        .padding(.horizontal) // left and right distance to edges of dark colored box
-                                        .multilineTextAlignment(.center)
-                                        .foregroundStyle(.white)
-                                        .frame(maxWidth: .infinity) // extend dark colored box horizontally to edge of LookAroundPreview
-                                        .frame(maxHeight: .infinity) // extend dark colored box verticall to edge or LookAroundPreview
-                                        .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-                                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                                        .padding(.horizontal, 10) // apply same padding as LookAroundPreview
-                                        .padding(.vertical, 5)    // apply same padding as LookAroundPreview
-                                        .opacity((lookAroundScene == nil || selectedAccidentGRDB == nil) ? 1 : 0)
-                                }
-                                .overlay() { // xmark in top right to discard the preview.
-                                    HStack(alignment: .top) {
-                                        Spacer()
-                                        VStack(alignment: .trailing) {
-                                            Button(action: {
-                                                showLookAroundPreview.toggle()
-                                            }) {
-                                                Image(systemName: "xmark.circle.fill")
-                                                    .resizable()
-                                                    .frame(width: 30, height: 30)
-                                                    .background(Color.white)
-                                                    .clipShape(Circle())
-                                                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
-                                            }
-                                            .padding(.trailing, 15)
-                                            .padding(.top, 10)
-//                                            .padding(horizontal: 10, vertical: 5)
-                                            Spacer()
-                                        }
-                                    }
-                                }
+                        if showLookAroundPreview {
+                            LookAroundPreviewContainer(
+                                scene: lookAroundScene,
+                                selectedAccident: selectedAccidentGRDB,
+                                isVisible: $showLookAroundPreview
+                            )
                         }
+                        //                        if showLookAroundPreview { // selectedAccident != nil {
+//                            LookAroundPreview(initialScene: lookAroundScene)
+//                                .frame (height: 128)
+//                                .clipShape(RoundedRectangle(cornerRadius: 10))
+//                                .padding(.horizontal, 10)
+//                                .padding(.vertical, 5)
+//                                .overlay() {
+//                                    Text("Keine Lookaround-Ansicht vorhanden, kein Unfall ausgewählt oder Internetverbindung eingeschränkt.")
+//                                        .padding(.horizontal) // left and right distance to edges of dark colored box
+//                                        .multilineTextAlignment(.center)
+//                                        .foregroundStyle(.white)
+//                                        .frame(maxWidth: .infinity) // extend dark colored box horizontally to edge of LookAroundPreview
+//                                        .frame(maxHeight: .infinity) // extend dark colored box verticall to edge or LookAroundPreview
+//                                        .background(Color(red: 0.2, green: 0.2, blue: 0.2))
+//                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+//                                        .padding(.horizontal, 10) // apply same padding as LookAroundPreview
+//                                        .padding(.vertical, 5)    // apply same padding as LookAroundPreview
+//                                        .opacity((lookAroundScene == nil || selectedAccidentGRDB == nil) ? 1 : 0)
+//                                }
+//                                .overlay() { // xmark in top right to discard the preview.
+//                                    HStack(alignment: .top) {
+//                                        Spacer()
+//                                        VStack(alignment: .trailing) {
+//                                            Button(action: {
+//                                                showLookAroundPreview.toggle()
+//                                            }) {
+//                                                Image(systemName: "xmark.circle.fill")
+//                                                    .resizable()
+//                                                    .frame(width: 30, height: 30)
+//                                                    .background(Color.white)
+//                                                    .clipShape(Circle())
+//                                                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
+//                                            }
+//                                            .padding(.trailing, 15)
+//                                            .padding(.top, 10)
+////                                            .padding(horizontal: 10, vertical: 5)
+//                                            Spacer()
+//                                        }
+//                                    }
+//                                }
+//                        }
                         
                         Divider()
                         
@@ -218,15 +236,20 @@ struct ContentView: View  {
                     // We need camera (for its heading property) and region
 
 //                    viewModel.isFetchingAccidents = true
-                    
+                    guard self.visibleRegion != context.region else { return }
+                    print("🔁 Durch erste Stufe durchgerutscht: Region changed significantly → loading new accidents")
+//                    guard !visibleRegion.isApproximatelyEqualTo(to: context.region, tolerancePercent: 0.5) else { return }
+                    guard !visibleRegion.isApproximatelyEqual(to: context.region, tolerancePercent: 0.01) else { return }
+                    print("🔁 Durch zweite Stufe auch durchgerutscht: Region changed significantly → loading new accidents")
+                    self.visibleRegion = context.region
+                    self.mapCamera = context.camera
+
+
                     // General decision: raises responsiveness dramatically, but instantly no accidents shown any more while moving the map
                     if viewModel.accidentStructsGRDB.count > 100 {
 //                        viewModel.accidentStructsGRDB = []
                         viewModel.clearAccidentsGRDB()
                     }
-
-                    self.mapCamera = context.camera
-                    self.visibleRegion = context.region
                     
                     // This task runs on the main thread
                     task?.cancel()
@@ -238,44 +261,21 @@ struct ContentView: View  {
                         guard !Task.isCancelled else { return }
 
 //                            print("Task, not cancelled, starting")
-                            // async seems to result in more responsive UI
-//                            viewModel.fetchAccidents2(region: context.region)
-//                            viewModel.fetchAccidents(region: context.region)
                         viewModel.fetchAccidentsGRDB(region: context.region)
                         viewModel.fetchCountInRegion(region: context.region)
 //                            print("In Task, not cancelled, ended")
                     }
                 }
                 
-                // Text on number of accidents within region and number of accidents displayed.
-                VStack(alignment: .center) {
-                    HStack(alignment: .bottom) {
-                        Spacer()
-                        if viewModel.isFetchingAccidents {
-                            Group {
-                                ProgressView()
-                                Text(" Lade Daten für Kartenausschnitt ... ")
-                            }
-                        } else {
-                            Text(infoTextForRegion)
-                            .multilineTextAlignment(.trailing)
-                        }
-                    }
-                    .padding(.horizontal)
-                    .background(Color(.tertiarySystemBackground)).opacity(0.75)
-                    
-                    // Seems to be a bug in mac catalyst, but compass is not displayed on map using the .mapControls modifier, thus manually here
-                    HStack{
-                        Spacer()
-                        MapCompass(scope: mapScope)
-                            .padding(.horizontal)
-                    }
-                    
-//#if DEBUG
-//                    Text( (position.region != nil) ? "Fläche ist \(Int(position.region!.areaInSquareKilometers)) km^2" : "Fehler: position.region ist nil.")
-//#endif
-                    
-                }
+                // Overlay with text on number of accidents within region and number of accidents displayed and compass.
+                AccidentMapOverlayView(
+                    isFetchingAccidents: viewModel.isFetchingAccidents,
+                    countOfAccidents: viewModel.accidentStructsGRDB.count,
+                    selectedCountInRegion: viewModel.selectedCountInRegion,
+                    mapCamera: mapCamera,
+                    mapStyleIsStandard: mapStyleIsStandard,
+                    mapScope: mapScope
+                )
             }
             .mapScope(mapScope)
             
@@ -304,7 +304,8 @@ struct ContentView: View  {
                     Button(action: {
                         isShowingFilterView.toggle()
 //                        viewModel.accidentStructs = [] // neded for speedup and responsiveness
-                        viewModel.accidentStructsGRDB = [] // neded for speedup and responsiveness
+//                        viewModel.accidentStructsGRDB = [] // neded for speedup and responsiveness
+                        viewModel.clearAccidentsGRDB()  // neded for speedup and responsiveness
                     }) {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
                     }
@@ -323,7 +324,6 @@ struct ContentView: View  {
             // User pressed button to show symbols or not
             .onChange(of: showSymbols) {
                 print("============================== in .onChange(of: showSymbols) ===============================")
-//                viewModel.fetchAccidents(region: visibleRegion)
                 viewModel.fetchAccidentsGRDB(region: visibleRegion)
                 viewModel.fetchCountInRegion(region: visibleRegion)
             }
@@ -361,7 +361,6 @@ struct ContentView: View  {
                         locationManager.requestAuthorization()
                     }
                 }
-//                viewModel.fetchAccidents(region: visibleRegion)
                 viewModel.fetchAccidentsGRDB(region: visibleRegion)
                 viewModel.fetchCountInRegion(region: visibleRegion)
             }
@@ -371,7 +370,6 @@ struct ContentView: View  {
     // Action when dismissing InfoView or FilterView
     func dismissFilterViewAction() {
         print("============================== in func dismissAction ======================")
-//        viewModel.fetchAccidents(region: visibleRegion)
         viewModel.fetchAccidentsGRDB(region: visibleRegion)
         viewModel.fetchCountInRegion(region: visibleRegion)
     }
@@ -387,26 +385,21 @@ struct ContentView: View  {
         }        
     }
     
-    var infoTextForRegion: String {
-        var text: String = "Error or no value."
-                
-        if let mapCamera, !mapStyleIsStandard  || (0.5 < mapCamera.heading && mapCamera.heading < 355.5) || 0.5 < mapCamera.pitch {
-            // Camera is not standard map, not in north or pitch is no zero (not in 2D) -> no count information in visible region since not accurate
-            text = "Unfallzahl für Kartenausschnitt nur bei Standardkarte in Nordausrichtung"
-        } else {
-//            if viewModel.accidentStructs.count >= viewModel.fetchLimit {
-//                text = "\(viewModel.fetchLimit) oder mehr Unfälle im Kartenausschnitt (\(viewModel.fetchLimit) angezeigt)"
+//    var infoTextForRegion: String {
+//        var text: String = "Error or no value."
+//                
+//        if let mapCamera, !mapStyleIsStandard  || (0.5 < mapCamera.heading && mapCamera.heading < 355.5) || 0.5 < mapCamera.pitch {
+//            // Camera is not standard map, not in north or pitch is no zero (not in 2D) -> no count information in visible region since not accurate
+//            text = "Unfallzahl für Kartenausschnitt nur bei Standardkarte in Nordausrichtung"
+//        } else {
+//            if viewModel.selectedCountInRegion > viewModel.accidentStructsGRDB.count {
+//                text = "\(viewModel.selectedCountInRegion) Unfälle im Kartenausschnitt (\(viewModel.accidentStructsGRDB.count) angezeigt)"
 //            } else {
-//                text = "\(viewModel.accidentStructs.count) Unfälle im Kartenausschnitt"
+//                text = "\(viewModel.accidentStructsGRDB.count) Unfälle im Kartenausschnitt"
 //            }
-            if viewModel.selectedCountInRegion > viewModel.accidentStructsGRDB.count {
-                text = "\(viewModel.selectedCountInRegion) Unfälle im Kartenausschnitt (\(viewModel.accidentStructsGRDB.count) angezeigt)"
-            } else {
-                text = "\(viewModel.accidentStructsGRDB.count) Unfälle im Kartenausschnitt"
-            }
-        }
-        return text
-    }
+//        }
+//        return text
+//    }
     
 }
 

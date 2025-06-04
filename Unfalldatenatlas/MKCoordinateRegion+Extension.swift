@@ -89,3 +89,69 @@ extension MKCoordinateRegion {
         )
     }
 }
+
+//extension MKCoordinateRegion {
+//    var areaInSquareDegrees: Double {
+//        return span.latitudeDelta * span.longitudeDelta
+//    }
+//}
+//
+//extension MKCoordinateRegion {
+//    func isApproximatelyEqualTo(_ other: MKCoordinateRegion, tolerancePercent: Double = 1.0) -> Bool {
+//        let oldArea = self.areaInSquareDegrees
+//        let newArea = other.areaInSquareDegrees
+//        guard oldArea > 0 && newArea > 0 else { return false }
+//
+//        let areaDelta = abs(newArea - oldArea)
+//        let relativeChange = areaDelta / oldArea * 100
+//
+//        let centerShiftLat = abs(self.center.latitude - other.center.latitude)
+//        let centerShiftLon = abs(self.center.longitude - other.center.longitude)
+//
+//        // Toleranzwert: wenn sich Zentrum UND Fläche nicht stark ändern, ist es "gleich"
+//        return relativeChange < tolerancePercent &&
+//               centerShiftLat < self.span.latitudeDelta * tolerancePercent / 100 &&
+//               centerShiftLon < self.span.longitudeDelta * tolerancePercent / 100
+//    }
+//}
+
+
+extension MKCoordinateRegion {
+    
+    /// Estimates the visible map area's size in "square degrees".
+    /// This is a unitless measure useful for comparing relative region size changes
+    /// regardless of zoom level or location on Earth.
+    var areaInSquareDegrees: Double {
+        return span.latitudeDelta * span.longitudeDelta
+    }
+
+    /// Compares two coordinate regions with a tolerance percentage.
+    ///
+    /// Returns `true` if the area size and center position of the regions
+    /// differ by less than the given tolerance.
+    ///
+    /// - Parameters:
+    ///   - other: The region to compare with.
+    ///   - tolerancePercent: The allowed difference in percent (default: 1.0).
+    /// - Returns: `true` if regions are considered approximately equal.
+    func isApproximatelyEqual(to other: MKCoordinateRegion, tolerancePercent: Double = 1.0) -> Bool {
+        let area1 = self.areaInSquareDegrees
+        let area2 = other.areaInSquareDegrees
+        
+        // Avoid division by zero or nonsensical comparisons
+        guard area1 > 0 && area2 > 0 else { return false }
+
+        // Compute relative area change in percent
+        let areaDifference = abs(area2 - area1)
+        let areaChangePercent = areaDifference / area1 * 100
+
+        // Compute center coordinate difference
+        let latShift = abs(center.latitude - other.center.latitude)
+        let lonShift = abs(center.longitude - other.center.longitude)
+
+        // Both area and center must be within tolerance to consider equal
+        return areaChangePercent < tolerancePercent &&
+               latShift < span.latitudeDelta * tolerancePercent / 100 &&
+               lonShift < span.longitudeDelta * tolerancePercent / 100
+    }
+}
