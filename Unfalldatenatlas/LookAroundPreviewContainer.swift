@@ -24,7 +24,7 @@ struct LookAroundPreviewContainer: View {
             .overlay {
                 /// Fallback overlay if scene is not available or nothing is selected
                 if scene == nil || selectedAccident == nil {
-                    Text("Keine Lookaround-Ansicht vorhanden, kein Unfall ausgewählt oder Internetverbindung eingeschränkt.")
+                    Text("Keine Lookaround-Ansicht vorhanden,\nkein Unfall ausgewählt oder \nInternetverbindung eingeschränkt.")
                         .padding(.horizontal)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.white)

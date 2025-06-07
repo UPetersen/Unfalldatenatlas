@@ -16,7 +16,7 @@ struct ContentView: View  {
     @StateObject var initializationViewModel = InitializationViewModel()
     @StateObject var locationManager = LocationManager()
 
-    @State private var task: Task<Void, Never>? = nil
+    @State private var debounceTask: Task<Void, Never>? = nil
 
     @State private var showSymbols = false
     @State private var mapCameraPosition: MapCameraPosition = .region(LocationManager.regionForGermany)
@@ -55,75 +55,11 @@ struct ContentView: View  {
                         getLookAroundScene(forAccident: newSelection)
                     }
                 )
-//                Map(position: $mapCameraPosition, scope: mapScope) {
-//
-//                    UserAnnotation() // Displays the blue circle for user's position
-//                    
-//                    // Draw Circle on map for each Accident and conditionally show symbols text
-//                    // Big sppeed up to separate
-//                    if !viewModel.accidentStructsGRDB.isEmpty { // App crashes here, when enabling '-com.apple.CoreData.ConcurrencyDebug 1'. Not sure why.
-//                        // Some sppeed up to distinguish the two cases of displaying symbols or not in the following way
-//                        if showSymbols {
-//                            // Circles with text symbols (the emojis) for each accident
-//                            ForEach(viewModel.accidentStructsGRDB) { accident in
-//                                // MARK: BEWARE: Annotation text could also be used for symbols information text
-//                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
-//                                    Button(action: {
-//                                        print("==================== Button pressed ===================")
-//                                        if accident == selectedAccidentGRDB {
-//                                            selectedAccidentGRDB = nil
-//                                        } else {
-//                                            selectedAccidentGRDB = accident
-//                                        }
-//                                        getLookAroundScene(forAccident: selectedAccidentGRDB)
-//                                    }) {
-//                                        Circle()
-//                                            .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
-//                                            .padding()
-//                                            .overlay() {
-//                                                SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
-//                                            }
-//                                    }
-//                                    .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
-//                                }
-//                            }
-//                        } else {
-//                            // Plain circles (no emojis here)
-//                            ForEach(viewModel.accidentStructsGRDB, id: \.id) { accident in
-//                                Annotation("", coordinate: accident.coordinate, anchor: .center) {
-//                                    Button(action: {
-//                                        print("==================== Button pressed ===================")
-//                                        if accident == selectedAccidentGRDB {
-//                                            selectedAccidentGRDB = nil
-//                                        } else {
-//                                            selectedAccidentGRDB = accident
-//                                        }
-//                                        getLookAroundScene(forAccident: selectedAccidentGRDB)
-//                                    }) {
-//                                        Circle()
-//                                            .stroke(accident.color, lineWidth: accident == selectedAccidentGRDB ? 12 : 5)
-//                                            .padding()
-//                                    }
-//                                    .overlay() {
-//                                        SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
-//                                            .opacity(accident == selectedAccidentGRDB ? 1 : 0)
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                
-
-                // Click on anywhere in the map (which is not the circle of an accident) deselects the previously selected accident.
-                .simultaneousGesture(TapGesture(count: 1).onEnded { // Simultaneous gesture needed for retaining zoom on double click.
-//                    selectedAccident = nil
-                    selectedAccidentGRDB = nil
-                })
 
                 .mapControls {
                     MapScaleView()
                 }
+                
                 .mapStyle(mapStyleIsStandard ? .standard : .hybrid(elevation: .realistic))
                 
                 // LOOK AROUND PREVIEW AND BOTTOM TOOLBAR AND INITIALIZATION VIEW
@@ -143,98 +79,27 @@ struct ContentView: View  {
                                 isVisible: $showLookAroundPreview
                             )
                         }
-                        //                        if showLookAroundPreview { // selectedAccident != nil {
-//                            LookAroundPreview(initialScene: lookAroundScene)
-//                                .frame (height: 128)
-//                                .clipShape(RoundedRectangle(cornerRadius: 10))
-//                                .padding(.horizontal, 10)
-//                                .padding(.vertical, 5)
-//                                .overlay() {
-//                                    Text("Keine Lookaround-Ansicht vorhanden, kein Unfall ausgewählt oder Internetverbindung eingeschränkt.")
-//                                        .padding(.horizontal) // left and right distance to edges of dark colored box
-//                                        .multilineTextAlignment(.center)
-//                                        .foregroundStyle(.white)
-//                                        .frame(maxWidth: .infinity) // extend dark colored box horizontally to edge of LookAroundPreview
-//                                        .frame(maxHeight: .infinity) // extend dark colored box verticall to edge or LookAroundPreview
-//                                        .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-//                                        .clipShape(RoundedRectangle(cornerRadius: 10))
-//                                        .padding(.horizontal, 10) // apply same padding as LookAroundPreview
-//                                        .padding(.vertical, 5)    // apply same padding as LookAroundPreview
-//                                        .opacity((lookAroundScene == nil || selectedAccidentGRDB == nil) ? 1 : 0)
-//                                }
-//                                .overlay() { // xmark in top right to discard the preview.
-//                                    HStack(alignment: .top) {
-//                                        Spacer()
-//                                        VStack(alignment: .trailing) {
-//                                            Button(action: {
-//                                                showLookAroundPreview.toggle()
-//                                            }) {
-//                                                Image(systemName: "xmark.circle.fill")
-//                                                    .resizable()
-//                                                    .frame(width: 30, height: 30)
-//                                                    .background(Color.white)
-//                                                    .clipShape(Circle())
-//                                                    .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
-//                                            }
-//                                            .padding(.trailing, 15)
-//                                            .padding(.top, 10)
-////                                            .padding(horizontal: 10, vertical: 5)
-//                                            Spacer()
-//                                        }
-//                                    }
-//                                }
-//                        }
                         
                         Divider()
                         
                         // Buttons at the bottom of the screen
-                        HStack {
-                            // Caveat: the first two buttons do not scale with the system font, but the latter three do.
-                            // I did not find a ways to scale the first two buttons.
-                            if locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways {
-                                MapUserLocationButton(scope: mapScope)
-                            }
-                            MapPitchToggle(scope: mapScope)
-                            
-                            // Button to toggle between standard and hybrid view
-                            Button(action: { mapStyleIsStandard.toggle() }) {
-                                Image(systemName: mapStyleIsStandard ? "map" : "map.fill")
-                                    .font(.system(size: 18)) // keep size independent to system font size, because of above mentioned bug
-                            }
-                            .padding(.horizontal)
-                            
-                            // Button to toggle between showing symbols for the accidents or not
-                            Button(action: { showSymbols.toggle() }) {
-                                Image(systemName: showSymbols ? "ellipsis.rectangle.fill" : "ellipsis.rectangle")
-                                    .font(.system(size: 18)) // keep size independent to system font size, because of above mentioned bug
-                                    .padding([.top, .bottom], 8)
-                            }
-                            .padding(.horizontal)
-                            
-                            // Button to toggle between showing look around preview or not
-                            Button(action: { showLookAroundPreview.toggle() }) {
-                                Image(systemName: showLookAroundPreview ? "binoculars.fill" : "binoculars")
-                                    .font(.system(size: 18)) // keep size independent to system font size, because of above mentioned bug
-                                    .padding([.top, .bottom], 8)
-                            }
-                            .padding(.horizontal)
-                        }
-                        .padding(.horizontal)
-                        .frame(maxWidth: .infinity)
+                        MapBottomToolbarView(
+                            mapScope: mapScope,
+                            locationAuthorized: locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways,
+                            mapStyleIsStandard: $mapStyleIsStandard,
+                            showSymbols: $showSymbols,
+                            showLookAroundPreview: $showLookAroundPreview
+                        )
                     }
                     .mapControlVisibility(.visible)
                     .background(Color(.systemBackground))
                 }
                 
-                // Update map when user pinched, zoomed or panned and set a new region
+                // Update map when user pinched, zoomed or panned and thus set a new region
                 // Must run ".continuos" for the delay/debounce to become effective. (Otherwise it
                 // fires after each finish of moving the fingers plus the delay time, even if the user
                 // continued moving his finger on the map again within the delay time.
                 .onMapCameraChange(frequency: .continuous) { context in
-//                    print("==============================  in .onMapCameraChange(...) ============================")
-                    // BEWARE: contex has always a camera, a rect and a region as properties.
-                    // We need camera (for its heading property) and region
-
 //                    viewModel.isFetchingAccidents = true
                     guard self.visibleRegion != context.region else { return }
                     print("🔁 Durch erste Stufe durchgerutscht: Region changed significantly → loading new accidents")
@@ -244,26 +109,20 @@ struct ContentView: View  {
                     self.visibleRegion = context.region
                     self.mapCamera = context.camera
 
-
                     // General decision: raises responsiveness dramatically, but instantly no accidents shown any more while moving the map
                     if viewModel.accidentStructsGRDB.count > 100 {
-//                        viewModel.accidentStructsGRDB = []
                         viewModel.clearAccidentsGRDB()
                     }
                     
-                    // This task runs on the main thread
-                    task?.cancel()
-                    task = Task {
+                    debounceTask?.cancel()
+                    debounceTask = Task {
                         
 //                        viewModel.isFetchingAccidents = true
                         
                         try? await Task.sleep(nanoseconds: 400_000_000) // Delay (debounce) for some time
                         guard !Task.isCancelled else { return }
-
-//                            print("Task, not cancelled, starting")
                         viewModel.fetchAccidentsGRDB(region: context.region)
                         viewModel.fetchCountInRegion(region: context.region)
-//                            print("In Task, not cancelled, ended")
                     }
                 }
                 
