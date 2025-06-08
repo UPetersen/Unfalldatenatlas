@@ -142,30 +142,24 @@ struct ContentView: View  {
             .toolbar {
                 // Text with count of selected accidents
                 ToolbarItem(placement: .navigationBarLeading) {
-                    VStack(alignment: .leading) {
-                        CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.totalCountinGermany, countOfSelectedAccidents: viewModel.selectedCountInGermany, isFetchingCountOfSelectedAccidents: viewModel.isFetchingSelectedCountInGermany, displayPercentage: initializationViewModel.isInitialized)
-                    }
+                    CountOfSelectedAccidentsView(countOfAllAccidents: ViewModel.totalCountinGermany,
+                                                 countOfSelectedAccidents: viewModel.selectedCountInGermany,
+                                                 isFetchingCountOfSelectedAccidents: viewModel.isFetchingSelectedCountInGermany,
+                                                 displayPercentage: initializationViewModel.isInitialized)
                 }
-                // The (i) button
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    // (i) button
+                    Button {
                         isShowingInfoView.toggle()
-//                        viewModel.accidentStructs = [] // neded for speedup and responsiveness
-//                        viewModel.accidentStructsGRDB = [] // neded for speedup and responsiveness
                         viewModel.clearAccidentsGRDB() // neded for speedup and responsiveness
-                    }) {
+                    } label: {
                         Label("Info", systemImage: "info.circle")
                     }
-                }
-                // The filter button
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    // Use sheet, because there is some significant lag if using NavigationLink.
-                    Button(action: {
+                    // filter button
+                    Button {
                         isShowingFilterView.toggle()
-//                        viewModel.accidentStructs = [] // neded for speedup and responsiveness
-//                        viewModel.accidentStructsGRDB = [] // neded for speedup and responsiveness
                         viewModel.clearAccidentsGRDB()  // neded for speedup and responsiveness
-                    }) {
+                    } label: {
                         Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
                     }
                 }
@@ -243,23 +237,7 @@ struct ContentView: View  {
             print("getLookAroundScene finished")
         }        
     }
-    
-//    var infoTextForRegion: String {
-//        var text: String = "Error or no value."
-//                
-//        if let mapCamera, !mapStyleIsStandard  || (0.5 < mapCamera.heading && mapCamera.heading < 355.5) || 0.5 < mapCamera.pitch {
-//            // Camera is not standard map, not in north or pitch is no zero (not in 2D) -> no count information in visible region since not accurate
-//            text = "Unfallzahl für Kartenausschnitt nur bei Standardkarte in Nordausrichtung"
-//        } else {
-//            if viewModel.selectedCountInRegion > viewModel.accidentStructsGRDB.count {
-//                text = "\(viewModel.selectedCountInRegion) Unfälle im Kartenausschnitt (\(viewModel.accidentStructsGRDB.count) angezeigt)"
-//            } else {
-//                text = "\(viewModel.accidentStructsGRDB.count) Unfälle im Kartenausschnitt"
-//            }
-//        }
-//        return text
-//    }
-    
+        
 }
 
 //struct ContentView_Previews: PreviewProvider {

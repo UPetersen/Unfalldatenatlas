@@ -106,29 +106,29 @@ final class ViewModel: ObservableObject {
     @Published var selectedCountInGermany: Int = 0
     @Published var isFetchingSelectedCountInGermany = false
     private var taskForFetchCountInGermany: Task<Void, Error>? = nil
-
+    
     // count of the subset of the accidents in the database that lies in the respective region (geographic rectangular), filter/selection applied.
     // Number is limited by fetchlimit, thus it can be a number from 0 up to fetchLimit.
-//    @Published var totalCountInRegion: Int = 0
+    //    @Published var totalCountInRegion: Int = 0
     @Published var selectedCountInRegion: Int = 0
     @Published var isFetchingSelectedCountInRegion = false
     private var taskForFetchCountInRegion: Task<Void, Error>? = nil
-
+    
     // Accidents to be displayed, i.e. the accidents in the respective region (0 up to fetchLimit accidents)
-//    @Published var accidentStructs: [AccidentStruct] = []
+    //    @Published var accidentStructs: [AccidentStruct] = []
     @Published var accidentStructsGRDB: [AccidentStructGRDB] = []
     @Published var isFetchingAccidents = false
     @Published var accidentDataFilters = AccidentDataFilter()
     private var taskForFetchAccidents: Task<Void, Never>? = nil
     private(set) var fetchLimit = 400 //300 // Maximum number of accidents to fetched -> fetchLimit for fetch request.
     
-//    private var fetchOperation: FetchOperation? = nil
+    //    private var fetchOperation: FetchOperation? = nil
     
     init(initFromFile: Bool = false) {
-//        asyncContext.automaticallyMergesChangesFromParent = true
+        //        asyncContext.automaticallyMergesChangesFromParent = true
         
-//        let didSaveNotification = NSManagedObjectContext.didSaveObjectsNotification
-//        NotificationCenter.default.addObserver(self, selector: #selector(didSave(_:)), name: didSaveNotification, object: nil)
+        //        let didSaveNotification = NSManagedObjectContext.didSaveObjectsNotification
+        //        NotificationCenter.default.addObserver(self, selector: #selector(didSave(_:)), name: didSaveNotification, object: nil)
 #if DEBUG
         print("Running in debug mode.")
 #else
@@ -142,21 +142,21 @@ final class ViewModel: ObservableObject {
     }
     
     
-//    /// Called when context was saved. Updates the count of selected accidents in the respective view.
-//    /// - Parameter notification: This parameter is not used
-//    @objc func didSave(_ notification: Notification) {
-////        getCountOfSelectedAccidents()
-////        fetchCountInGermany()
-//    }
-  
+    //    /// Called when context was saved. Updates the count of selected accidents in the respective view.
+    //    /// - Parameter notification: This parameter is not used
+    //    @objc func didSave(_ notification: Notification) {
+    ////        getCountOfSelectedAccidents()
+    ////        fetchCountInGermany()
+    //    }
+    
     /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
     func fetchAccidentsGRDB(region: MKCoordinateRegion) {
-   
+        
         taskForFetchAccidents?.cancel()
         taskForFetchAccidents = Task.detached(priority: .high) {
             
             // Nachfolgende Zeile verursacht Flackern im UI. Das UI wird trotzdem dies auskodierr ist immer wieder gerendert und die Accidents neu gefetched.
-//            await MainActor.run { self.isFetchingAccidents = true }
+            //            await MainActor.run { self.isFetchingAccidents = true }
             let limit = await self.fetchLimit
             
             do {
@@ -165,7 +165,7 @@ final class ViewModel: ObservableObject {
                 let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
                 
                 let rows = try await DatabaseService.shared.dbPool.read { db in
-
+                    
                     try AccidentNeu
                         .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
                         .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
@@ -174,9 +174,9 @@ final class ViewModel: ObservableObject {
                         .limit(limit)
                         .fetchAll(db)
                 }
-
+                
                 let accidentStructsGDRB = rows.map(AccidentStructGRDB.init) // Creates AccidentStrucGRDB for every record from the record and puts into result array
-
+                
                 await Task.yield()
                 
                 await MainActor.run {
@@ -192,7 +192,7 @@ final class ViewModel: ObservableObject {
     }
     
     func fetchCountInRegion(region: MKCoordinateRegion) {
-   
+        
         taskForFetchCountInRegion?.cancel()
         taskForFetchCountInRegion = Task.detached(priority: .high) {
             
@@ -204,7 +204,7 @@ final class ViewModel: ObservableObject {
                 let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
                 
                 let count = try await DatabaseService.shared.dbPool.read { db in
-
+                    
                     try AccidentNeu
                         .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
                         .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
@@ -213,7 +213,7 @@ final class ViewModel: ObservableObject {
                 }
                 
                 await Task.yield()
-
+                
                 await MainActor.run {
                     self.selectedCountInRegion = count
                     self.isFetchingSelectedCountInRegion = false
@@ -229,17 +229,17 @@ final class ViewModel: ObservableObject {
     
     func fetchCountInGermany() {
         
-//        isFetchingSelectedCountInGermany = true
-//        selectedCountInGermany = 0
+        //        isFetchingSelectedCountInGermany = true
+        //        selectedCountInGermany = 0
         
         taskForFetchCountInGermany?.cancel()
         taskForFetchCountInGermany = Task.detached(priority: .high) {
-
+            
             await MainActor.run {
                 self.selectedCountInGermany = 0
                 self.isFetchingSelectedCountInGermany = true
             }
-
+            
             do {
                 let filters = await self.accidentDataFilters.grdbFilters
                 let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
@@ -252,7 +252,7 @@ final class ViewModel: ObservableObject {
                 }
                 
                 await Task.yield()
-
+                
                 await MainActor.run {
                     self.selectedCountInGermany = count
                     self.isFetchingSelectedCountInGermany = false
@@ -264,7 +264,8 @@ final class ViewModel: ObservableObject {
             }
         }
     }
- 
+}
+
 //    /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
 //    func fetchAccidents(region: MKCoordinateRegion)  {
 //        
@@ -411,7 +412,7 @@ final class ViewModel: ObservableObject {
 //    
     
 
-}
+
 
 
 ///// Creates an Operation and runs a fetch request on it.
