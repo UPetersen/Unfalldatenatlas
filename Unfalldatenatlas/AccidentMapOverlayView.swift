@@ -13,6 +13,8 @@ struct AccidentMapOverlayView: View {
     let isFetchingAccidents: Bool
     let countOfAccidents: Int          // viewModel.accidentStructsGRDB.count
     let selectedCountInRegion: Int     // viewModel.selectedCountInRegion
+    let fetchStatusSelectedCountInRegion: FetchStatus
+
     let mapCamera: MapCamera?
     let mapStyleIsStandard: Bool
     let mapScope: Namespace.ID
@@ -21,7 +23,7 @@ struct AccidentMapOverlayView: View {
         VStack(alignment: .center) {
             HStack(alignment: .bottom) {
                 Spacer()
-                if isFetchingAccidents {
+                if isFetchingAccidents || fetchStatusSelectedCountInRegion == .fetching {
                     Group {
                         ProgressView()
                         Text(" Lade Daten für Kartenausschnitt ... ")
@@ -48,22 +50,40 @@ struct AccidentMapOverlayView: View {
         }
     }
     
-    var infoTextForRegion: String {
-        var text: String = "Error or no value."
-                
-        if let mapCamera, !mapStyleIsStandard  || (0.5 < mapCamera.heading && mapCamera.heading < 355.5) || 0.5 < mapCamera.pitch {
-            // Camera is not standard map, not in north or pitch is no zero (not in 2D) -> no count information in visible region since not accurate
-            text = "Unfallzahl für Kartenausschnitt nur bei Standardkarte in Nordausrichtung"
-        } else {
-            if selectedCountInRegion > countOfAccidents {
-                text = "\(selectedCountInRegion) Unfälle im Kartenausschnitt (\(countOfAccidents) angezeigt)"
-            } else {
-                text = "\(countOfAccidents) Unfälle im Kartenausschnitt"
-            }
-        }
-        return text
-    }
+//    var infoTextForRegion: String {
+//        var text: String = "Error or no value."
+//                
+//        if let mapCamera, !mapStyleIsStandard  || (0.5 < mapCamera.heading && mapCamera.heading < 355.5) || 0.5 < mapCamera.pitch {
+//            // Camera is not standard map, not in north or pitch is no zero (not in 2D) -> no count information in visible region since not accurate
+//            text = "Unfallzahl für Kartenausschnitt nur bei Standardkarte in Nordausrichtung"
+//        } else {
+//            if selectedCountInRegion > countOfAccidents {
+//                text = "\(selectedCountInRegion) Unfälle im Kartenausschnitt (\(countOfAccidents) angezeigt)"
+//            } else {
+//                text = "\(countOfAccidents) Unfälle im Kartenausschnitt"
+//            }
+//        }
+//        return text
+//    }
     
+    var infoTextForRegion: String {
+        if fetchStatusSelectedCountInRegion == .failure {
+            return "Fehler beim Laden der Unfallzahl."
+        }
+
+        guard mapStyleIsStandard,
+              let mapCamera,
+              (mapCamera.heading < 0.5 || mapCamera.heading > 355.5),
+              mapCamera.pitch <= 0.5 else {
+            return "Unfallzahl für Kartenausschnitt nur bei Standardkarte in Nordausrichtung"
+        }
+
+        if selectedCountInRegion > countOfAccidents {
+            return "\(selectedCountInRegion) Unfälle im Kartenausschnitt (\(countOfAccidents) angezeigt)"
+        } else {
+            return "\(countOfAccidents) Unfälle im Kartenausschnitt"
+        }
+    }
     
     
 }

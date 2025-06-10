@@ -89,10 +89,15 @@ struct AccidentDataFilter: Equatable {
             vehicleMaskFilter
         ].compactMap { $0 }
     }
-
 }
 
-
+/// Represents the status of an async fetch operation (e.g. loading, success, failure).
+enum FetchStatus {
+    case idle        // No task running
+    case fetching    // Task is currently fetching
+    case success     // Fetch finished successfully
+    case failure     // Fetch failed
+}
 
 
 @MainActor
@@ -111,7 +116,9 @@ final class ViewModel: ObservableObject {
     // Number is limited by fetchlimit, thus it can be a number from 0 up to fetchLimit.
     //    @Published var totalCountInRegion: Int = 0
     @Published var selectedCountInRegion: Int = 0
-    @Published var isFetchingSelectedCountInRegion = false
+//    @Published var isFetchingSelectedCountInRegion = false
+    // NEW: status indicator for count fetches in current region
+    @Published var fetchStatusSelectedCountInRegion: FetchStatus = .idle
     private var taskForFetchCountInRegion: Task<Void, Error>? = nil
     
     // Accidents to be displayed, i.e. the accidents in the respective region (0 up to fetchLimit accidents)
@@ -139,6 +146,7 @@ final class ViewModel: ObservableObject {
     
     func clearAccidentsGRDB() {
         self.accidentStructsGRDB = []
+        self.isFetchingAccidents = true
     }
     
     
@@ -155,8 +163,9 @@ final class ViewModel: ObservableObject {
         taskForFetchAccidents?.cancel()
         taskForFetchAccidents = Task.detached(priority: .high) {
             
+            let dateStart = Date()
             // Nachfolgende Zeile verursacht Flackern im UI. Das UI wird trotzdem dies auskodierr ist immer wieder gerendert und die Accidents neu gefetched.
-            //            await MainActor.run { self.isFetchingAccidents = true }
+            await MainActor.run { self.isFetchingAccidents = true }
             let limit = await self.fetchLimit
             
             do {
@@ -174,29 +183,40 @@ final class ViewModel: ObservableObject {
                         .limit(limit)
                         .fetchAll(db)
                 }
+                if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 1"); return }
                 
                 let accidentStructsGDRB = rows.map(AccidentStructGRDB.init) // Creates AccidentStrucGRDB for every record from the record and puts into result array
                 
                 await Task.yield()
                 
+                if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 2"); return }
+
                 await MainActor.run {
                     self.accidentStructsGRDB = accidentStructsGDRB
                     self.isFetchingAccidents = false
                     print("🧪 fetched \(rows.count) accidents.")
+                    print("🧪 fetched \(rows.count) accidents in \(Date().timeIntervalSince(dateStart)) seconds.")
                 }
-            } catch {
-                await MainActor.run { self.isFetchingAccidents = false }
+            } catch is CancellationError {
+                print("❌ Abbruch duch cancel beim GRDB-Fetch fetchAccidentsGRDB.")
+           } catch {
                 print("❌ Fehler beim GRDB-Fetch fetchAccidentsGRDB: \(error)")
             }
         }
     }
     
+    /// Fetches the number of accidents in the current map region.
+    /// Runs in a detached Task to ensure parallelism with accident fetching.
+    /// The result is stored in `selectedCountInRegion`, and fetch status is updated accordingly.
     func fetchCountInRegion(region: MKCoordinateRegion) {
         
         taskForFetchCountInRegion?.cancel()
         taskForFetchCountInRegion = Task.detached(priority: .high) {
             
-            await MainActor.run { self.isFetchingSelectedCountInRegion = true }
+//            await MainActor.run { self.isFetchingSelectedCountInRegion = true }
+            // Start fetch – set loading state
+            let dateStart = Date()
+            await MainActor.run { self.fetchStatusSelectedCountInRegion = .fetching }
             
             do {
                 let box = region.boundingBox100
@@ -204,23 +224,39 @@ final class ViewModel: ObservableObject {
                 let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
                 
                 let count = try await DatabaseService.shared.dbPool.read { db in
-                    
                     try AccidentNeu
                         .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
                         .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
                         .filter(combinedFilter)
                         .fetchCount(db)
                 }
+                if Task.isCancelled {print("Task cancelled in fetchCountInRegion, returning early 1. Count would be \(count)"); return }
+
                 
                 await Task.yield()
                 
+//                await MainActor.run {
+//                    self.selectedCountInRegion = count
+//                    self.isFetchingSelectedCountInRegion = false
+//                    print("🧪 fetched count in region: \(count).")
+//                }
+                // Success – update count and status
+                if Task.isCancelled {print("Task cancelled in fetchCountInRegion, returning early 2. Count would be \(count)"); return }
+
                 await MainActor.run {
                     self.selectedCountInRegion = count
-                    self.isFetchingSelectedCountInRegion = false
+                    self.fetchStatusSelectedCountInRegion = .success
                     print("🧪 fetched count in region: \(count).")
+                    print("🧪 fetched count in region: \(count) in \(Date().timeIntervalSince(dateStart)) seconds.")
+
                 }
+            } catch is CancellationError {
+                print("❌ Abbruch duch cancel beim GRDB-Fetch fetchCountInRegion.")
             } catch {
-                await MainActor.run { self.isFetchingAccidents = false }
+//                await MainActor.run { self.isFetchingAccidents = false }
+//                print("❌ Fehler beim GRDB-Fetch fetchCountInRegion: \(error)")
+//                // Error – set failure status
+                await MainActor.run { self.fetchStatusSelectedCountInRegion = .failure }
                 print("❌ Fehler beim GRDB-Fetch fetchCountInRegion: \(error)")
             }
         }
@@ -258,8 +294,10 @@ final class ViewModel: ObservableObject {
                     self.isFetchingSelectedCountInGermany = false
                     print("🧪 fetched count in Germany: \(count).")
                 }
+            } catch is CancellationError {
+                print("❌ Abbruch duch cancel beim GRDB-Fetch fetchCountInGermany.")
             } catch {
-                await MainActor.run { self.isFetchingAccidents = false }
+                await MainActor.run { self.isFetchingSelectedCountInGermany = false }
                 print("❌ Fehler beim GRDB-Fetch fetchCountInGermany: \(error)")
             }
         }

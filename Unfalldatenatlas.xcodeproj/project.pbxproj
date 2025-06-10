@@ -29,6 +29,7 @@
 		C62942712DEF886B005E20D5 /* LookAroundPreviewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62942702DEF8867005E20D5 /* LookAroundPreviewContainer.swift */; };
 		C62942752DEF9062005E20D5 /* AccidentMapContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62942742DEF905A005E20D5 /* AccidentMapContentView.swift */; };
 		C62942772DF4B11C005E20D5 /* MapBottomToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62942762DF4B10A005E20D5 /* MapBottomToolbarView.swift */; };
+		C62942792DF84908005E20D5 /* AccidentAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62942782DF848FA005E20D5 /* AccidentAnnotationView.swift */; };
 		C640096B2AD464F000988E56 /* CountOfSelectedAccidentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C640096A2AD464F000988E56 /* CountOfSelectedAccidentsView.swift */; };
 		C642DA2629A20CEC00623663 /* MapConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2529A20CEC00623663 /* MapConfigurationView.swift */; };
 		C642DA2829A5441B00623663 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642DA2729A5441B00623663 /* InfoView.swift */; };
@@ -92,6 +93,7 @@
 		C62942702DEF8867005E20D5 /* LookAroundPreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookAroundPreviewContainer.swift; sourceTree = "<group>"; };
 		C62942742DEF905A005E20D5 /* AccidentMapContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccidentMapContentView.swift; sourceTree = "<group>"; };
 		C62942762DF4B10A005E20D5 /* MapBottomToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapBottomToolbarView.swift; sourceTree = "<group>"; };
+		C62942782DF848FA005E20D5 /* AccidentAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccidentAnnotationView.swift; sourceTree = "<group>"; };
 		C63146042DE4FF7200CD7E54 /* Unfalldatenatlas 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Unfalldatenatlas 6.xcdatamodel"; sourceTree = "<group>"; };
 		C640096A2AD464F000988E56 /* CountOfSelectedAccidentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountOfSelectedAccidentsView.swift; sourceTree = "<group>"; };
 		C642D9D9299ACF8300623663 /* Unfalldatenatlas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Unfalldatenatlas.entitlements; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 		C6CA9F62297DBCBC000D9E8B /* Unfalldatenatlas */ = {
 			isa = PBXGroup;
 			children = (
+				C62942782DF848FA005E20D5 /* AccidentAnnotationView.swift */,
 				C62942762DF4B10A005E20D5 /* MapBottomToolbarView.swift */,
 				C62942702DEF8867005E20D5 /* LookAroundPreviewContainer.swift */,
 				C629426A2DEAC975005E20D5 /* ColumnExpressioin+Extension.swift */,
@@ -410,6 +413,7 @@
 				C6745E992DE88FD300C82B37 /* DatabaseService.swift in Sources */,
 				C629426B2DEAC98D005E20D5 /* ColumnExpressioin+Extension.swift in Sources */,
 				C67874762997B7260015A20C /* MKCoordinateRegion+Extension.swift in Sources */,
+				C62942792DF84908005E20D5 /* AccidentAnnotationView.swift in Sources */,
 				C62942752DEF9062005E20D5 /* AccidentMapContentView.swift in Sources */,
 				C6D0D023298B0AF0000572C3 /* FilterView.swift in Sources */,
 				C62942692DEA1C03005E20D5 /* SymbolsTextViewGRDB.swift in Sources */,

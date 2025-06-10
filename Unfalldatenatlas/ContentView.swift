@@ -100,10 +100,11 @@ struct ContentView: View  {
                 // fires after each finish of moving the fingers plus the delay time, even if the user
                 // continued moving his finger on the map again within the delay time.
                 .onMapCameraChange(frequency: .continuous) { context in
-//                    viewModel.isFetchingAccidents = true
-                    guard self.visibleRegion != context.region else { return }
-                    print("🔁 Durch erste Stufe durchgerutscht: Region changed significantly → loading new accidents")
-//                    guard !visibleRegion.isApproximatelyEqualTo(to: context.region, tolerancePercent: 0.5) else { return }
+                    print("============================== in .onMapCameraChange  ===============================")
+
+
+//                    guard self.visibleRegion != context.region else { return }
+//                    print("🔁 Durch erste Stufe durchgerutscht: Region changed significantly → loading new accidents")
                     guard !visibleRegion.isApproximatelyEqual(to: context.region, tolerancePercent: 0.01) else { return }
                     print("🔁 Durch zweite Stufe auch durchgerutscht: Region changed significantly → loading new accidents")
                     self.visibleRegion = context.region
@@ -131,6 +132,7 @@ struct ContentView: View  {
                     isFetchingAccidents: viewModel.isFetchingAccidents,
                     countOfAccidents: viewModel.accidentStructsGRDB.count,
                     selectedCountInRegion: viewModel.selectedCountInRegion,
+                    fetchStatusSelectedCountInRegion: viewModel.fetchStatusSelectedCountInRegion,
                     mapCamera: mapCamera,
                     mapStyleIsStandard: mapStyleIsStandard,
                     mapScope: mapScope

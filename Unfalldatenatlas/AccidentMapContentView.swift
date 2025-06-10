@@ -25,60 +25,119 @@ struct AccidentMapContentView: View {
             
             UserAnnotation()  // Show user location (blue dot)
             
-            // Case A: showSymbols == true → draw symbol for all accidents
-            if showSymbols {
-                // Circles with text symbols (the emojis) for each accident
-                ForEach(accidents) { accident in
-                    // MARK: BEWARE: Annotation text could also be used for symbols information text
-                    Annotation("", coordinate: accident.coordinate, anchor: .center) {
-                        Button {
-                            print("==================== Button pressed ===================")
+            ForEach(accidents) { accident in
+                // MARK: BEWARE: Annotation text could also be used for symbols information text
+                Annotation("", coordinate: accident.coordinate, anchor: .center) {
+                    AccidentAnnotationView(
+                        accident: accident,
+                        showSymbol: showSymbols,
+                        isSelected: accident == selectedAccident,
+                        onTap: {
                             if accident == selectedAccident {
                                 onSelectAccident(nil)
                             } else {
                                 onSelectAccident(accident)
                             }
-                        } label: {
-                            Circle()
-                                .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
-                                .padding()
-                                .overlay() {
-                                    SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
-                                }
                         }
-                        //                            .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
-                    }
-                }
-            } else {
-                // Case B: showSymbols == false → show symbol only for selected accident
-                ForEach(accidents, id: \.id) { accident in
-                    Annotation("", coordinate: accident.coordinate, anchor: .center) {
-                        Button {
-                            print("==================== Button pressed ===================")
-                            if accident == selectedAccident {
-                                onSelectAccident(nil)
-                            } else {
-                                onSelectAccident(accident)
-                            }
-                        } label: {
-                            Circle()
-                                .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
-                                .padding()
-                        }
-                        .overlay() {
-                            SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
-                                .opacity(accident == selectedAccident ? 1 : 0)
-                        }
-                    }
+                    )
                 }
             }
         }
+        
         // Clicking anywhere in the map (which is not the circle of an accident) deselects the previously selected accident.
         .simultaneousGesture(
             TapGesture(count: 1).onEnded {
                 onSelectAccident(nil)
             }
         )
+
+        
+//            // Case A: showSymbols == true → draw symbol for all accidents
+//            if showSymbols {
+//                // Circles with text symbols (the emojis) for each accident
+//                ForEach(accidents) { accident in
+//                    // MARK: BEWARE: Annotation text could also be used for symbols information text
+//                    Annotation("", coordinate: accident.coordinate, anchor: .center) {
+//                        AccidentAnnotationView(
+//                            accident: accident,
+//                            showSymbol: true,
+//                            isSelected: accident == selectedAccident,
+//                            onTap: {
+//                                if accident == selectedAccident {
+//                                    onSelectAccident(nil)
+//                                } else {
+//                                    onSelectAccident(accident)
+//                                }
+//                            }
+//                        )
+//
+////                        Button {
+////                            print("==================== Button pressed ===================")
+////                            if accident == selectedAccident {
+////                                onSelectAccident(nil)
+////                            } else {
+////                                onSelectAccident(accident)
+////                            }
+////                        } label: {
+////                            Circle()
+////                                .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
+////                                .padding()
+////                                .overlay() {
+////                                    SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
+////                                }
+////                        }
+////                        //                            .disabled(!showLookAroundPreview) // Button disable (to still have double tap zoom when no preview)
+//                    }
+//                }
+//            } else {
+//                // Case B: showSymbols == false → show symbol only for selected accident
+//                ForEach(accidents, id: \.id) { accident in
+//                    Annotation("", coordinate: accident.coordinate, anchor: .center) {
+//                        AccidentAnnotationView(
+//                            accident: accident,
+//                            showSymbol: false,
+//                            isSelected: accident == selectedAccident,
+//                            onTap: {
+//                                if accident == selectedAccident {
+//                                    onSelectAccident(nil)
+//                                } else {
+//                                    onSelectAccident(accident)
+//                                }
+//                            }
+//                        )
+////                        Circle()
+////                            .stroke(.red, lineWidth: 4)
+////                            .frame(width: 20, height: 20)
+////                        Button {
+////                            print("==================== Button pressed ===================")
+////                            if accident == selectedAccident {
+////                                onSelectAccident(nil)
+////                            } else {
+////                                onSelectAccident(accident)
+////                            }
+////                        } label: {
+////                            Circle()
+////                                .stroke(accident.color, lineWidth: accident == selectedAccident ? 12 : 5)
+////                                .padding()
+////                        }
+////                        .overlay() {
+////                            SymbolsTextViewGRDB(accident: accident).allowsHitTesting(false) // The emojis
+////                                .opacity(accident == selectedAccident ? 1 : 0)
+////                        }
+//                    }
+//                }
+//            }
+//        }
+        
+//        // Clicking anywhere in the map (which is not the circle of an accident) deselects the previously selected accident.
+//        .simultaneousGesture(
+//            TapGesture(count: 1).onEnded {
+//                onSelectAccident(nil)
+//            }
+//        )
+
+
+
     }
 }
 
