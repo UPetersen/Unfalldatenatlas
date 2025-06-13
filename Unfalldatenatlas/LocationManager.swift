@@ -22,8 +22,9 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
     static let longitudeMiddleOfGermany: CLLocationDegrees = 10.447683
     
     // Width of Germany is ca. 636 km and length (north/south) ca. 874 km, see https://de.wikipedia.org/wiki/Geographie_Deutschlands
-    static let widthOfGermany = 636_000.0
-    static let lengthOfGermany = 874_000.0
+    // Plus some distance to cover for any uncertainties
+    static let widthOfGermany  = 636_000.0 + 20_000.0
+    static let lengthOfGermany = 874_000.0 + 20_000.0
     
     static let regionForGermany = MKCoordinateRegion(
         center: CLLocationCoordinate2D(

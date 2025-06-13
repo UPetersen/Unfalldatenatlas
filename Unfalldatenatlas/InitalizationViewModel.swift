@@ -82,17 +82,23 @@ struct AccidentCSVMapping: Hashable {
     let vehicleFlags: [VehicleMask: Int]
     let latitude: Int
     let longitude: Int
+
+    let land: Int         // Spaltenindex für Bundesland
+    let regbez: Int       // Spaltenindex für Regierungsbezirk
+    let kreis: Int        // Spaltenindex für Kreis
+    let gemeinde: Int     // Spaltenindex für Gemeinde
+
 }
 
 let mappingsByYear: [String: AccidentCSVMapping] = [
-    "2016": AccidentCSVMapping(id: 1, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23),
-    "2017": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 18, strassenZustand: 19, vehicleFlags: [.fahrrad: 13, .pkw: 14, .fussgaenger: 15, .krad: 16,                 .sonstige: 17 ], latitude: 23, longitude: 22),
-    "2018": AccidentCSVMapping(id: 0, jahr: 5, monat: 6, stunde: 7, wochentag: 8, unfallKategorie:  9, unfallArt: 10, unfallTyp1: 11, lichtVerhaeltnisse: 12, strassenZustand: 19, vehicleFlags: [.fahrrad: 13, .pkw: 14, .fussgaenger: 15, .krad: 16, .gueterKfz: 17, .sonstige: 18 ], latitude: 23, longitude: 22),
-    "2019": AccidentCSVMapping(id: 0, jahr: 5, monat: 6, stunde: 7, wochentag: 8, unfallKategorie:  9, unfallArt: 10, unfallTyp1: 11, lichtVerhaeltnisse: 12, strassenZustand: 23, vehicleFlags: [.fahrrad: 13, .pkw: 14, .fussgaenger: 15, .krad: 16, .gueterKfz: 17, .sonstige: 18 ], latitude: 22, longitude: 21),
-    "2020": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 24, vehicleFlags: [.fahrrad: 14, .pkw: 15, .fussgaenger: 16, .krad: 17, .gueterKfz: 18, .sonstige: 19 ], latitude: 23, longitude: 22),
-    "2021": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23),
-    "2022": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23),
-    "2023": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23)
+    "2016": AccidentCSVMapping(id: 1, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23, land: 2, regbez: 3, kreis: 4, gemeinde: 5),
+    "2017": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 18, strassenZustand: 19, vehicleFlags: [.fahrrad: 13, .pkw: 14, .fussgaenger: 15, .krad: 16,                 .sonstige: 17 ], latitude: 23, longitude: 22, land: 2, regbez: 3, kreis: 4, gemeinde: 5),
+    "2018": AccidentCSVMapping(id: 0, jahr: 5, monat: 6, stunde: 7, wochentag: 8, unfallKategorie:  9, unfallArt: 10, unfallTyp1: 11, lichtVerhaeltnisse: 12, strassenZustand: 19, vehicleFlags: [.fahrrad: 13, .pkw: 14, .fussgaenger: 15, .krad: 16, .gueterKfz: 17, .sonstige: 18 ], latitude: 23, longitude: 22, land: 1, regbez: 2, kreis: 3, gemeinde: 4),
+    "2019": AccidentCSVMapping(id: 0, jahr: 5, monat: 6, stunde: 7, wochentag: 8, unfallKategorie:  9, unfallArt: 10, unfallTyp1: 11, lichtVerhaeltnisse: 12, strassenZustand: 23, vehicleFlags: [.fahrrad: 13, .pkw: 14, .fussgaenger: 15, .krad: 16, .gueterKfz: 17, .sonstige: 18 ], latitude: 22, longitude: 21, land: 1, regbez: 2, kreis: 3, gemeinde: 4),
+    "2020": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 24, vehicleFlags: [.fahrrad: 14, .pkw: 15, .fussgaenger: 16, .krad: 17, .gueterKfz: 18, .sonstige: 19 ], latitude: 23, longitude: 22, land: 2, regbez: 3, kreis: 4, gemeinde: 5),
+    "2021": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23, land: 2, regbez: 3, kreis: 4, gemeinde: 5),
+    "2022": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23, land: 2, regbez: 3, kreis: 4, gemeinde: 5),
+    "2023": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23, land: 2, regbez: 3, kreis: 4, gemeinde: 5)
 ]
 
 
@@ -164,63 +170,7 @@ final class InitializationViewModel: ObservableObject {
         }
     }
 
-    
-    /// Reads al files and stores the content in cord data. Uncomment relevant lines for respective files.
-//    nonisolated private func loadDataIntoDatabase() async throws {
-//        
-//        let beginDate = Date.now
-//        
-//        let years = ["2022", "2021", "2020", "2019", "2018", "2017", "2016", "2023"]
-////        let years = [ "2018", "2017"]
-////        let years = [ "2018"]
-//        let countOFRecordsForYears: [String: Int] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
-//        
-//        let countOfAccidentsStored = await self.countOfAccidentsInDatabase
-//        let linesToRead = linesToRead(countOfAccidentsStored: countOfAccidentsStored, years: years)
-//        
-//        for year in years {
-//
-//            guard linesToRead[year]! > 0 else { continue }
-//            
-//            var lines = [String()]
-//            lines.reserveCapacity(270_000)
-//            lines.removeFirst()
-//            let countOfRecordsForYear = countOFRecordsForYears[year]!
-//            let url = Bundle.main.url(forResource: "Unfallorte\(year)_LinRef", withExtension: "csv")!
-//            
-//            print("Reading File: \(url.description) ...")
-//            
-//            DispatchQueue.main.async { [weak self] in
-//                self?.initializationState = .loadingData(year: year)
-//                self?.progress = 0
-//            }
-//            
-//            // Async loop over the csv file for the respective year, reading only the lines necessary.
-//            // First line also has to be skipped, because it contains header data (i.e. names of the columens)
-//            for try await line in url.lines.dropFirst(1 + countOfRecordsForYear - linesToRead[year]!) {
-//                await MainActor.run{
-//                    self.countOFAccidents += 1
-//                }
-//                lines.append(line)
-//                if lines.count % 20_000 == 0 {
-//                    DispatchQueue.main.async { [unowned self, lines, countOfRecordsForYear] in
-//                        self.initializationState = .loadingData(year: year)
-//                        self.progress = Double(lines.count) / Double(countOfRecordsForYear)
-//                    }
-//                }
-//            }
-//            
-//            // Final import is needed for the remaining accidents (beyond the 20.000 units)
-//            try? await self.importAccidents(from: Array(lines), year: year)
-//            print("year: \(year), duration: \(DateInterval(start: beginDate, end: Date.now).duration) s, \(countOfRecordsForYear) Records, \(lines.count) lines")
-//        }
-//        
-//        DispatchQueue.main.async {
-//            self.initializationState = .initalized
-//        }
-//        print("Overall: \(years), duration: \(DateInterval(start: beginDate, end: Date.now).duration) s")
-//    }
-        
+            
     /// Reads al files and stores the content in the database.
     nonisolated private func loadDataIntoDatabaseGRDB() async throws {
         
@@ -258,7 +208,6 @@ final class InitializationViewModel: ObservableObject {
             }
             
             print("year: \(year), duration: \(DateInterval(start: beginDateGRDB, end: Date.now).duration) s")
-
         }
         
         // Index creation afterwards
@@ -266,8 +215,10 @@ final class InitializationViewModel: ObservableObject {
                 let dbPool: DatabasePool = DatabaseService.shared.dbPool
                 try await dbPool.write { db in
                     // Indexe anlegen.
-                    try db.execute(sql: "CREATE INDEX idx_lon_lat ON accidents(longitude100, latitude100)")
-                    try db.execute(sql: "CREATE INDEX idx_jahr ON accidents(jahr)")
+                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_lon_lat ON accidents(longitude100, latitude100)")
+//                    try db.execute(sql: "CREATE INDEX idx_jahr ON accidents(jahr)")
+                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_id ON accidents(id);")
+//                    try db.create(index: "idx_unfaelle_id", on: "unfaelle", columns: ["id"], ifNotExists: true)
                 }
                 print("✅ Index erfolgreich erzeugt")
             } catch {
@@ -466,7 +417,7 @@ struct AccidentImporter {
         let yearOffset = year % 2000                            // e.g. 2016 → 16
         let objectID = Int32(components[mapping.id])!           // 1 ... number of lines in file
         let uniqueID = Int32(yearOffset * 1_000_000 + objectID) // e.g. 16_000_001, counting up.
-
+        
         return AccidentNeu(
 
             id: uniqueID,
@@ -481,7 +432,12 @@ struct AccidentImporter {
             strassenZustand: Int16(components[mapping.strassenZustand])!,
             vehicleMask: mask,
             latitude100: Int32(lat * 10_000_000),
-            longitude100: Int32(lon * 10_000_000)
+            longitude100: Int32(lon * 10_000_000),
+            
+            land: UInt8(components[mapping.land])!,
+            regbez: UInt8(components[mapping.regbez])!,
+            kreis: UInt8(components[mapping.kreis])!,
+            gemeinde: UInt16(components[mapping.gemeinde])!
         )
     }
 }

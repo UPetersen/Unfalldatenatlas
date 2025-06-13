@@ -55,7 +55,7 @@ struct ContentView: View  {
                         getLookAroundScene(forAccident: newSelection)
                     }
                 )
-
+                
                 .mapControls {
                     MapScaleView()
                 }
@@ -96,34 +96,35 @@ struct ContentView: View  {
                 }
                 
                 // Update map when user pinched, zoomed or panned and thus set a new region
-                // Must run ".continuos" for the delay/debounce to become effective. (Otherwise it
+                // Must run ".continuos" f ror the delay/debounce to become effective. (Otherwise it
                 // fires after each finish of moving the fingers plus the delay time, even if the user
                 // continued moving his finger on the map again within the delay time.
                 .onMapCameraChange(frequency: .continuous) { context in
                     print("============================== in .onMapCameraChange  ===============================")
 
 
-//                    guard self.visibleRegion != context.region else { return }
-//                    print("🔁 Durch erste Stufe durchgerutscht: Region changed significantly → loading new accidents")
-                    guard !visibleRegion.isApproximatelyEqual(to: context.region, tolerancePercent: 0.01) else { return }
-                    print("🔁 Durch zweite Stufe auch durchgerutscht: Region changed significantly → loading new accidents")
+                    guard self.visibleRegion != context.region else { return }
+                    print("🔁 Durch erste Stufe durchgerutscht: Region changed significantly → loading new accidents")
+//                    guard !visibleRegion.isApproximatelyEqual(to: context.region, tolerancePercent: 0.01) else { return }
+//                    print("🔁 Durch zweite Stufe auch durchgerutscht: Region changed significantly → loading new accidents")
                     self.visibleRegion = context.region
                     self.mapCamera = context.camera
 
                     // General decision: raises responsiveness dramatically, but instantly no accidents shown any more while moving the map
-                    if viewModel.accidentStructsGRDB.count > 100 {
+                    if viewModel.accidentStructsGRDB.count > 100 && !viewModel.accidentStructsGRDB.isEmpty {
                         viewModel.clearAccidentsGRDB()
                     }
-                    
+
                     debounceTask?.cancel()
                     debounceTask = Task {
-                        
-//                        viewModel.isFetchingAccidents = true
-                        
+                                                
                         try? await Task.sleep(nanoseconds: 400_000_000) // Delay (debounce) for some time
+                        
                         guard !Task.isCancelled else { return }
                         viewModel.fetchAccidentsGRDB(region: context.region)
                         viewModel.fetchCountInRegion(region: context.region)
+                        
+//                        try? await Task.sleep(nanoseconds: 200_000_000) // Delay (debounce) for some time
                     }
                 }
                 
@@ -131,8 +132,8 @@ struct ContentView: View  {
                 AccidentMapOverlayView(
                     isFetchingAccidents: viewModel.isFetchingAccidents,
                     countOfAccidents: viewModel.accidentStructsGRDB.count,
+                    isfetchingSelectedCountInRegion: viewModel.isFetchingSelectedCountInRegion,
                     selectedCountInRegion: viewModel.selectedCountInRegion,
-                    fetchStatusSelectedCountInRegion: viewModel.fetchStatusSelectedCountInRegion,
                     mapCamera: mapCamera,
                     mapStyleIsStandard: mapStyleIsStandard,
                     mapScope: mapScope
@@ -169,7 +170,7 @@ struct ContentView: View  {
             .toolbarBackground(.visible, for: .navigationBar) // to map not sneak unterneath
             
             // SHEET for INFOVIEW and FILTERVIEW
-            .sheet(isPresented: $isShowingInfoView, onDismiss: { dismissFilterViewAction() } ) {
+            .sheet(isPresented: $isShowingInfoView) {
                 InfoView(accidentsFetchLimit: viewModel.fetchLimit)
             }
             .sheet(isPresented: $isShowingFilterView, onDismiss: { dismissFilterViewAction() } ) {
@@ -236,7 +237,7 @@ struct ContentView: View  {
                 let request = MKLookAroundSceneRequest(coordinate: accident.coordinate)
                 lookAroundScene = try? await request.scene
             }
-            print("getLookAroundScene finished")
+//            print("getLookAroundScene finished")
         }        
     }
         

@@ -9,6 +9,7 @@ import Foundation
 import MapKit
 import SwiftUI
 import CoreData
+import GRDB
 
 /// Struct that contains the accident data that is displayed to the user.
 ///
@@ -39,18 +40,17 @@ extension AccidentStruct: Equatable {
         lhs.id == rhs.id
     }
 }
-/// This is a mirror, or say copy, of the core data class Accident which is used by the core data store. Contrary to NSMangedObject's it is Sendable. Introduced when changing to Swift 6.
-struct AccidentStructGRDB: Sendable, Identifiable {
-//    let id: UUID = UUID()
+/// Accident data needed for displaying on the map. This is what is fetched from the data base and it is a subset of what is stored in the data base.
+/// E.g. land is stored in the database but only used for filtering (using SQL). Thus, land will not be fetched and is not contained in this struct. The same accounts for regBez, kreis and gemeinde.
+//struct AccidentStructGRDB: Sendable, Identifiable {
+struct AccidentStructGRDB: FetchableRecord, TableRecord, Decodable, Sendable, Identifiable {
+
     let id: Int32
-    let accidentObjectID: Int32
-    //    let countOfAccidentsBy100000: Int32
     let vehicleMask: Int16
     let jahr: Int16
-//    let land: Int16
-    let latitude: Double
+    let latitude100: Int32
     let lichtVerhaeltnisse: Int16
-    let longitude: Double
+    let longitude100: Int32
     let monat: Int16
     let strassenZustand: Int16
     let stunde: Int16
@@ -58,12 +58,21 @@ struct AccidentStructGRDB: Sendable, Identifiable {
     let unfallKategorie: Int16
     let unfallTyp1: Int16
     let wochentag: Int16
-    let coordinate: CLLocationCoordinate2D
-    let color: Color
+    
+    static let databaseTableName = "accidents"
+
+    // Computed Properties:
+    var latitude: Double { Double(latitude100) / 10_000_000 }
+    var longitude: Double { Double(longitude100) / 10_000_000 }
+    var coordinate: CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    var color: Color {
+        UnfallTyp1(rawValue: Int(self.unfallTyp1))?.color ?? .gray
+    }
     
     init(_ record: AccidentNeu) {
         self.id = record.id
-        self.accidentObjectID = record.id
         self.vehicleMask = record.vehicleMask
         self.jahr = record.jahr
         self.monat = record.monat
@@ -74,13 +83,9 @@ struct AccidentStructGRDB: Sendable, Identifiable {
         self.unfallTyp1 = record.unfallTyp1
         self.lichtVerhaeltnisse = record.lichtVerhaeltnisse
         self.strassenZustand = record.strassenZustand
-        self.latitude = Double(record.latitude100) / 10_000_000
-        self.longitude = Double(record.longitude100) / 10_000_000
-        self.coordinate = CLLocationCoordinate2D(
-            latitude: self.latitude,
-            longitude: self.longitude
-        )
-        self.color = record.color // Wenn `color` eine Property von `AccidentNeu` ist
+
+        self.latitude100 = record.latitude100
+        self.longitude100 = record.longitude100
     }
     
     var  symbolString: String {

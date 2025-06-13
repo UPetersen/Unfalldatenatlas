@@ -12,8 +12,8 @@ import SwiftUI
 struct AccidentMapOverlayView: View {
     let isFetchingAccidents: Bool
     let countOfAccidents: Int          // viewModel.accidentStructsGRDB.count
+    let isfetchingSelectedCountInRegion: Bool
     let selectedCountInRegion: Int     // viewModel.selectedCountInRegion
-    let fetchStatusSelectedCountInRegion: FetchStatus
 
     let mapCamera: MapCamera?
     let mapStyleIsStandard: Bool
@@ -23,7 +23,8 @@ struct AccidentMapOverlayView: View {
         VStack(alignment: .center) {
             HStack(alignment: .bottom) {
                 Spacer()
-                if isFetchingAccidents || fetchStatusSelectedCountInRegion == .fetching {
+//                if isFetchingAccidents || fetchStatusSelectedCountInRegion == .fetching {
+                if isFetchingAccidents || isfetchingSelectedCountInRegion {
                     Group {
                         ProgressView()
                         Text(" Lade Daten für Kartenausschnitt ... ")
@@ -67,9 +68,6 @@ struct AccidentMapOverlayView: View {
 //    }
     
     var infoTextForRegion: String {
-        if fetchStatusSelectedCountInRegion == .failure {
-            return "Fehler beim Laden der Unfallzahl."
-        }
 
         guard mapStyleIsStandard,
               let mapCamera,

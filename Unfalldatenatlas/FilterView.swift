@@ -13,7 +13,6 @@ struct FilterView: View {
     @Environment(\.colorScheme) var colorScheme // .dark for dark mode
     @Environment(\.dismiss) var dismiss
     
-    
     @ObservedObject var viewModel: ViewModel
     @Binding var accidentDataFilters: AccidentDataFilter
     @Binding var isFetchingCountOfSelectedAccidents: Bool
@@ -109,12 +108,12 @@ struct FilterView: View {
                 }
             }
             
-//            Section(header: Text("Örtlichkeit")) {
-//                // Bundesland
-//                Picker("Bundesland", selection: $accidentDataFilters.land) {
-//                    ForEach(Land.allCases, id: \.id) { Text($0.sectionText).tag($0) }
-//                }
-//            }
+            Section(header: Text("Örtlichkeit")) {
+                // Bundesland
+                Picker("Bundesland", selection: $accidentDataFilters.land) {
+                    ForEach(Land.allCases, id: \.id) { Text($0.sectionText).tag($0) }
+                }
+            }
 #if DEBUG
             Section(header: Text("Filterbedingung (Debugging)")) {
                 Text("Filter: \(accidentDataFilters.predicates.debugDescription)")
