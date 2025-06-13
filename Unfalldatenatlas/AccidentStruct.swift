@@ -47,17 +47,17 @@ struct AccidentStructGRDB: FetchableRecord, TableRecord, Decodable, Sendable, Id
 
     let id: Int32
     let vehicleMask: Int16
-    let jahr: Int16
+    let jahr: Int
     let latitude100: Int32
-    let lichtVerhaeltnisse: Int16
+    let lichtVerhaeltnisse: Int
     let longitude100: Int32
-    let monat: Int16
-    let strassenZustand: Int16
-    let stunde: Int16
-    let unfallArt: Int16
-    let unfallKategorie: Int16
-    let unfallTyp1: Int16
-    let wochentag: Int16
+    let monat: Int
+    let strassenZustand: Int
+    let stunde: Int
+    let unfallArt: Int
+    let unfallKategorie: Int
+    let unfallTyp1: Int
+    let wochentag: Int
     
     static let databaseTableName = "accidents"
 

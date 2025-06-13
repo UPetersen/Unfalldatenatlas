@@ -216,9 +216,6 @@ final class InitializationViewModel: ObservableObject {
                 try await dbPool.write { db in
                     // Indexe anlegen.
                     try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_lon_lat ON accidents(longitude100, latitude100)")
-//                    try db.execute(sql: "CREATE INDEX idx_jahr ON accidents(jahr)")
-                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_id ON accidents(id);")
-//                    try db.create(index: "idx_unfaelle_id", on: "unfaelle", columns: ["id"], ifNotExists: true)
                 }
                 print("✅ Index erfolgreich erzeugt")
             } catch {
@@ -421,23 +418,23 @@ struct AccidentImporter {
         return AccidentNeu(
 
             id: uniqueID,
-            jahr: Int16(year),
-            monat: Int16(components[mapping.monat])!,
-            stunde: Int16(components[mapping.stunde])!,
-            wochentag: Int16(components[mapping.wochentag])!,
-            unfallKategorie: Int16(components[mapping.unfallKategorie])!,
-            unfallArt: Int16(components[mapping.unfallArt])!,
-            unfallTyp1: Int16(components[mapping.unfallTyp1])!,
-            lichtVerhaeltnisse: Int16(components[mapping.lichtVerhaeltnisse])!,
-            strassenZustand: Int16(components[mapping.strassenZustand])!,
+            jahr: Int(year),
+            monat: Int(components[mapping.monat])!,
+            stunde: Int(components[mapping.stunde])!,
+            wochentag: Int(components[mapping.wochentag])!,
+            unfallKategorie: Int(components[mapping.unfallKategorie])!,
+            unfallArt: Int(components[mapping.unfallArt])!,
+            unfallTyp1: Int(components[mapping.unfallTyp1])!,
+            lichtVerhaeltnisse: Int(components[mapping.lichtVerhaeltnisse])!,
+            strassenZustand: Int(components[mapping.strassenZustand])!,
             vehicleMask: mask,
             latitude100: Int32(lat * 10_000_000),
             longitude100: Int32(lon * 10_000_000),
             
-            land: UInt8(components[mapping.land])!,
-            regbez: UInt8(components[mapping.regbez])!,
-            kreis: UInt8(components[mapping.kreis])!,
-            gemeinde: UInt16(components[mapping.gemeinde])!
+            land: Int(components[mapping.land])!,
+            regbez: Int(components[mapping.regbez])!,
+            kreis: Int(components[mapping.kreis])!,
+            gemeinde: Int(components[mapping.gemeinde])!
         )
     }
 }
