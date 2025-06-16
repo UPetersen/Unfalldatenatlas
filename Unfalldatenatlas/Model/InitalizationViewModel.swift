@@ -221,6 +221,9 @@ final class InitializationViewModel: ObservableObject {
                 print("❌ Fehler beim erzeugen von Index")
             }
         
+        // Copy bundle version and build information into database
+        DatabaseService.shared.writeBundleVersionToDB()
+        
         DispatchQueue.main.async {
             self.initializationState = .initalized
         }

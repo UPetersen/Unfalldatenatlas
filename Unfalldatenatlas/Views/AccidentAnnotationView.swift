@@ -25,7 +25,7 @@ struct AccidentAnnotationView: View {
             
             Circle()
                 .fill(accident.color)
-                .frame(width: isSelected ? 24 : 18, height: isSelected ? 24 : 18)
+                .frame(width: isSelected ? 24 : 16, height: isSelected ? 24 : 16)
         }
         // 👇 unsichtbar größer machen für besseres Tap-Ziel
         .frame(width: 44, height: 44, alignment: .center) // Apple empfiehlt 44x44 für Touch
