@@ -176,6 +176,8 @@ final class InitializationViewModel: ObservableObject {
         let beginDateGRDB = Date.now
         
         let years = ["2022", "2021", "2020", "2019", "2018", "2017", "2016", "2023"]
+//        let years = ["2016", "2022", "2021", "2020", "2019", "2018", "2017", "2023"]
+
 //        let years = [ "2018", "2017"]
 //        let years = [ "2018"]
 //        let countOFRecordsForYears: [String: Int] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
@@ -215,6 +217,7 @@ final class InitializationViewModel: ObservableObject {
                 try await dbPool.write { db in
                     // Indexe anlegen.
                     try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_lon_lat ON accidents(longitude100, latitude100)")
+//                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_unfallKategorie ON accidents(unfallKategorie)")
                 }
                 print("✅ Index erfolgreich erzeugt")
             } catch {
@@ -252,7 +255,10 @@ struct AccidentImporter {
         }
 
         let lines = try await readLines(from: fileURL)
-        let records = try lines.compactMap { try parseLine($0, with: mapping) }
+        let records = try lines.compactMap {
+            try parseLine($0, with: mapping)
+        }
+            .shuffled()  // randomise the order to get better geographical distribution on the map
         let total = records.count
         let chunkSize = 20_000
        
@@ -261,6 +267,7 @@ struct AccidentImporter {
             
             for chunk in records.chunked(into: chunkSize) {
                 for var record in chunk {
+                    record.id = nil // GRDB sets ID automaticcally (AutoIncrement)
                     try record.insert(db)
                 }
                 
@@ -298,13 +305,14 @@ struct AccidentImporter {
         // The objectIds in the files count from 0 upwards line per line. The following creates a unique id for all files, using the year
         // e.g. for ojbectID = 1 in year 20216 it creates 2016_000_001. This is sufficient and still allows Int32 as data type.
         let year = Int32(components[mapping.jahr])!
-        let yearOffset = year % 2000                            // e.g. 2016 → 16
-        let objectID = Int32(components[mapping.id])!           // 1 ... number of lines in file
-        let uniqueID = Int32(yearOffset * 1_000_000 + objectID) // e.g. 16_000_001, counting up.
+//        let yearOffset = year % 2000                            // e.g. 2016 → 16
+//        let objectID = Int32(components[mapping.id])!           // 1 ... number of lines in file
+//        let uniqueID = Int32(yearOffset * 1_000_000 + objectID) // e.g. 16_000_001, counting up.
         
         return AccidentNeu(
 
-            id: uniqueID,
+//            id: uniqueID,
+            id: nil,
             jahr: Int(year),
             monat: Int(components[mapping.monat])!,
             stunde: Int(components[mapping.stunde])!,

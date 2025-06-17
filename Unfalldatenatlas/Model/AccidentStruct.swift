@@ -45,7 +45,8 @@ extension AccidentStruct: Equatable {
 //struct AccidentStructGRDB: Sendable, Identifiable {
 struct AccidentStructGRDB: FetchableRecord, TableRecord, Decodable, Sendable, Identifiable {
 
-    let id: Int32
+//    let id: Int32
+    let id: Int64?
     let vehicleMask: Int16
     let jahr: Int
     let latitude100: Int32
