@@ -10,6 +10,7 @@ import GRDB
 
 /// Used for writing the data from the csv tables into the database.
 struct AccidentNeu: Codable, FetchableRecord, MutablePersistableRecord, Identifiable {
+//    var id: Int32                     // accidentObjectID
     var id: Int64?                     // accidentObjectID
     var jahr: Int
     var monat: Int

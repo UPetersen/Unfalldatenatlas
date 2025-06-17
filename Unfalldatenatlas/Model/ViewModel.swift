@@ -205,7 +205,8 @@ final class ViewModel: ObservableObject {
                         .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
                         .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
                         .filter(combinedFilter)
-                        .order(Column("id").asc)
+//                        .order(Column("id").asc)
+                        .order(Column("id").desc)
                         .limit(limit)
                         .fetchAll(db)
                 }

@@ -258,7 +258,7 @@ struct AccidentImporter {
         let records = try lines.compactMap {
             try parseLine($0, with: mapping)
         }
-            .shuffled()  // randomise the order to get better geographical distribution on the map
+//            .shuffled()  // randomise the order to get better geographical distribution on the map
         let total = records.count
         let chunkSize = 20_000
        
@@ -267,7 +267,6 @@ struct AccidentImporter {
             
             for chunk in records.chunked(into: chunkSize) {
                 for var record in chunk {
-                    record.id = nil // GRDB sets ID automaticcally (AutoIncrement)
                     try record.insert(db)
                 }
                 
