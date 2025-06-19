@@ -157,82 +157,200 @@ final class ViewModel: ObservableObject {
     ////        fetchCountInGermany()
     //    }
     
+//    /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
+//    func fetchAccidentsGRDB(region: MKCoordinateRegion) {
+//        
+//         self.isFetchingAccidents = true
+//        taskForFetchAccidents?.cancel()
+//        
+//        taskForFetchAccidents = Task.detached(priority: .high) {
+//            
+//            if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 0"); return }
+//            
+//            
+//            let dateStart = Date()
+//            // Nachfolgende Zeile verursacht Flackern im UI. Das UI wird trotzdem dies auskodierr ist immer wieder gerendert und die Accidents neu gefetched.
+//            let limit = await self.fetchLimit
+//            
+//            do {
+//                let box = region.boundingBox100
+//                let filters = await self.accidentDataFilters.grdbFilters
+//                let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
+//                
+//                let rows = try await DatabaseService.shared.dbPool.read { db in
+//                    
+//                    try AccidentStructGRDB
+//                        .select(
+//                            Column("id"),
+//                            Column("vehicleMask"),
+//                            Column("jahr"),
+//                            Column("latitude100"),
+//                            Column("longitude100"),
+//                            Column("lichtVerhaeltnisse"),
+//                            Column("monat"),
+//                            Column("strassenZustand"),
+//                            Column("stunde"),
+//                            Column("unfallArt"),
+//                            Column("unfallKategorie"),
+//                            Column("unfallTyp1"),
+//                            Column("wochentag")
+//                        )
+//                        .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
+//                        .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
+//                        .filter(combinedFilter)
+//                        .order(sql: "RANDOM()")
+//                        .limit(limit)
+//                        .fetchAll(db)
+//                }
+//                if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 1"); return }
+//                
+//                await Task.yield()
+//                
+//                if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 2"); return }
+//                
+//                await MainActor.run {
+//                    //                    self.accidentStructsGRDB = accidentStructsGDRB
+//                    self.accidentStructsGRDB = rows
+//                    self.isFetchingAccidents = false
+//                    print(String(format: "🧪 fetched %d accidents in region in %.2f seconds.", rows.count, Date().timeIntervalSince(dateStart)))
+//                }
+//            } catch is CancellationError {
+//                print("❌ Abbruch duch cancel beim GRDB-Fetch fetchAccidentsGRDB.")
+//            } catch {
+//                print("❌ Fehler beim GRDB-Fetch fetchAccidentsGRDB: \(error)")
+//            }
+//        }
+//        
+//    }
+    
+    
+    
     /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
     func fetchAccidentsGRDB(region: MKCoordinateRegion) {
         
          self.isFetchingAccidents = true
-        
         taskForFetchAccidents?.cancel()
+        
         taskForFetchAccidents = Task.detached(priority: .high) {
             
             if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 0"); return }
-
+            
             
             let dateStart = Date()
             // Nachfolgende Zeile verursacht Flackern im UI. Das UI wird trotzdem dies auskodierr ist immer wieder gerendert und die Accidents neu gefetched.
             let limit = await self.fetchLimit
             
+            let availableYears: [Int] = [2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016]
+            var selectedYears: [Int] = []
+
+            
             do {
                 let box = region.boundingBox100
                 let filters = await self.accidentDataFilters.grdbFilters
                 let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
+                var accidents: [AccidentStructGRDB] = []
+
                 
-                let rows = try await DatabaseService.shared.dbPool.read { db in
-                    
-//                    try AccidentNeu
+//                let rows = try await DatabaseService.shared.dbPool.read { db in
+//                    
+//                    try AccidentStructGRDB
+//                        .select(
+//                            Column("id"), Column("vehicleMask"), Column("jahr"), Column("latitude100"), Column("longitude100"), Column("lichtVerhaeltnisse"), Column("monat"), Column("strassenZustand"), Column("stunde"), Column("unfallArt"), Column("unfallKategorie"), Column("unfallTyp1"), Column("wochentag")
+//                        )
 //                        .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
 //                        .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
 //                        .filter(combinedFilter)
-//                        .order(Column("id").asc)
+//                        .order(sql: "RANDOM()")
 //                        .limit(limit)
 //                        .fetchAll(db)
-                    try AccidentStructGRDB
-                        .select(
-                            Column("id"),
-                            Column("vehicleMask"),
-                            Column("jahr"),
-                            Column("latitude100"),
-                            Column("longitude100"),
-                            Column("lichtVerhaeltnisse"),
-                            Column("monat"),
-                            Column("strassenZustand"),
-                            Column("stunde"),
-                            Column("unfallArt"),
-                            Column("unfallKategorie"),
-                            Column("unfallTyp1"),
-                            Column("wochentag")
-                        )
-                        .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
-                        .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
-                        .filter(combinedFilter)
-//                        .order(Column("id").asc)
-                        .order(Column("id").desc)
-                        .limit(limit)
-                        .fetchAll(db)
-                }
-                if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 1"); return }
+//                }
+//                
+//                try await DatabaseService.shared.dbPool.read { db in
+//                    let request = AccidentStructGRDB
+//                        .select(
+//                            Column("id"), Column("vehicleMask"), Column("jahr"), Column("latitude100"), Column("longitude100"), Column("lichtVerhaeltnisse"), Column("monat"), Column("strassenZustand"), Column("stunde"), Column("unfallArt"), Column("unfallKategorie"), Column("unfallTyp1"), Column("wochentag")
+//                        )
+//                        .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
+//                        .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
+//                        .filter(combinedFilter)
+//                        .order(sql: "RANDOM()")
+//                    let statement = try request.makePreparedRequest(db).statement
+//                    print(statement)
+//                }
+//
+//                if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 1"); return }
                 
-//                let accidentStructsGDRB = rows.map(AccidentStructGRDB.init) // Creates AccidentStrucGRDB for every record from the record and puts into result array
+//var accidents: [AccidentStructGRDB] = []
+                
+                // Try year by year (start with most recent, then add more)
+                for year in availableYears {
+                    selectedYears.append(year)
+                    
+                    var yearExpr: SQLExpression
+                    if selectedYears.count >= 1 {
+                        yearExpr = selectedYears.dropFirst().reduce(Column("jahr") == selectedYears.first!, { $0 || $1 } )
+                    } else {
+                        fatalError()
+                    }
+
+                    // Appends other filters to the year filteras and thus creates the final set of filters
+                    let combinedFilter = filters.reduce(yearExpr, { $0 && $1 })
+                    
+                    print("year is \(year)")
+
+                    let result = try await DatabaseService.shared.dbPool.read { db in
+                        try AccidentStructGRDB
+                            .select(
+                                Column("id"), Column("vehicleMask"), Column("jahr"), Column("latitude100"), Column("longitude100"), Column("lichtVerhaeltnisse"), Column("monat"), Column("strassenZustand"), Column("stunde"), Column("unfallArt"), Column("unfallKategorie"), Column("unfallTyp1"), Column("wochentag")
+                            )
+                            .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
+                            .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
+                            .filter(combinedFilter)
+                            .order(sql: "RANDOM()")
+                            .limit(limit)
+                            .fetchAll(db)
+                    }
+                    accidents = result
+                    
+                    try await DatabaseService.shared.dbPool.read { db in
+                        let request = AccidentStructGRDB
+                            .select(
+                                Column("id"), Column("vehicleMask"), Column("jahr"), Column("latitude100"), Column("longitude100"), Column("lichtVerhaeltnisse"), Column("monat"), Column("strassenZustand"), Column("stunde"), Column("unfallArt"), Column("unfallKategorie"), Column("unfallTyp1"), Column("wochentag")
+                            )
+                            .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
+                            .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
+                            .filter(combinedFilter)
+                            .order(sql: "RANDOM()")
+                        let statement = try request.makePreparedRequest(db).statement
+                        print(statement)
+                    }
+                    
+                    
+                    // If we've reached the target number, stop
+                    if accidents.count >= limit { break }
+                }
                 
                 await Task.yield()
                 
                 if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 2"); return }
                 
-//                try? await Task.sleep(nanoseconds: 400_000_000) // Delay (debounce) for some time
-
                 await MainActor.run {
-//                    self.accidentStructsGRDB = accidentStructsGDRB
-                    self.accidentStructsGRDB = rows
+                    //                    self.accidentStructsGRDB = accidentStructsGDRB
+//                    self.accidentStructsGRDB = rows
+                    self.accidentStructsGRDB = accidents
                     self.isFetchingAccidents = false
-                    print(String(format: "🧪 fetched %d accidents in region in %.2f seconds.", rows.count, Date().timeIntervalSince(dateStart)))
+//                    print(String(format: "🧪 fetched %d accidents in region in %.2f seconds.", rows.count, Date().timeIntervalSince(dateStart)))
+                    print(String(format: "🧪 fetched %d accidents in region in %.2f seconds.", accidents.count, Date().timeIntervalSince(dateStart)))
                 }
             } catch is CancellationError {
                 print("❌ Abbruch duch cancel beim GRDB-Fetch fetchAccidentsGRDB.")
-           } catch {
+            } catch {
                 print("❌ Fehler beim GRDB-Fetch fetchAccidentsGRDB: \(error)")
             }
         }
+        
     }
+
     
     /// Fetches the number of accidents in the current map region.
     /// Runs in a detached Task to ensure parallelism with accident fetching.
@@ -325,5 +443,11 @@ final class ViewModel: ObservableObject {
             }
         }
     }
+    
+    
+    
 }
+
+
+
 

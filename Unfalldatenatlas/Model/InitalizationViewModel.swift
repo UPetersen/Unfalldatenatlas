@@ -216,7 +216,10 @@ final class InitializationViewModel: ObservableObject {
                 let dbPool: DatabasePool = DatabaseService.shared.dbPool
                 try await dbPool.write { db in
                     // Indexe anlegen.
-                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_lon_lat ON accidents(longitude100, latitude100)")
+                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_lon_lat      ON accidents(longitude100, latitude100)")
+                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_jahr_lon_lat ON accidents(jahr, longitude100, latitude100)")
+//                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_lon_lat_jahr ON accidents(longitude100, latitude100, jahr)")
+//                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_jahr ON accidents(jahr)")
 //                    try db.execute(sql: "CREATE INDEX IF NOT EXISTS idx_unfallKategorie ON accidents(unfallKategorie)")
                 }
                 print("✅ Index erfolgreich erzeugt")

@@ -513,7 +513,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0;
-				"OTHER_SWIFT_FLAGS[arch=*]" = "-DGRDB_DATABASE_CREATION_MODE_TRUE";
+				"OTHER_SWIFT_FLAGS[arch=*]" = "-DGRDB_DATABASE_CREATION_MODE_FALSE";
 				PRODUCT_BUNDLE_IDENTIFIER = UPP.Unfalldatenatlas;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -558,7 +558,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.0;
-				"OTHER_SWIFT_FLAGS[arch=*]" = "-DGRDB_DATABASE_CREATION_MODE_TRUE";
+				"OTHER_SWIFT_FLAGS[arch=*]" = "-DGRDB_DATABASE_CREATION_MODE_FALSE";
 				PRODUCT_BUNDLE_IDENTIFIER = UPP.Unfalldatenatlas;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
