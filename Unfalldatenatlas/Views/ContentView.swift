@@ -217,8 +217,8 @@ struct ContentView: View  {
                         locationManager.requestAuthorization()
                     }
                 }
-                viewModel.fetchAccidentsGRDB(region: visibleRegion)
-                viewModel.fetchCountInRegion(region: visibleRegion)
+//                viewModel.fetchAccidentsGRDB(region: visibleRegion)
+//                viewModel.fetchCountInRegion(region: visibleRegion)
             }
         }
     }
