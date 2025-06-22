@@ -2,6 +2,10 @@
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
+# UWE, your settings:
+# Unfalldaten database is too large for GitHub (max 100 MB) and needs not to be stored, since it can be regenerated from the csv files any time.
+Unfalldaten.sqlite
+
 ## User settings
 xcuserdata/
 
