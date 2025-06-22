@@ -168,7 +168,7 @@ struct ContentView: View  {
             .toolbarBackground(.visible, for: .navigationBar) // to map not sneak unterneath
             
             // SHEET for INFOVIEW and FILTERVIEW
-            .sheet(isPresented: $isShowingInfoView) {
+            .sheet(isPresented: $isShowingInfoView, onDismiss: { dismissFilterViewAction() } ) {
                 InfoView(accidentsFetchLimit: viewModel.fetchLimit)
             }
             .sheet(isPresented: $isShowingFilterView, onDismiss: { dismissFilterViewAction() } ) {

@@ -22,10 +22,6 @@ struct InfoView: View {
             
             Diese App zeigt mehr als 1,8 Millionen polizeilich registrierte Unfälle mit getöteten oder verletzen Personen der Jahre 2016 bis 2023 auf einer Deutschlandkarte an. Zu den einzelnen Unfällen können verschiedene Attribute wie z.B. Unfallart und -typ oder Unfallbeteiligte (Pkw, Fahrrad, Fußgänger etc.) eingeblendet werden. Zudem können die angezeigten Unfälle nach vielen Attributen gefiltert werden. So lassen sich die angzeigten Unfälle z.B. auf alle Fahrunfälle mit Getöteten und Beteiligung von Krafträdern bei feuchter/nasser/schlüpfriger Fahrbahn einschränken.
             
-            Bitte beachten Sie, dass maximal \(accidentsFetchLimit) Unfälle im Kartenausschnitt angezeigt werden. Um alle Unfälle in einem Kartenausschnitt zu sehen, muss daher ggf. weiter hineingezoomt werden. Für große Kartenausschnitte wie ganz Deutschland wirkt die Anzeige etwas willkürlich, weil dann meist nur Unfälle in einem Bundesland angezeigt werden.
-            
-            Diese App ist ein Hobbyprojekt, [Open Source](https://github.com/UPetersen/Unfalldatenatlas) und kostenlos verfügbar. Nicht alles ist perfekt, manchmal ruckelt es. Bitte berücksichtigen Sie das bei eventuellen Bewertungen.
-            
             **Anzeige der Unfallorte**
             
             Die einzelnen Unfälle werden auf der Karte am Unfallort durch Kreise angezeigt, die entsprechend [der Farbskala für Unfalltypen](https://de.wikipedia.org/wiki/Unfalltyp) eingefärbt sind:
@@ -71,6 +67,8 @@ struct InfoView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 
                 Text("""
+            
+            Bitte beachten Sie, dass maximal \(accidentsFetchLimit) Unfälle im Kartenausschnitt angezeigt werden. Um alle Unfälle in einem Kartenausschnitt zu sehen, muss daher ggf. weiter hineingezoomt werden. 
             
             **Anzeige von Unfalldetails \(Image(systemName: "ellipsis.rectangle"))**
             
@@ -133,11 +131,15 @@ struct InfoView: View {
             
             **Einschränkungen**
             
-            Da nur eine begrenzte Menge von Unfällen im Kartenausschnitt angezeigt wird, ist die Verteilung dieser Punkte letztlich willkürlich, solange nicht alle im Kartenausschnitt enthaltenen Unfälle angezeigt werden können. Beim Start der App wird Deutschland in voller Fläche dargestellt, aber nur 400 der 1.823.882 Unfälle angezeigt und entsprechend nur die ersten 400 aus der Datenbank abgefragt, um die Anzeige schnell aktualisieren zu können. Als Konsequen daraus werden dann meist nur 400 Punkte in einem Bundesland oder einer Ecke Deutschlands angezeigt, wo eine gleichmäßige Verteilung über die Deutschlandkarte doch etwas schöner wäre.
+            Diese App ist ein Hobbyprojekt, [Open Source](https://github.com/UPetersen/Unfalldatenatlas) und kostenlos verfügbar. Nicht alles ist perfekt, manchmal ruckelt es. Bitte berücksichtigen Sie das bei eventuellen Bewertungen.
             
-            Bei Auswahl nach mehreren Kriterien, welche die Unfallzahl nur wenig reduzieren, z.B. Unfälle bei Tageslicht mit Leichtverletzten und Pkw-Beteiligung verlängert sich das Laden der Daten unter Umständen erheblich. Bei mehreren Kriterien ist es grundsätzlich ratsam, das Kriterium, welches die Unfallzahl am meisten reduziert, als erstes auszuwählen. Also z.B. für Unfälle mit Getöteten bei Tageslicht erst Unfälle mit Getöteten ( 1% der Unfälle) auswählen und danach auf Unfälle bei Tageslicht (76% der Unfälle) einschränken (statt umgekehrt). Eine weitere Empfehlung ist, erst in den Bereich auf der Karte zu zoomen, der von Interesse ist und danach zu filtern. Je kleiner der Kartenausschnitt, umso schneller werden die Daten aus der Datenbank gelesen.
+            Bitte beachten Sie, dass maximal \(accidentsFetchLimit) Unfallorte im Kartenausschnitt angezeigt werden. Um alle Unfallorte in einem Kartenausschnitt zu sehen, muss daher ggf. weiter hineingezoomt werden. 
+                        
+            Die Auswahl der maximal \(accidentsFetchLimit) angezeigten Unfallorte erfolgt zufällig. Aus Performancgründen wird dabei zunächst nur das jüngste Unfalljahr abgefragt. Sollten darin weniger als \(accidentsFetchLimit) Unfälle enthalten sein, werden sukzessive die nachfolgenden Unfalljahre mit einbezogen, bis \(accidentsFetchLimit) Unfälle oder weniger (dann über alle Unfalljahre) für den Kartenausschnitt vorliegen. 
+                        
+            Die Bestimmung der Gesamtzahl der im Kartenausschnitt vorhandenen Unfälle kann etwas länger dauern, als das Laden der maximal \(accidentsFetchLimit) in der Karte angezeigten Unfallorte, insbesondere bei vielen Filterbedingungen. Dies liegt daran, dass die komplette Datenbank abgefragt werden muss und nicht nur die ersten 400 Unfälle, welche den Filterbedingungen für den Kartenausschnitt genügen.
 
-            Die Zahl der Unfälle im Kartenausschnitt ist nur korrekt bei nach Norden ausgerichter Karte und in der Standardkartenansicht (nicht Satellitenansicht, kein 3D) und wird deshalb nur bei nach Norden ausgerichtetet Karte mit Standardansicht angzeigt. Wird die Lookaround-Voransicht über den Button \(Image(systemName: "binoculars")) ein- oder ausgeblendet, so aktualisiert sich die Zahl der Unfälle im Kartenausschnitt nicht. Dazu bitte die Karte z. B. einmal leicht verschieben.
+            Die Zahl der Unfälle im Kartenausschnitt ist nur korrekt bei nach Norden ausgerichter Karte und in der Standardkartenansicht (nicht Satellitenansicht, kein 3D) und wird deshalb auch nur bei nach Norden ausgerichtetet Karte mit Standardansicht angzeigt. Wird die Lookaround-Voransicht über den Button \(Image(systemName: "binoculars")) ein- oder ausgeblendet, so aktualisiert sich die Zahl der Unfälle im Kartenausschnitt nicht. Dazu bitte die Karte z. B. einmal leicht verschieben.
             
             **Haftungsausschluss**
             

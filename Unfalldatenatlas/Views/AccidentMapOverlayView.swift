@@ -23,7 +23,7 @@ struct AccidentMapOverlayView: View {
         VStack(alignment: .center) {
             HStack(alignment: .bottom) {
                 Spacer()
-//                if isFetchingAccidents || fetchStatusSelectedCountInRegion == .fetching {
+                
                 if isFetchingAccidents || isfetchingSelectedCountInRegion {
                     Group {
                         ProgressView()
@@ -51,21 +51,6 @@ struct AccidentMapOverlayView: View {
         }
     }
     
-//    var infoTextForRegion: String {
-//        var text: String = "Error or no value."
-//                
-//        if let mapCamera, !mapStyleIsStandard  || (0.5 < mapCamera.heading && mapCamera.heading < 355.5) || 0.5 < mapCamera.pitch {
-//            // Camera is not standard map, not in north or pitch is no zero (not in 2D) -> no count information in visible region since not accurate
-//            text = "Unfallzahl für Kartenausschnitt nur bei Standardkarte in Nordausrichtung"
-//        } else {
-//            if selectedCountInRegion > countOfAccidents {
-//                text = "\(selectedCountInRegion) Unfälle im Kartenausschnitt (\(countOfAccidents) angezeigt)"
-//            } else {
-//                text = "\(countOfAccidents) Unfälle im Kartenausschnitt"
-//            }
-//        }
-//        return text
-//    }
     
     var infoTextForRegion: String {
 
@@ -81,6 +66,18 @@ struct AccidentMapOverlayView: View {
         } else {
             return "\(countOfAccidents) Unfälle im Kartenausschnitt"
         }
+
+//        // More precise information on the four different possible states. Overall too nervous, thus not used.
+//        if isFetchingAccidents && !isfetchingSelectedCountInRegion { // 1
+//            return "\(countOfAccidents) Unfälle im Kartenausschnitt"
+//        } else if !isFetchingAccidents && isfetchingSelectedCountInRegion && countOfAccidents < 400 { // 2
+//            return "\(countOfAccidents) Unfälle im Kartenausschnitt"
+//        } else if !isFetchingAccidents && isfetchingSelectedCountInRegion && countOfAccidents >= 400  { // 3
+//            return " Unfälle im Kartenausschnitt (\(countOfAccidents) angezeigt)"
+//        } else { // 4
+//            return "\(selectedCountInRegion) Unfälle im Kartenausschnitt (\(countOfAccidents) angezeigt)"
+//        }
+
     }
     
     

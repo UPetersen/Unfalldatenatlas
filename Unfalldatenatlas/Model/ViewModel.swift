@@ -225,67 +225,33 @@ final class ViewModel: ObservableObject {
     
     
     
-    /// Loads accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
+    /// Loads fetchLimit accidents for the current region from the database. This is ASYNC! since it is called from .task, mainly when user
     func fetchAccidentsGRDB(region: MKCoordinateRegion) {
         
-         self.isFetchingAccidents = true
+        self.isFetchingAccidents = true
         taskForFetchAccidents?.cancel()
-        
         taskForFetchAccidents = Task.detached(priority: .high) {
             
             if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 0"); return }
             
-            
             let dateStart = Date()
-            // Nachfolgende Zeile verursacht Flackern im UI. Das UI wird trotzdem dies auskodierr ist immer wieder gerendert und die Accidents neu gefetched.
             let limit = await self.fetchLimit
             
             let availableYears: [Int] = [2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016]
             var selectedYears: [Int] = []
 
-            
             do {
                 let box = region.boundingBox100
-                let filters = await self.accidentDataFilters.grdbFilters
-//                let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
+                let filters = await self.accidentDataFilters.grdbFilters // all filters the user can set
                 var accidents: [AccidentStructGRDB] = []
                 
-//                let rows = try await DatabaseService.shared.dbPool.read { db in
-//                    
-//                    try AccidentStructGRDB
-//                        .select(
-//                            Column("id"), Column("vehicleMask"), Column("jahr"), Column("latitude100"), Column("longitude100"), Column("lichtVerhaeltnisse"), Column("monat"), Column("strassenZustand"), Column("stunde"), Column("unfallArt"), Column("unfallKategorie"), Column("unfallTyp1"), Column("wochentag")
-//                        )
-//                        .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
-//                        .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
-//                        .filter(combinedFilter)
-//                        .order(sql: "RANDOM()")
-//                        .limit(limit)
-//                        .fetchAll(db)
-//                }
-//                
-//                try await DatabaseService.shared.dbPool.read { db in
-//                    let request = AccidentStructGRDB
-//                        .select(
-//                            Column("id"), Column("vehicleMask"), Column("jahr"), Column("latitude100"), Column("longitude100"), Column("lichtVerhaeltnisse"), Column("monat"), Column("strassenZustand"), Column("stunde"), Column("unfallArt"), Column("unfallKategorie"), Column("unfallTyp1"), Column("wochentag")
-//                        )
-//                        .filter(Column("longitude100") >= box.minLon && Column("longitude100") <= box.maxLon)
-//                        .filter(Column("latitude100") >= box.minLat && Column("latitude100") <= box.maxLat)
-//                        .filter(combinedFilter)
-//                        .order(sql: "RANDOM()")
-//                    let statement = try request.makePreparedRequest(db).statement
-//                    print(statement)
-//                }
-//
-//                if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 1"); return }
-                
-//var accidents: [AccidentStructGRDB] = []
-                
                 // Try year by year (start with most recent, then add more)
+                // Explanation: accident for the different years are randomly distributed accross Germany. (They are sorted for Bundeslang, but that seems to be it.) Thus use this characteristic and load only data for one year (e.g. 2023) if fetchLimit accidents (e.g. 400) can be retrieved. If the region is small or there are not many accidents due to filtering (i.e. less than fetchLimit), do another trip to the database adding another year. Repeat if necessary, until all years are covered.
+                // This mechanism is much faster than just always loading the fetchLimit Accidents from the complete database. Therefore, an index was added to the database for year/lon/lat (addtionally to the lon/lat index.
                 for year in availableYears {
                     selectedYears.append(year)
                     
-                    var yearExpr: SQLExpression = true.sqlExpression
+                    var yearExpr: SQLExpression // = true.sqlExpression // helpfull to test withour the year mechanism
                     
                     if selectedYears.count >= 1 {
                         yearExpr = selectedYears.dropFirst().reduce(Column("jahr") == selectedYears.first!, { $0 || $1 } )
@@ -293,7 +259,7 @@ final class ViewModel: ObservableObject {
                         fatalError()
                     }
 
-                    // Appends other filters to the year filteras and thus creates the final set of filters
+                    // Appends other (user set) filters to the year filteras and thus creates the final set of filters
                     let combinedFilter = filters.reduce(yearExpr, { $0 && $1 })
                     
                     print("year is \(year)")
@@ -325,7 +291,6 @@ final class ViewModel: ObservableObject {
                         print(statement)
                     }
                     
-                    
                     // If we've reached the target number, stop
                     if accidents.count >= limit { break }
                 }
@@ -335,12 +300,8 @@ final class ViewModel: ObservableObject {
                 if Task.isCancelled {print("Task cancelled in fetchAccidentsGRDB 2"); return }
                 
                 await MainActor.run {
-                    //                    self.accidentStructsGRDB = accidentStructsGDRB
-//                    self.accidentStructsGRDB = rows
                     self.accidentStructsGRDB = accidents
                     self.isFetchingAccidents = false
-//                    print(String(format: "🧪 fetched %d accidents in region in %.2f seconds.", rows.count, Date().timeIntervalSince(dateStart)))
-                
                     print(String(format: "🧪 fetched %d accidents in region of \(region.lonLatString()) in %.2f seconds.", accidents.count, Date().timeIntervalSince(dateStart)))
                 }
             } catch is CancellationError {
@@ -349,7 +310,6 @@ final class ViewModel: ObservableObject {
                 print("❌ Fehler beim GRDB-Fetch fetchAccidentsGRDB: \(error)")
             }
         }
-        
     }
 
     
