@@ -15,6 +15,7 @@ struct AccidentAnnotationView: View {
     
     var body: some View {
         ZStack {
+            
             // Circle as center of the annotation
             Circle()
                 .fill(accident.color)

@@ -29,32 +29,60 @@ struct InfoView: View {
                 
                 HStack {
                     VStack(alignment: .leading) {
+//                        HStack {
+//                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.green)
+//                            Text("Fahrunfall")
+//                        }.padding(.vertical, 1)
+//                        HStack {
+//                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.yellow)
+//                            Text("Abbiegeunfall")
+//                        }.padding(.vertical, 1)
+//                        HStack {
+//                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.red)
+//                            Text("Einbiegen-/Kreuzenunfall")
+//                        }.padding(.vertical, 1)
+//                        HStack {
+//                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.white)
+//                            Text("Überschreitenunfall")
+//                        }.padding(.vertical, 1)
+//                        HStack {
+//                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.blue)
+//                            Text("Unfall durch ruhenden Verkehr")
+//                        }.padding(.vertical, 1)
+//                        HStack {
+//                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.orange)
+//                            Text("Unfall im Längsverkehr")
+//                        }.padding(.vertical, 1)
+//                        HStack {
+//                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.black)
+//                            Text("Sonstiger Unfall")
+//                        }.padding(.vertical, 1)
                         HStack {
-                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.green)
+                            Image(systemName: "circle.fill").foregroundStyle(.green)
                             Text("Fahrunfall")
                         }.padding(.vertical, 1)
                         HStack {
-                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.yellow)
+                            Image(systemName: "circle.fill").foregroundStyle(.yellow)
                             Text("Abbiegeunfall")
                         }.padding(.vertical, 1)
                         HStack {
-                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.red)
+                            Image(systemName: "circle.fill").foregroundStyle(.red)
                             Text("Einbiegen-/Kreuzenunfall")
                         }.padding(.vertical, 1)
                         HStack {
-                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.white)
+                            Image(systemName: "circle.fill").foregroundStyle(.white)
                             Text("Überschreitenunfall")
                         }.padding(.vertical, 1)
                         HStack {
-                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.blue)
+                            Image(systemName: "circle.fill").foregroundStyle(.blue)
                             Text("Unfall durch ruhenden Verkehr")
                         }.padding(.vertical, 1)
                         HStack {
-                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.orange)
+                            Image(systemName: "circle.fill").foregroundStyle(.orange)
                             Text("Unfall im Längsverkehr")
                         }.padding(.vertical, 1)
                         HStack {
-                            Image(systemName: "smallcircle.filled.circle.fill").foregroundStyle(.black)
+                            Image(systemName: "circle.fill").foregroundStyle(.black)
                             Text("Sonstiger Unfall")
                         }.padding(.vertical, 1)
                     }
