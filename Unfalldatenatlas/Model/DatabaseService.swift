@@ -68,7 +68,8 @@ final class DatabaseService: @unchecked Sendable {
                 create: true)
             let dbURL = appSupportURL.appendingPathComponent("Unfalldaten.sqlite")
 
-            
+// If the flag is set, the sqlite database will be crated from scratch from the csv files. Copy that database (file Unfalldaten.sqlite) then later into the xcode repository.
+// If the flag es not set (#else) the database from the xcode project (bundle) will be used and copied over to the respective folder in the app. If the current version is already in this folder, no copy is necessary. If an older version is already in this folder it will be removed.
 #if GRDB_DATABASE_CREATION_MODE_TRUE
             // Remove old DB if exists
             try? fileManager.removeItem(at: dbURL)
