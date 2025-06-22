@@ -126,7 +126,12 @@ final class ViewModel: ObservableObject {
     @Published var isFetchingAccidents = false
     @Published var accidentDataFilters = AccidentDataFilter()
     private var taskForFetchAccidents: Task<Void, Never>? = nil
-    private(set) var fetchLimit = 400 //300 // Maximum number of accidents to fetched -> fetchLimit for fetch request.
+//    private(set) var fetchLimit = 600 //300 // Maximum number of accidents to fetched -> fetchLimit for fetch request.
+#if targetEnvironment(macCatalyst)
+    private(set) var  fetchLimit = 600
+#else
+    private(set) var  fetchLimit = 400
+#endif
     
     //    private var fetchOperation: FetchOperation? = nil
     
