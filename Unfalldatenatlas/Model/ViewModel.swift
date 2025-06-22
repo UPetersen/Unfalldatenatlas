@@ -247,9 +247,8 @@ final class ViewModel: ObservableObject {
             do {
                 let box = region.boundingBox100
                 let filters = await self.accidentDataFilters.grdbFilters
-                let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
+//                let combinedFilter = filters.reduce(true.sqlExpression) { $0 && $1 }
                 var accidents: [AccidentStructGRDB] = []
-
                 
 //                let rows = try await DatabaseService.shared.dbPool.read { db in
 //                    
@@ -286,7 +285,8 @@ final class ViewModel: ObservableObject {
                 for year in availableYears {
                     selectedYears.append(year)
                     
-                    var yearExpr: SQLExpression
+                    var yearExpr: SQLExpression = true.sqlExpression
+                    
                     if selectedYears.count >= 1 {
                         yearExpr = selectedYears.dropFirst().reduce(Column("jahr") == selectedYears.first!, { $0 || $1 } )
                     } else {
@@ -340,7 +340,8 @@ final class ViewModel: ObservableObject {
                     self.accidentStructsGRDB = accidents
                     self.isFetchingAccidents = false
 //                    print(String(format: "🧪 fetched %d accidents in region in %.2f seconds.", rows.count, Date().timeIntervalSince(dateStart)))
-                    print(String(format: "🧪 fetched %d accidents in region in %.2f seconds.", accidents.count, Date().timeIntervalSince(dateStart)))
+                
+                    print(String(format: "🧪 fetched %d accidents in region of \(region.lonLatString()) in %.2f seconds.", accidents.count, Date().timeIntervalSince(dateStart)))
                 }
             } catch is CancellationError {
                 print("❌ Abbruch duch cancel beim GRDB-Fetch fetchAccidentsGRDB.")
@@ -443,8 +444,6 @@ final class ViewModel: ObservableObject {
             }
         }
     }
-    
-    
     
 }
 

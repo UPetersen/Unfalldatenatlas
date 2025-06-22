@@ -34,12 +34,33 @@ extension MKCoordinateRegion: @retroactive Equatable
         let loc3 = CLLocation(latitude: center.latitude, longitude: center.longitude - span.longitudeDelta * 0.5)
         let loc4 = CLLocation(latitude: center.latitude, longitude: center.longitude + span.longitudeDelta * 0.5)
         
-        let latidueMeters = loc1.distance(from: loc2)
+        let latitudeMeters = loc1.distance(from: loc2)
         let longitudeMeters = loc3.distance(from: loc4)
-        let area = latidueMeters * longitudeMeters / 1_000_000.0
+        let area = latitudeMeters * longitudeMeters / 1_000_000.0
         return area
     }
     
+    var lonLatInKilometers: (Double, Double) {
+        let span = self.span
+        let center = self.center
+        
+        let loc1 = CLLocation(latitude: center.latitude - span.latitudeDelta * 0.5, longitude: center.longitude)
+        let loc2 = CLLocation(latitude: center.latitude + span.latitudeDelta * 0.5, longitude: center.longitude)
+        let loc3 = CLLocation(latitude: center.latitude, longitude: center.longitude - span.longitudeDelta * 0.5)
+        let loc4 = CLLocation(latitude: center.latitude, longitude: center.longitude + span.longitudeDelta * 0.5)
+        
+        let latitudeMeters  = loc1.distance(from: loc2) / 1_000.0
+        let longitudeMeters = loc3.distance(from: loc4) / 1_000.0
+
+        return (longitudeMeters, latitudeMeters)
+    }
+    
+    func lonLatString() -> String {
+        let lonLatInKilometers = self.lonLatInKilometers
+        let lon = lonLatInKilometers.0.formatted(.number.locale(.init(identifier: "de_DE")).precision(.significantDigits(4)))
+        let lat = lonLatInKilometers.1.formatted(.number.locale(.init(identifier: "de_DE")).precision(.significantDigits(4)))
+        return String ("(\(lon), \(lat)) km")
+    }
 //    var predicate: NSPredicate  {
 //        let longitudeMin = self.center.longitude - 0.5 * self.span.longitudeDelta
 //        let longitudeMax = self.center.longitude + 0.5 * self.span.longitudeDelta

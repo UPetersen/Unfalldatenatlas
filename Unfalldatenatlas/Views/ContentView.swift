@@ -105,7 +105,7 @@ struct ContentView: View  {
 
                     guard self.visibleRegion != context.region else { return }
                     print("🔁 Durch erste Stufe durchgerutscht: Region changed significantly → loading new accidents")
-//                    guard !visibleRegion.isApproximatelyEqual(to: context.region, tolerancePercent: 0.01) else { return }
+//                    guard !visibleRegion.isApproximatelyEqual(to: context.region, tolerancePercent: 1) else { return }
 //                    print("🔁 Durch zweite Stufe auch durchgerutscht: Region changed significantly → loading new accidents")
                     self.visibleRegion = context.region
                     self.mapCamera = context.camera
@@ -123,8 +123,6 @@ struct ContentView: View  {
                         guard !Task.isCancelled else { return }
                         viewModel.fetchAccidentsGRDB(region: context.region)
                         viewModel.fetchCountInRegion(region: context.region)
-                        
-//                        try? await Task.sleep(nanoseconds: 200_000_000) // Delay (debounce) for some time
                     }
                 }
                 
