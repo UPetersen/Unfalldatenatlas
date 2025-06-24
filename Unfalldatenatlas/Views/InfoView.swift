@@ -163,7 +163,7 @@ struct InfoView: View {
             
             Bitte beachten Sie, dass maximal \(accidentsFetchLimit) Unfallorte im Kartenausschnitt angezeigt werden. Um alle Unfallorte in einem Kartenausschnitt zu sehen, muss daher ggf. weiter hineingezoomt werden. 
                         
-            Die Auswahl der maximal \(accidentsFetchLimit) angezeigten Unfallorte erfolgt zufällig. Aus Performancgründen wird dabei zunächst nur das jüngste Unfalljahr abgefragt. Sollten darin weniger als \(accidentsFetchLimit) Unfälle enthalten sein, werden sukzessive die nachfolgenden Unfalljahre mit einbezogen, bis \(accidentsFetchLimit) Unfälle oder weniger (dann über alle Unfalljahre) für den Kartenausschnitt vorliegen. 
+            Die Auswahl der maximal \(accidentsFetchLimit) angezeigten Unfallorte erfolgt zufällig. Aus Performancgründen wird dabei zunächst nur das jüngste Unfalljahr abgefragt. Sollten darin weniger als \(accidentsFetchLimit) Unfälle enthalten sein, werden sukzessive die nachfolgenden Unfalljahre mit einbezogen, bis \(accidentsFetchLimit) Unfälle vorliegen oder alle Unfalljahre einbezogen sind. 
                         
             Die Bestimmung der Gesamtzahl der im Kartenausschnitt vorhandenen Unfälle kann etwas länger dauern, als das Laden der maximal \(accidentsFetchLimit) in der Karte angezeigten Unfallorte, insbesondere bei vielen Filterbedingungen. Dies liegt daran, dass die komplette Datenbank abgefragt werden muss und nicht nur die ersten \(accidentsFetchLimit) Unfälle, welche den Filterbedingungen für den Kartenausschnitt genügen.
 
