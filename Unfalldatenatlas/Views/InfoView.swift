@@ -20,7 +20,7 @@ struct InfoView: View {
                 Text("""
             **Unfalldatenatlas**
             
-            Diese App zeigt mehr als 1,8 Millionen polizeilich registrierte Unfälle mit getöteten oder verletzen Personen der Jahre 2016 bis 2023 auf einer Deutschlandkarte an. Zu den einzelnen Unfällen können verschiedene Attribute wie z.B. Unfallart und -typ oder Unfallbeteiligte (Pkw, Fahrrad, Fußgänger etc.) eingeblendet werden. Zudem können die angezeigten Unfälle nach vielen Attributen gefiltert werden. So lassen sich die angzeigten Unfälle z.B. auf alle Fahrunfälle mit Getöteten und Beteiligung von Krafträdern bei feuchter/nasser/schlüpfriger Fahrbahn einschränken.
+            Diese App zeigt mehr als 2 Millionen polizeilich registrierte Unfälle mit getöteten oder verletzen Personen der Jahre 2016 bis 2024 auf einer Deutschlandkarte an. Zu den einzelnen Unfällen können verschiedene Attribute wie z.B. Unfallart und -typ oder Unfallbeteiligte (Pkw, Fahrrad, Fußgänger etc.) eingeblendet werden. Zudem können die angezeigten Unfälle nach vielen Attributen gefiltert werden. So lassen sich die angzeigten Unfälle z.B. auf alle Fahrunfälle mit Getöteten und Beteiligung von Krafträdern bei feuchter/nasser/schlüpfriger Fahrbahn einschränken.
             
             **Anzeige der Unfallorte**
             

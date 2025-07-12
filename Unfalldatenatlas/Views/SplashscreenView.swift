@@ -55,8 +55,8 @@
 //                    .padding()
 //                
 //                Text("""
-//                Liebe Nutzer, bevor die neuen Daten für 2023 geladen werden, muss die Datenbank einmalig neu strukturiert werden. Damit wird sie ingesamt kleiner und die Zugriffe gehen etwas schneller. 
-//                
+//                Liebe Nutzer, bevor die neuen Daten für 2024 geladen werden, muss die Datenbank einmalig neu strukturiert werden. Damit wird sie ingesamt kleiner und die Zugriffe gehen etwas schneller. 
+//
 //                Dieser Vorgang dauert circa 1:30 Minuten (auf einem iPhone 14 Pro Max).
 //                """)
 //                .multilineTextAlignment(.center)

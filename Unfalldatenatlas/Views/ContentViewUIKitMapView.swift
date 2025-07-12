@@ -39,26 +39,23 @@ struct ContentViewUIKitMapView: View  {
 //    @StateObject var viewModel = ViewModel()
     @StateObject var initializationViewModel = InitializationViewModel()
     @StateObject var locationManager = LocationManager()
-
+    
     @State private var debounceTask: Task<Void, Never>? = nil
-
     @State private var showSymbols = false
     @State private var mapCameraPosition: MapCameraPosition = .region(LocationManager.regionForGermany)
     @State private var visibleRegion: MKCoordinateRegion = LocationManager.regionForGermany
     @State private var mapCamera: MapCamera? // needed to get heading angle
     @State private var mapStyleIsStandard = true
+    @State private var show3D = false        // <-- NEW
 
     @Namespace var mapScope
 
     @State private var lookAroundScene: MKLookAroundScene?
     @State private var selectedAccident: AccidentStruct?
     @State private var selectedAccidentGRDB: AccidentStructGRDB?
-
     @State private var showLookAroundPreview = false
-    
     @State private var isShowingFilterView = false
     @State private var isShowingInfoView = false
-    
     @State private var isFetchingCountOfSelectedAccidents = false
     
     // For UIKit Mapt View
@@ -70,41 +67,54 @@ struct ContentViewUIKitMapView: View  {
             
             ZStack(alignment: .topTrailing) {
                                 
-                // Use initializer with $position, otherwhise position waggles several times, when coming back from filter view
-                // I do not understand why. $position should actually not be needed.
-//                AccidentMapContentView(
-//                    mapCameraPosition: $mapCameraPosition,
-//                    mapScope: mapScope,
-//                    showSymbols: showSymbols,
-//                    accidents: viewModel.accidentStructsGRDB,
-//                    selectedAccident: selectedAccidentGRDB,
-//                    onSelectAccident: { newSelection in
-//                        selectedAccidentGRDB = newSelection
-//                        getLookAroundScene(forAccident: newSelection)
-//                    }
-//                )
+
                 
+//                UIKitMapView(
+//                    initialRegion: LocationManager.regionForGermany, // <- oder wie auch immer du initialisieren willst
+//                    accidents: viewModel.accidentStructsGRDB,
+//                    mapStyleIsStandard: mapStyleIsStandard,
+//                    show3D: false,
+//                    onSelectAccident: { accident in
+//                        selectedAccidentGRDB = accident
+//                        getLookAroundScene(forAccident: accident)
+//                    },
+//                    onRegionChanged: { region in
+//                        // Fetches bei echter Kartenbewegung!
+//                        debounceTask?.cancel()
+//                        debounceTask = Task {
+//                            try? await Task.sleep(nanoseconds: 400_000_000)
+//                            guard !Task.isCancelled else { return }
+//                            viewModel.fetchAccidentsGRDB(region: region)
+//                            viewModel.fetchCountInRegion(region: region)
+//                        }
+//                    },
+//                    coordinatorRef: $mapCoordinator
+//                )
+  
+                // --- Main map view with all required callbacks ---
                 UIKitMapView(
-                    initialRegion: LocationManager.regionForGermany, // <- oder wie auch immer du initialisieren willst
+                    initialRegion: LocationManager.regionForGermany,
                     accidents: viewModel.accidentStructsGRDB,
                     mapStyleIsStandard: mapStyleIsStandard,
-                    show3D: false,
+                    show3D: show3D,
                     onSelectAccident: { accident in
                         selectedAccidentGRDB = accident
                         getLookAroundScene(forAccident: accident)
                     },
                     onRegionChanged: { region in
-                        // Fetches bei echter Kartenbewegung!
+                        // Debounce user interaction (zoom/move) to avoid excessive database calls
                         debounceTask?.cancel()
                         debounceTask = Task {
                             try? await Task.sleep(nanoseconds: 400_000_000)
                             guard !Task.isCancelled else { return }
+                            visibleRegion = region
                             viewModel.fetchAccidentsGRDB(region: region)
                             viewModel.fetchCountInRegion(region: region)
                         }
-                    },
-                    coordinatorRef: $mapCoordinator
+                    }
                 )
+                
+                
 //                .background(
 //                    UIKitMapCoordinatorReader { coordinator in
 //                        mapCoordinator = coordinator // Merke dir den Coordinator für spätere Region-Abfragen!
@@ -112,9 +122,9 @@ struct ContentViewUIKitMapView: View  {
 //                )
                 
                 
-                .mapControls {
-                    MapScaleView()
-                }
+//                .mapControls {
+//                    MapScaleView()
+//                }
                 
                 .mapStyle(mapStyleIsStandard ? .standard : .hybrid(elevation: .realistic))
                 
@@ -139,50 +149,26 @@ struct ContentViewUIKitMapView: View  {
                         Divider()
                         
                         // Buttons at the bottom of the screen
-                        MapBottomToolbarView(
+//                        MapBottomToolbarView(
+//                            mapScope: mapScope,
+//                            locationAuthorized: locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways,
+//                            mapStyleIsStandard: $mapStyleIsStandard,
+//                            showSymbols: $showSymbols,
+//                            showLookAroundPreview: $showLookAroundPreview
+//                        )
+                        MapBottomToolbarViewMapKit(
                             mapScope: mapScope,
                             locationAuthorized: locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways,
                             mapStyleIsStandard: $mapStyleIsStandard,
                             showSymbols: $showSymbols,
-                            showLookAroundPreview: $showLookAroundPreview
+                            showLookAroundPreview: $showLookAroundPreview,
+                            show3D: $show3D            // <-- Pass the binding!
                         )
                     }
-                    .mapControlVisibility(.visible)
+//                    .mapControlVisibility(.visible)
                     .background(Color(.systemBackground))
                 }
                 
-//                // Update map when user pinched, zoomed or panned and thus set a new region
-//                // Must run ".continuos" f ror the delay/debounce to become effective. (Otherwise it
-//                // fires after each finish of moving the fingers plus the delay time, even if the user
-//                // continued moving his finger on the map again within the delay time.
-//                .onMapCameraChange(frequency: .continuous) { context in
-//                    print("============================== in .onMapCameraChange  ===============================")
-//
-//
-//                    guard self.visibleRegion != context.region else { return }
-//                    print("🔁 Durch erste Stufe durchgerutscht: Region changed significantly → loading new accidents")
-////                    guard !visibleRegion.isApproximatelyEqual(to: context.region, tolerancePercent: 0.01) else { return }
-////                    print("🔁 Durch zweite Stufe auch durchgerutscht: Region changed significantly → loading new accidents")
-//                    self.visibleRegion = context.region
-//                    self.mapCamera = context.camera
-//
-//                    // General decision: raises responsiveness dramatically, but instantly no accidents shown any more while moving the map
-//                    if viewModel.accidentStructsGRDB.count > 100 && !viewModel.accidentStructsGRDB.isEmpty {
-//                        viewModel.clearAccidentsGRDB()
-//                    }
-//
-//                    debounceTask?.cancel()
-//                    debounceTask = Task {
-//                                                
-//                        try? await Task.sleep(nanoseconds: 400_000_000) // Delay (debounce) for some time
-//                        
-//                        guard !Task.isCancelled else { return }
-//                        viewModel.fetchAccidentsGRDB(region: context.region)
-//                        viewModel.fetchCountInRegion(region: context.region)
-//                        
-////                        try? await Task.sleep(nanoseconds: 200_000_000) // Delay (debounce) for some time
-//                    }
-//                }
                 
                 // Overlay with text on number of accidents within region and number of accidents displayed and compass.
                 AccidentMapOverlayView(
@@ -195,7 +181,7 @@ struct ContentViewUIKitMapView: View  {
                     mapScope: mapScope
                 )
             }
-            .mapScope(mapScope)
+//            .mapScope(mapScope)
             
             // NAVIGATION BAR (TOP TOOLBAR)
             .toolbar {
@@ -253,17 +239,17 @@ struct ContentViewUIKitMapView: View  {
                 viewModel.fetchCountInRegion(region: visibleRegion)
             }
             
-            // User toggled the type of the map (between standard and hybrid map type)
-            .onChange(of: mapStyleIsStandard) {
-                print("============================== in .onChange(of: mapStyleIsStandard) ======================")
-                
-                // When the user changes the map type, the region is usualy changed, too. Might be due to different tile
-                // sizes. However, in this case the accidents must be fetched again for the new region.
-                // Here position is needed sind it fires the redrawing of the map and thus the recalculation of the
-                // visible region (after its change) and thereafter the respective accidents for this new region are
-                // fetched automatically in .onMapCameraChange.
-                mapCameraPosition = .region(visibleRegion)
-            }
+//            // User toggled the type of the map (between standard and hybrid map type)
+//            .onChange(of: mapStyleIsStandard) {
+//                print("============================== in .onChange(of: mapStyleIsStandard) ======================")
+//                
+//                // When the user changes the map type, the region is usualy changed, too. Might be due to different tile
+//                // sizes. However, in this case the accidents must be fetched again for the new region.
+//                // Here position is needed sind it fires the redrawing of the map and thus the recalculation of the
+//                // visible region (after its change) and thereafter the respective accidents for this new region are
+//                // fetched automatically in .onMapCameraChange.
+//                mapCameraPosition = .region(visibleRegion)
+//            }
 
             // .task instead of .onAppear, .task runs once, when view appears, and it runs asynchronously.
             // This is not called when returning from InfoView or FilterView (as long as they remain sheets).
@@ -290,10 +276,12 @@ struct ContentViewUIKitMapView: View  {
         viewModel.fetchCountInRegion(region: visibleRegion)
     }
     func userDidChangeFilter() {
-        if let region = mapCoordinator?.lastRegion {
-            viewModel.fetchAccidentsGRDB(region: region)
-            viewModel.fetchCountInRegion(region: region)
-        }
+//        if let region = mapCoordinator?.lastRegion {
+//            viewModel.fetchAccidentsGRDB(region: region)
+//            viewModel.fetchCountInRegion(region: region)
+//        }
+        viewModel.fetchAccidentsGRDB(region: visibleRegion)
+        viewModel.fetchCountInRegion(region: visibleRegion)
     }
     
     func getLookAroundScene (forAccident accident: AccidentStructGRDB?) {

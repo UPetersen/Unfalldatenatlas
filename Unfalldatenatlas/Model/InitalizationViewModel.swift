@@ -26,13 +26,13 @@
 //   0           509497,179245107     5392224,05191507 9,12902797500004 48,682987865
 //
 // Vergleich Unfälle mit Personenschaden insgesamt laut Destatis (Obermenge der Daten des Unfalldatenatlas) und Daten des Unfalldatenatlas:
-// Jahr:                       2019       2020       2021       2022      2023
-// Unfälle mit Personenschaden 300_143    264_499    258_987    289_672,    ?
-// Unfälle im Unfalldatenatlas 268_370,   237_994, " 233_208,   256_492,  269_048
+// Jahr:                       2019       2020       2021       2022      2023      2024
+// Unfälle mit Personenschaden 300_143    264_499    258_987    289_672,  ?         ?
+// Unfälle im Unfalldatenatlas 268_370,   237_994, " 233_208,   256_492,  269_048,  268_519
 //
-// Unfälle in der App insgesamt mit Daten von 2016 bis einschlie0ßlich 2023: 1_823_882 (Mit Daten von 2016 einschließlich 2022: 1_554_834)
+// Unfälle in der App insgesamt mit Daten von 2016 bis einschlie0ßlich 2024: 2_092_401 
 // Unfälle pro Jahr:
-//   ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
+//   ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048, "2024": 268_519]
 //
 // Mapping aller Jahre:
 //   Jahr   id  jahr monat stunde wochentag    unfallKategorie    unfallArt    unfallTyp1    lichtVerhaeltnisse    strassenZustand    vehicleFlags    latitude    longitude
@@ -44,6 +44,7 @@
 //   2021    0    6    7    8     9      10    11    12    13    14    {'fahrrad': 15, 'pkw': 16, 'fussgaenger': 17, 'krad': 18, 'gueterKfz': 19, 'sonstige': 20}    24    23
 //   2022    0    6    7    8     9      10    11    12    13    14    {'fahrrad': 15, 'pkw': 16, 'fussgaenger': 17, 'krad': 18, 'gueterKfz': 19, 'sonstige': 20}    24    23
 //   2023    0    6    7    8     9      10    11    12    13    14    {'fahrrad': 15, 'pkw': 16, 'fussgaenger': 17, 'krad': 18, 'gueterKfz': 19, 'sonstige': 20}    24    23
+//   2024    0    6    7    8     9      10    11    12    13    14    {'fahrrad': 15, 'pkw': 16, 'fussgaenger': 17, 'krad': 18, 'gueterKfz': 19, 'sonstige': 20}    24    23
 
 import Foundation
 import CoreData
@@ -60,7 +61,6 @@ enum InitializationState: Equatable {
         switch self {
         case .initializationRequired: return "Initalisierung ..."
             //        case .clearingDatabase: return "Initalisierung wurde nicht erfolgreich abgeschlossen und muss wiederholt werden. Bereinige Unfalldatenbank, bitte warten ..."
-            //        case .loadingData(let year): return "Konfiguriere Unfalldaten für das Jahr \(year) ... \n\nDas erfolgt nur einmalig beim allerersten Start der App für die Unfalljahre 2016 bis 2023 (in der Reihenfolge 2022, 2021, ..., 2016, 2023). \nDas dauert bis zu 10 Minuten oder länger. Bitte nicht abbrechen, sonst muss der Vorgang teilweise wiederholt werden.\nDie App kann in dieser Zeit schon  mit den ersten Daten benutzt werden."
         case .loadingData(let year): return "Lade Daten für \(year) von lokaler Datei ... "
         case .importingData(let year): return "Schreibe Daten von \(year) in die Datenbank... "
         case .initalized: return "... Initalisierung beendet"
@@ -97,7 +97,8 @@ let mappingsByYear: [String: AccidentCSVMapping] = [
     "2020": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 24, vehicleFlags: [.fahrrad: 14, .pkw: 15, .fussgaenger: 16, .krad: 17, .gueterKfz: 18, .sonstige: 19 ], latitude: 23, longitude: 22, land: 2, regbez: 3, kreis: 4, gemeinde: 5),
     "2021": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23, land: 2, regbez: 3, kreis: 4, gemeinde: 5),
     "2022": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23, land: 2, regbez: 3, kreis: 4, gemeinde: 5),
-    "2023": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23, land: 2, regbez: 3, kreis: 4, gemeinde: 5)
+    "2023": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23, land: 2, regbez: 3, kreis: 4, gemeinde: 5),
+    "2024": AccidentCSVMapping(id: 0, jahr: 6, monat: 7, stunde: 8, wochentag: 9, unfallKategorie: 10, unfallArt: 11, unfallTyp1: 12, lichtVerhaeltnisse: 13, strassenZustand: 14, vehicleFlags: [.fahrrad: 15, .pkw: 16, .fussgaenger: 17, .krad: 18, .gueterKfz: 19, .sonstige: 20 ], latitude: 24, longitude: 23, land: 2, regbez: 3, kreis: 4, gemeinde: 5)
 ]
 
 
@@ -109,7 +110,7 @@ let mappingsByYear: [String: AccidentCSVMapping] = [
 ///   - years: array of the years in the order as they are stored in the database, i.e. ["2022", "2021", "2020", "2019", "2018", "2017", "2016", "2023"]
 /// - Returns: Example: "[\"2017\": 195229, \"2016\": 151673, \"2023\": 269048, \"2022\": 0, \"2020\": 0, \"2019\": 0, \"2018\": 73141, \"2021\": 0]
 func linesToRead(countOfAccidentsStored: Int, years: [String]) -> [String: Int] {
-    let countOfRecordsForYears: [String: Int] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
+    let countOfRecordsForYears: [String: Int] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048, "2024": 268_519]
     var countOfAccidentsStoredForRemainingYears = countOfAccidentsStored
     var linesToRead: [String: Int] = [:]
     for year in years {
@@ -143,14 +144,14 @@ final class InitializationViewModel: ObservableObject {
         print(" In Gesamtinitialisierung.")
         initializationState = .initializationRequired
 
-        // Check number of records in database, if 1_823_882, then all data for 2016 to 2023 is contained in the database and all okay.
+        // Check number of records in database, if 2_092_401, then all data for 2016 to 2024 is contained in the database and all okay.
         do {
             let totalCountInDatabase = try  DatabaseService.shared.dbPool.read { db in
                 try AccidentNeu.fetchCount(db)
             }
             print("ℹ️ Total number of accidents in database: \(totalCountInDatabase)")
             
-            if totalCountInDatabase == ViewModel.totalCountinGermany { // 1_823_882
+            if totalCountInDatabase == ViewModel.totalCountinGermany { // 2_092_401 for 2016 ... 2024
                 // All good, database contains all datasets for all the years
                 self.initializationState = .initalized
                 print("No initialization required. Database is complete.")
@@ -175,12 +176,13 @@ final class InitializationViewModel: ObservableObject {
         
         let beginDateGRDB = Date.now
         
-        let years = ["2022", "2021", "2020", "2019", "2018", "2017", "2016", "2023"]
+        let years = ["2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016"]
+//        let years = ["2024", "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2023"]
 //        let years = ["2016", "2022", "2021", "2020", "2019", "2018", "2017", "2023"]
 
 //        let years = [ "2018", "2017"]
 //        let years = [ "2018"]
-//        let countOFRecordsForYears: [String: Int] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048]
+//        let countOFRecordsForYears: [String: Int] = ["2016": 151_673, "2017": 195_229, "2018": 211_868, "2019": 268_370, "2020": 237_994, "2021": 233_208, "2022": 256_492, "2023": 269_048, "2024": 268_519]
 
         for year in years {
             

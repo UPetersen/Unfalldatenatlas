@@ -81,7 +81,7 @@ struct AccidentDataFilter: Equatable {
             land.grdbFilter,               // [0 ... 15]
             monat.grdbFilter,              // [0 ... 12]
             unfallArt.grdbFilter,          // [0 ... 10]
-            jahr.grdbFilter,               // [0, 2016, ... 2023], 9 states
+            jahr.grdbFilter,               // [0, 2016, ... 2024], 10 states
             unfallTyp1.grdbFilter,         // [0 ... 7]
             wochentag.grdbFilter,          // [0 ... 7]
             lichtVerhaeltnisse.grdbFilter, // [0, 1, 2, 4]
@@ -106,7 +106,7 @@ final class ViewModel: ObservableObject {
     
     // static let countOfAllAccidents = 1_554_834 // with 2022 date. Value to be filled in by hand, whenever new data files for new years are added.
     // count of all accidents in the database when all the years are imported into the database
-    static let totalCountinGermany = 1_823_882 // With 2023 data. Value to filled in by hand, whenever new data files for new years are added.
+    static let totalCountinGermany = 2_092_401 // as for 2016 ... 2024.  1_823_882 for 2023. Value to filled in by hand, whenever new data files for new years are added.
     
     // count of all accidents in the database if no filter/seletion is applied, otherwhise the count of the accidents in the database after filtering/selection
     @Published var selectedCountInGermany: Int = 0
@@ -242,7 +242,7 @@ final class ViewModel: ObservableObject {
             let dateStart = Date()
             let limit = await self.fetchLimit
             
-            let availableYears: [Int] = [2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016]
+            let availableYears: [Int] = [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016]
             var selectedYears: [Int] = []
 
             do {
@@ -251,7 +251,7 @@ final class ViewModel: ObservableObject {
                 var accidents: [AccidentStructGRDB] = []
                 
                 // Try year by year (start with most recent, then add more)
-                // Explanation: accident for the different years are randomly distributed accross Germany. (They are sorted for Bundeslang, but that seems to be it.) Thus use this characteristic and load only data for one year (e.g. 2023) if fetchLimit accidents (e.g. 400) can be retrieved. If the region is small or there are not many accidents due to filtering (i.e. less than fetchLimit), do another trip to the database adding another year. Repeat if necessary, until all years are covered.
+                // Explanation: accident for the different years are randomly distributed accross Germany. (They are sorted for Bundeslang, but that seems to be it.) Thus use this characteristic and load only data for one year (e.g. 2024) if fetchLimit accidents (e.g. 400) can be retrieved. If the region is small or there are not many accidents due to filtering (i.e. less than fetchLimit), do another trip to the database adding another year. Repeat if necessary, until all years are covered.
                 // This mechanism is much faster than just always loading the fetchLimit Accidents from the complete database. Therefore, an index was added to the database for year/lon/lat (addtionally to the lon/lat index.
                 for year in availableYears {
                     selectedYears.append(year)
