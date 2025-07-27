@@ -13,6 +13,8 @@ struct AccidentAnnotationView: View {
     let isSelected: Bool
     let onTap: () -> Void
     
+//    @Environment(\.colorScheme) private var colorScheme // check if light or dark mode is active
+    
 #if os(macOS)
     let symbolFontSize: CGFloat = 22
 #else
@@ -47,7 +49,12 @@ struct AccidentAnnotationView: View {
                 Text(accident.symbolString)
                     .font(.system(size: symbolFontSize))
                     .fixedSize()
+//                    .background(Color.white)
+                    .padding(2) // Optional für bessere Lesbarkeit
+
                     .background(Color.white)
+                    .foregroundColor(Color.black)
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
 //                    .offset(y: -20) // text on top of the circle
                     .offset(y: -(circleDiameter / 2 + 8))
             }
