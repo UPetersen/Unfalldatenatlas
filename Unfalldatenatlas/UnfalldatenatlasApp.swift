@@ -18,6 +18,7 @@ struct UnfalldatenatlasApp: App {
             ContentView(viewModel: ViewModel())
 //            ContentViewUIKitMapView(viewModel: ViewModel())
 
+            
 //            ContentView()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
