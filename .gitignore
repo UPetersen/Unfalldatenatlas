@@ -4,7 +4,9 @@
 
 # UWE, your settings:
 # Unfalldaten database is too large for GitHub (max 100 MB) and needs not to be stored, since it can be regenerated from the csv files any time.
-Unfalldaten.sqlite
+# 2025-08-01: aaskommentiert, weil über git lfs versioniert
+#Unfalldaten.sqlite
+
 
 ## User settings
 xcuserdata/
