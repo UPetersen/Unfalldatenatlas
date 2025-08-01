@@ -71,7 +71,7 @@ Aus Datenschutzgründen ist der genaue Zeitpunkt eines Umfalls nicht in den Date
 - 🌧️ für nass/feucht/schlüpfrigen Straßenzustand,
 - ❄️ für winterglatten Straßenzustand.
 - Wird nichts angezeigt war der Unfall bei trockenem Straßenzustand.
-       
+        
             
 ### Verletzungsschwere
 
